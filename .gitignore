@@ -1,0 +1,20 @@
+[Oo]bj/
+[Bb]in/
+App_Data
+[Pp]ackages
+Logs
+PrecompiledWeb/
+
+_ReSharper.*
+*crunch*
+
+*.user
+*.suo
+*.cache
+*.dotCover
+*.dotsettings
+!*.proj
+
+# Visual Studio 2015 cache/options directory
+.vs/
+*.nupkg
