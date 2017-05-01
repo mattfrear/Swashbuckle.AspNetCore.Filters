@@ -4,4 +4,8 @@
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="1.0.0" />
+  </ItemGroup>
+
 </Project>
