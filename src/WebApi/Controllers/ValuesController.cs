@@ -1,14 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Examples;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using WebApi.Models;
+using WebApi.Models.Examples;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        [HttpPost]
+        [Route("api/values/person")]
+
+        [SwaggerResponse(200, typeof(PersonResponse), "Successfully found the person")]
+        [SwaggerResponseExample(HttpStatusCode.OK, typeof(PersonResponseExample))]
+
+        [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
+        [SwaggerResponseExample(HttpStatusCode.NotFound, typeof(NotFoundResponseExample))]
+
+        [SwaggerResponse(500, typeof(ErrorResponse), "There was an unexpected error")]
+        [SwaggerResponseExample(HttpStatusCode.InternalServerError, typeof(InternalServerResponseExample))]
+
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample))]
+        public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
+        {
+            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+            return personResponse;
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
