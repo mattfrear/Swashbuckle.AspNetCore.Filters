@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
-namespace Swashbuckle.Examples
+namespace Swashbuckle.AspNetCore.Examples
 {
     public class ExamplesOperationFilter : IOperationFilter
     {
@@ -26,11 +26,11 @@ namespace Swashbuckle.Examples
         private static void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
             var actionAttributes = apiDescription.ActionAttributes();
-            var swaggerRequestAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerRequestExamplesAttribute));
+            var swaggerRequestAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerRequestExampleAttribute));
 
             foreach (var attribute in swaggerRequestAttributes)
             {
-                var attr = (SwaggerRequestExamplesAttribute)attribute;
+                var attr = (SwaggerRequestExampleAttribute)attribute;
                 var schema = schemaRegistry.GetOrRegister(attr.RequestType);
 
                 var request = operation.Parameters.FirstOrDefault(p => p.In == "body"/* && p.schema.@ref == schema.@ref */);
@@ -55,14 +55,14 @@ namespace Swashbuckle.Examples
         private static void SetResponseModelExamples(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
             var actionAttributes = apiDescription.ActionAttributes();
-            var swaggerRequestAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerRequestExamplesAttribute));
+            var swaggerRequestAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerRequestExampleAttribute));
 
             foreach (var attribute in swaggerRequestAttributes)
             {
-                var attr = (SwaggerResponseExamplesAttribute)attribute;
-                var schema = schemaRegistry.GetOrRegister(attr.ResponseType);
+                var attr = (SwaggerResponseExampleAttribute)attribute;
+                var statusCode = ((int)attr.StatusCode).ToString();
 
-                var response = operation.Responses.FirstOrDefault(x => x.Value != null && x.Value.Schema != null && x.Value.Schema.Ref == schema.Ref);
+                var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode);
 
                 if (response.Equals(default(KeyValuePair<string, Response>)) == false)
                 {
