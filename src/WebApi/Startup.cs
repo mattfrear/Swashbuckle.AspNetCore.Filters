@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApi
@@ -34,6 +35,7 @@ namespace WebApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.OperationFilter<ExamplesOperationFilter>();
             });
         }
 

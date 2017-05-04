@@ -14,13 +14,13 @@ namespace Swashbuckle.AspNetCore.Examples
         public void Apply(Operation operation, OperationFilterContext context)
         {
             SetRequestModelExamples(operation, context.SchemaRegistry, context.ApiDescription);
-            SetResponseModelExamples(operation, context.SchemaRegistry, context.ApiDescription);
+            SetResponseModelExamples(operation, context.ApiDescription);
         }
 
         public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
             SetRequestModelExamples(operation, schemaRegistry, apiDescription);
-            SetResponseModelExamples(operation, schemaRegistry, apiDescription);
+            SetResponseModelExamples(operation, apiDescription);
         }
 
         private static void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
@@ -52,12 +52,12 @@ namespace Swashbuckle.AspNetCore.Examples
             }
         }
 
-        private static void SetResponseModelExamples(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
+        private static void SetResponseModelExamples(Operation operation, ApiDescription apiDescription)
         {
             var actionAttributes = apiDescription.ActionAttributes();
-            var swaggerRequestAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerRequestExampleAttribute));
+            var swaggerResponseExampleAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerResponseExampleAttribute));
 
-            foreach (var attribute in swaggerRequestAttributes)
+            foreach (var attribute in swaggerResponseExampleAttributes)
             {
                 var attr = (SwaggerResponseExampleAttribute)attribute;
                 var statusCode = ((int)attr.StatusCode).ToString();
