@@ -6,7 +6,7 @@
     <title>Swashbuckle.AspNetCore.Examples</title>
     <authors>Matt Frear</authors>
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
-    <projectUrl>https://github.com/mattfrear/Swashbuckle.Examples</projectUrl>
+    <projectUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Adds the SwaggerRequestExample and SwaggerResponseExample attribute for Swashbuckle. This will populate the example property of a schema object in the output swagger.</description>
     <copyright>Copyright 2017</copyright>
