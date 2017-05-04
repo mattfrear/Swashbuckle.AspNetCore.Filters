@@ -60,7 +60,7 @@ namespace Swashbuckle.AspNetCore.Examples
             foreach (var attribute in swaggerResponseExampleAttributes)
             {
                 var attr = (SwaggerResponseExampleAttribute)attribute;
-                var statusCode = ((int)attr.StatusCode).ToString();
+                var statusCode = attr.StatusCode.ToString();
 
                 var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode);
 

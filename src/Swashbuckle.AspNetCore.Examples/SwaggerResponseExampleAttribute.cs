@@ -10,7 +10,7 @@ namespace Swashbuckle.AspNetCore.Examples
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SwaggerResponseExampleAttribute : Attribute
     {
-        public SwaggerResponseExampleAttribute(HttpStatusCode statusCode, Type examplesProviderType)
+        public SwaggerResponseExampleAttribute(int statusCode, Type examplesProviderType)
         {
             StatusCode = statusCode;
             ExamplesProviderType = examplesProviderType;
@@ -18,6 +18,6 @@ namespace Swashbuckle.AspNetCore.Examples
 
         public Type ExamplesProviderType { get; }
 
-        public HttpStatusCode StatusCode { get; }
+        public int StatusCode { get; }
     }
 }
