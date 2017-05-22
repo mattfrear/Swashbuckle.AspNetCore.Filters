@@ -1,5 +1,4 @@
 ﻿using Swashbuckle.AspNetCore.Examples;
-using WebApi.Controllers;
 
 namespace WebApi.Models.Examples
 {
