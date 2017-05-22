@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -48,7 +46,7 @@ namespace Swashbuckle.AspNetCore.Examples
 
                     if (definitionToUpdate != null)
                     {
-                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider))["application/json"];
+                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider, attr.ContractResolver))["application/json"];
                     }
                 }
             }
@@ -71,19 +69,19 @@ namespace Swashbuckle.AspNetCore.Examples
                     if (response.Value != null)
                     {
                         var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
-                        response.Value.Examples = FormatAsJson(provider);
+                        response.Value.Examples = FormatAsJson(provider, attr.ContractResolver);
                     }
                 }
             }
         }
 
-        private static object ConvertToCamelCase(Dictionary<string, object> examples)
+        private static object ConvertToDesiredCase(Dictionary<string, object> examples, IContractResolver resolver)
         {
-            var jsonString = JsonConvert.SerializeObject(examples, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            var jsonString = JsonConvert.SerializeObject(examples, new JsonSerializerSettings { ContractResolver = resolver });
             return JsonConvert.DeserializeObject(jsonString);
         }
 
-        private static object FormatAsJson(IExamplesProvider provider)
+        private static object FormatAsJson(IExamplesProvider provider, IContractResolver resolver)
         {
             var examples = new Dictionary<string, object>
             {
@@ -92,7 +90,7 @@ namespace Swashbuckle.AspNetCore.Examples
                 }
             };
 
-            return ConvertToCamelCase(examples);
+            return ConvertToDesiredCase(examples,resolver);
         }
     }
 }

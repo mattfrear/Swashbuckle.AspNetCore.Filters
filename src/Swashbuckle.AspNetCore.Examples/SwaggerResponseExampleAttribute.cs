@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Net;
 
@@ -10,14 +11,17 @@ namespace Swashbuckle.AspNetCore.Examples
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SwaggerResponseExampleAttribute : Attribute
     {
-        public SwaggerResponseExampleAttribute(int statusCode, Type examplesProviderType)
+        public SwaggerResponseExampleAttribute(int statusCode, Type examplesProviderType, Type contractResolver = null)
         {
             StatusCode = statusCode;
             ExamplesProviderType = examplesProviderType;
+            ContractResolver = (IContractResolver)Activator.CreateInstance(contractResolver ?? typeof(CamelCasePropertyNamesContractResolver));
         }
 
         public Type ExamplesProviderType { get; }
 
         public int StatusCode { get; }
+
+        public IContractResolver ContractResolver { get; private set; }
     }
 }
