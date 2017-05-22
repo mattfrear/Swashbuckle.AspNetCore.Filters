@@ -11,23 +11,17 @@ namespace Swashbuckle.AspNetCore.Examples
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SwaggerResponseExampleAttribute : Attribute
     {
-        public SwaggerResponseExampleAttribute(int statusCode, Type examplesProviderType, Type formatter = null)
+        public SwaggerResponseExampleAttribute(int statusCode, Type examplesProviderType, Type contractResolver = null)
         {
             StatusCode = statusCode;
             ExamplesProviderType = examplesProviderType;
-            if (formatter != null)
-            {
-                JsonResolver = formatter;
-            }
-            else
-            {
-                JsonResolver = typeof(CamelCasePropertyNamesContractResolver);
-            }
+            ContractResolver = (IContractResolver)Activator.CreateInstance(contractResolver ?? typeof(CamelCasePropertyNamesContractResolver));
         }
 
         public Type ExamplesProviderType { get; }
 
         public int StatusCode { get; }
-        public Type JsonResolver { get; private set; }
+
+        public IContractResolver ContractResolver { get; private set; }
     }
 }

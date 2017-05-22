@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApi.Models;
@@ -14,6 +15,7 @@ namespace WebApi.Controllers
         [Route("api/values/person")]
 
         [SwaggerResponse(200, typeof(PersonResponse), "Successfully found the person")]
+        // [SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
 
         [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]

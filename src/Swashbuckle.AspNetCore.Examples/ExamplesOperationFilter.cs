@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -48,8 +46,7 @@ namespace Swashbuckle.AspNetCore.Examples
 
                     if (definitionToUpdate != null)
                     {
-                        var formatter = (IContractResolver)Activator.CreateInstance(attr.JsonResolver);
-                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider,formatter))["application/json"];
+                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider, attr.ContractResolver))["application/json"];
                     }
                 }
             }
@@ -72,8 +69,7 @@ namespace Swashbuckle.AspNetCore.Examples
                     if (response.Value != null)
                     {
                         var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
-                        var formatter = (IContractResolver)Activator.CreateInstance(attr.JsonResolver);
-                        response.Value.Examples = FormatAsJson(provider,formatter);
+                        response.Value.Examples = FormatAsJson(provider, attr.ContractResolver);
                     }
                 }
             }
