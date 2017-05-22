@@ -48,7 +48,8 @@ namespace Swashbuckle.AspNetCore.Examples
 
                     if (definitionToUpdate != null)
                     {
-                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider))["application/json"];
+                        var formatter = (IContractResolver)Activator.CreateInstance(attr.JsonResolver);
+                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider,formatter))["application/json"];
                     }
                 }
             }
@@ -71,19 +72,20 @@ namespace Swashbuckle.AspNetCore.Examples
                     if (response.Value != null)
                     {
                         var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
-                        response.Value.Examples = FormatAsJson(provider);
+                        var formatter = (IContractResolver)Activator.CreateInstance(attr.JsonResolver);
+                        response.Value.Examples = FormatAsJson(provider,formatter);
                     }
                 }
             }
         }
 
-        private static object ConvertToCamelCase(Dictionary<string, object> examples)
+        private static object ConvertToDesiredCase(Dictionary<string, object> examples, IContractResolver resolver)
         {
-            var jsonString = JsonConvert.SerializeObject(examples, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            var jsonString = JsonConvert.SerializeObject(examples, new JsonSerializerSettings { ContractResolver = resolver });
             return JsonConvert.DeserializeObject(jsonString);
         }
 
-        private static object FormatAsJson(IExamplesProvider provider)
+        private static object FormatAsJson(IExamplesProvider provider, IContractResolver resolver)
         {
             var examples = new Dictionary<string, object>
             {
@@ -92,7 +94,7 @@ namespace Swashbuckle.AspNetCore.Examples
                 }
             };
 
-            return ConvertToCamelCase(examples);
+            return ConvertToDesiredCase(examples,resolver);
         }
     }
 }
