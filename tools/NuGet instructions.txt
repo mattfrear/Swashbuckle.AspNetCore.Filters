@@ -1,0 +1,4 @@
+1. Update the version number in the .csproj
+2. dotnet pack --configuration release
+3. cd src\Swashbuckle.AspNetCore.Examples\bin\Release
+4. nuget push Swashbuckle.AspNetCore.Examples.1.2.0.nupkg MySecretNuGetApiKeyHere -Source https://www.nuget.org/api/v2/package
