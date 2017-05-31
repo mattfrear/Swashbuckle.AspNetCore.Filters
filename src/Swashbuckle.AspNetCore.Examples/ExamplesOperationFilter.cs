@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -46,7 +45,13 @@ namespace Swashbuckle.AspNetCore.Examples
 
                     if (definitionToUpdate != null)
                     {
-                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider, attr.ContractResolver))["application/json"];
+                        var serializerSettings = new JsonSerializerSettings
+                        {
+                            ContractResolver = attr.ContractResolver,
+                            NullValueHandling = NullValueHandling.Ignore // ignore null values because swagger does not support null objects https://github.com/OAI/OpenAPI-Specification/issues/229
+                        };
+
+                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider, serializerSettings))["application/json"];
                     }
                 }
             }
@@ -69,19 +74,20 @@ namespace Swashbuckle.AspNetCore.Examples
                     if (response.Value != null)
                     {
                         var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
-                        response.Value.Examples = FormatAsJson(provider, attr.ContractResolver);
+                        var serializerSettings = new JsonSerializerSettings { ContractResolver = attr.ContractResolver };
+                        response.Value.Examples = FormatAsJson(provider, serializerSettings);
                     }
                 }
             }
         }
 
-        private static object ConvertToDesiredCase(Dictionary<string, object> examples, IContractResolver resolver)
+        private static object ConvertToDesiredCase(Dictionary<string, object> examples, JsonSerializerSettings serializerSettings)
         {
-            var jsonString = JsonConvert.SerializeObject(examples, new JsonSerializerSettings { ContractResolver = resolver });
+            var jsonString = JsonConvert.SerializeObject(examples, serializerSettings);
             return JsonConvert.DeserializeObject(jsonString);
         }
 
-        private static object FormatAsJson(IExamplesProvider provider, IContractResolver resolver)
+        private static object FormatAsJson(IExamplesProvider provider, JsonSerializerSettings serializerSettings)
         {
             var examples = new Dictionary<string, object>
             {
@@ -90,7 +96,7 @@ namespace Swashbuckle.AspNetCore.Examples
                 }
             };
 
-            return ConvertToDesiredCase(examples,resolver);
+            return ConvertToDesiredCase(examples, serializerSettings);
         }
     }
 }

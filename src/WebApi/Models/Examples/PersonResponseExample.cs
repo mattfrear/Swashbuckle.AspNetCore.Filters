@@ -6,7 +6,7 @@ namespace WebApi.Models.Examples
     {
         public object GetExamples()
         {
-            return new PersonResponse { Id = 123, FirstName = "John", LastName = "Doe", Age = 27 };
+            return new PersonResponse { Id = 123, FirstName = "John", LastName = "Doe", Age = 27, Income = null };
         }
     }
 }

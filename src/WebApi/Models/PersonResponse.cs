@@ -13,5 +13,8 @@ namespace WebApi.Models
 
         [Description("His age, in years")]
         public int Age { get; set; }
+
+        [Description("His income, in dollars, if known. If unknown then null")]
+        public decimal? Income { get; set; }
     }
 }
