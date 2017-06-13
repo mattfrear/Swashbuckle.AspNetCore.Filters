@@ -84,7 +84,11 @@ namespace Swashbuckle.AspNetCore.Examples
 				{
 					if (response.Value != null)
 					{
-						var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
+						var provider = _services == null
+							? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType)
+							: (IExamplesProvider)_services.GetService(attr.ExamplesProviderType)
+							  ?? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
+
 						var serializerSettings = new JsonSerializerSettings { ContractResolver = attr.ContractResolver };
 						response.Value.Examples = FormatAsJson(provider, serializerSettings);
 					}
