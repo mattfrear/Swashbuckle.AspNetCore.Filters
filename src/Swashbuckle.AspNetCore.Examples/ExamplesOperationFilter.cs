@@ -38,7 +38,7 @@ namespace Swashbuckle.AspNetCore.Examples
                 {
                     var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
 
-                    var parts = schema.Ref.Split('/');
+                    var parts = schema.Ref?.Split('/');
                     if (parts == null)
                         continue;
                     
