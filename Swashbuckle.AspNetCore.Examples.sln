@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3C314E2-1A92-43F6-B38B-7FA0FC1863EA}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,10 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{32C79B97-862
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Examples", "src\Swashbuckle.AspNetCore.Examples\Swashbuckle.AspNetCore.Examples.csproj", "{BF2A4583-1466-440D-B818-0169634DA8F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "src\WebApi\WebApi.csproj", "{606B769A-F3D7-4518-82F9-3D53A20D2DC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\WebApi\WebApi.csproj", "{606B769A-F3D7-4518-82F9-3D53A20D2DC4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{B47A2133-3F12-4616-BC3B-1C85E25087E9}"
 	ProjectSection(SolutionItems) = preProject
+		tools\key.snk = tools\key.snk
 		tools\NuGet instructions.txt = tools\NuGet instructions.txt
 	EndProjectSection
 EndProject
