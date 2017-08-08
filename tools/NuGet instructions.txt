@@ -2,3 +2,4 @@
 2. dotnet pack --configuration release
 3. cd src\Swashbuckle.AspNetCore.Examples\bin\Release
 4. nuget push Swashbuckle.AspNetCore.Examples.1.2.0.nupkg MySecretNuGetApiKeyHere -Source https://www.nuget.org/api/v2/package
+5. Go to www.nuget.org and update the package description and add release notes.
