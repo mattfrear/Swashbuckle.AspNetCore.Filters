@@ -1,5 +1,5 @@
 # Swashbuckle.AspNetCore.Examples
-A simple library which adds the [SwaggerRequestExample] and [SwaggerResponseExample] attributes to [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
+A simple library which adds the `[SwaggerRequestExample]` and `[SwaggerResponseExample]` attributes to [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
 
 Example request:
 https://mattfrear.com/2016/01/25/generating-swagger-example-requests-with-swashbuckle/ 
