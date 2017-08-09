@@ -40,8 +40,10 @@ namespace Swashbuckle.AspNetCore.Examples
 
                     var parts = schema.Ref?.Split('/');
                     if (parts == null)
+                    {
                         continue;
-                    
+                    }
+
                     var name = parts.Last();
 
                     var definitionToUpdate = schemaRegistry.Definitions[name];
