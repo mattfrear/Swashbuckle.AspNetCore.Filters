@@ -38,7 +38,10 @@ namespace Swashbuckle.AspNetCore.Examples
                 {
                     var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
 
-                    var parts = schema.Ref.Split('/');
+                    var parts = schema.Ref?.Split('/');
+                    if (parts == null)
+                        continue;
+                    
                     var name = parts.Last();
 
                     var definitionToUpdate = schemaRegistry.Definitions[name];
@@ -74,7 +77,7 @@ namespace Swashbuckle.AspNetCore.Examples
                     if (response.Value != null)
                     {
                         var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
-                        var serializerSettings = new JsonSerializerSettings { ContractResolver = attr.ContractResolver };
+                        var serializerSettings = new JsonSerializerSettings { ContractResolver = attr.ContractResolver, NullValueHandling = NullValueHandling.Ignore };
                         response.Value.Examples = FormatAsJson(provider, serializerSettings);
                     }
                 }
