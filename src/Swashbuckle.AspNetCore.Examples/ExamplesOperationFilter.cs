@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
@@ -10,6 +11,13 @@ namespace Swashbuckle.AspNetCore.Examples
 {
     public class ExamplesOperationFilter : IOperationFilter
     {
+        private static IServiceProvider _services;
+
+        public ExamplesOperationFilter(IServiceProvider services = null)
+        {
+            _services = services;
+        }
+
         public void Apply(Operation operation, OperationFilterContext context)
         {
             SetRequestModelExamples(operation, context.SchemaRegistry, context.ApiDescription);
@@ -36,7 +44,10 @@ namespace Swashbuckle.AspNetCore.Examples
 
                 if (request != null)
                 {
-                    var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
+                    var provider = _services == null
+                        ? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType)
+                        : (IExamplesProvider)_services.GetService(attr.ExamplesProviderType)
+                        ?? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
 
                     var parts = schema.Ref?.Split('/');
                     if (parts == null)
@@ -78,7 +89,10 @@ namespace Swashbuckle.AspNetCore.Examples
                 {
                     if (response.Value != null)
                     {
-                        var provider = (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
+                        var provider = _services == null
+                            ? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType)
+                            : (IExamplesProvider)_services.GetService(attr.ExamplesProviderType)
+                              ?? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
                         var serializerSettings = new JsonSerializerSettings { ContractResolver = attr.ContractResolver, NullValueHandling = NullValueHandling.Ignore };
                         response.Value.Examples = FormatAsJson(provider, serializerSettings);
                     }
