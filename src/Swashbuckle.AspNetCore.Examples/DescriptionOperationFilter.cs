@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +11,9 @@ namespace Swashbuckle.AspNetCore.Examples
 {
     public class DescriptionOperationFilter : IOperationFilter
     {
+        private static readonly SchemaRegistrySettings Settings = new SchemaRegistrySettings();
+        private static readonly SchemaIdManager IdManager = new SchemaIdManager(Settings.SchemaIdSelector);
+    
         public void Apply(Operation operation, OperationFilterContext context)
         {
             SetResponseModelDescriptions(operation, context.SchemaRegistry, context.ApiDescription);
@@ -31,7 +35,7 @@ namespace Swashbuckle.AspNetCore.Examples
                 {
                     if (response.Value != null)
                     {
-                        var definition = schemaRegistry.Definitions[attr.Type.Name];
+                        var definition = schemaRegistry.Definitions[ResolveDefinitionKey(attr.Type)];
 
                         var propertiesWithDescription = attr.Type.GetProperties().Where(prop => prop.IsDefined(typeof(DescriptionAttribute), false));
 
@@ -44,6 +48,11 @@ namespace Swashbuckle.AspNetCore.Examples
                     }
                 }
             }
+        }
+        
+        private static string ResolveDefinitionKey(Type type)
+        {
+          return IdManager.IdFor(type);
         }
         
         private static string ToCamelCase(string value)
