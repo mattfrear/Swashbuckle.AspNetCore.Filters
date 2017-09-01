@@ -72,13 +72,13 @@ Decorate your controller methods with the included SwaggerRequestExample attribu
 ```
 [SwaggerRequestExample(typeof(DeliveryOptionsSearchModel), typeof(DeliveryOptionsSearchModelExample))]
 public async Task<IHttpActionResult> DeliveryOptionsForAddress(DeliveryOptionsSearchModel search)
-{
 ```
 
 Now implement it, in this case via a DeliveryOptionsSearchModelExample (which should implement IExamplesProvider), 
 which will generate the example data. It should return the type you specified when you specified the `[SwaggerRequestExample]`.
 	
-```public class DeliveryOptionsSearchModelExample : IExamplesProvider
+```
+public class DeliveryOptionsSearchModelExample : IExamplesProvider
 {
     public object GetExamples()
     {
@@ -105,7 +105,9 @@ which will generate the example data. It should return the type you specified wh
                 }
             }
         };
-    }```
+    }
+```
+
 ## How to use - Response examples
 
 Decorate your methods with the new SwaggerResponseExample attribute:
@@ -113,7 +115,8 @@ Decorate your methods with the new SwaggerResponseExample attribute:
 [SwaggerResponse(HttpStatusCode.OK, Type=typeof(IEnumerable<Country>))]
 [SwaggerResponseExample(HttpStatusCode.OK, typeof(CountryExamples))]
 [SwaggerResponse(HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ErrorResource>))]
-public async Task<HttpResponseMessage> Get(string lang)```
+public async Task<HttpResponseMessage> Get(string lang)
+```
 
 Now you’ll need to add an Examples class, which will implement IExamplesProvider to generate the example data
 
