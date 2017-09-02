@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -39,7 +40,8 @@ namespace Swashbuckle.AspNetCore.Examples
                 var attr = (SwaggerRequestExampleAttribute)attribute;
                 var schema = schemaRegistry.GetOrRegister(attr.RequestType);
 
-                var request = operation.Parameters.FirstOrDefault(p => p.In == "body"/* && p.schema.@ref == schema.@ref */);
+                var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
+                var request = bodyParameters.FirstOrDefault(p => p.Schema.Ref == schema.Ref);
 
                 if (request != null)
                 {
@@ -48,28 +50,12 @@ namespace Swashbuckle.AspNetCore.Examples
                         : (IExamplesProvider)_services.GetService(attr.ExamplesProviderType)
                         ?? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
 
-                    var parts = schema.Ref?.Split('/');
-                    if (parts == null)
+                    var name = attr.RequestType.Name;
+
+                    if (schemaRegistry.Definitions.ContainsKey(name))
                     {
-                        continue;
-                    }
-
-                    var name = parts.Last();
-
-                    var definitionToUpdate = schemaRegistry.Definitions[name];
-
-                    if (definitionToUpdate != null)
-                    {
-                        var serializerSettings = new JsonSerializerSettings
-                        {
-                            ContractResolver = attr.ContractResolver,
-                            NullValueHandling = NullValueHandling.Ignore // ignore null values because swagger does not support null objects https://github.com/OAI/OpenAPI-Specification/issues/229
-                        };
-
-                        if (attr.JsonConverter != null)
-                        {
-                            serializerSettings.Converters.Add(attr.JsonConverter);
-                        }
+                        var definitionToUpdate = schemaRegistry.Definitions[name];
+                        var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
                         definitionToUpdate.Example = ((dynamic)FormatAsJson(provider, serializerSettings))["application/json"];
                     }
@@ -98,16 +84,7 @@ namespace Swashbuckle.AspNetCore.Examples
                             : (IExamplesProvider)_services.GetService(attr.ExamplesProviderType)
                               ?? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
 
-                        var serializerSettings = new JsonSerializerSettings
-                        {
-                            ContractResolver = attr.ContractResolver,
-                            NullValueHandling = NullValueHandling.Ignore
-                        };
-
-                        if (attr.JsonConverter != null)
-                        {
-                            serializerSettings.Converters.Add(attr.JsonConverter);
-                        }
+                        var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
                         response.Value.Examples = ConvertToDesiredCase(provider.GetExamples(), serializerSettings);
                     }
@@ -131,6 +108,22 @@ namespace Swashbuckle.AspNetCore.Examples
             };
 
             return ConvertToDesiredCase(examples, serializerSettings);
+        }
+
+        private static JsonSerializerSettings SerializerSettings(IContractResolver attributeContractResolver, JsonConverter attributeJsonConverter)
+        {
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = attributeContractResolver,
+                NullValueHandling = NullValueHandling.Ignore // ignore null values because swagger does not support null objects https://github.com/OAI/OpenAPI-Specification/issues/229
+            };
+
+            if (attributeJsonConverter != null)
+            {
+                serializerSettings.Converters.Add(attributeJsonConverter);
+            }
+
+            return serializerSettings;
         }
     }
 }
