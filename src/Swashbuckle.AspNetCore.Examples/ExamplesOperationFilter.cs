@@ -93,13 +93,13 @@ namespace Swashbuckle.AspNetCore.Examples
                             : (IExamplesProvider)_services.GetService(attr.ExamplesProviderType)
                               ?? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
                         var serializerSettings = new JsonSerializerSettings { ContractResolver = attr.ContractResolver, NullValueHandling = NullValueHandling.Ignore };
-                        response.Value.Examples = FormatAsJson(provider, serializerSettings);
+                        response.Value.Examples = ConvertToDesiredCase(provider.GetExamples(), serializerSettings);
                     }
                 }
             }
         }
 
-        private static object ConvertToDesiredCase(Dictionary<string, object> examples, JsonSerializerSettings serializerSettings)
+        private static object ConvertToDesiredCase(object examples, JsonSerializerSettings serializerSettings)
         {
             var jsonString = JsonConvert.SerializeObject(examples, serializerSettings);
             return JsonConvert.DeserializeObject(jsonString);
