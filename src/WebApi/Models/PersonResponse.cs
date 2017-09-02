@@ -6,6 +6,8 @@ namespace WebApi.Models
     {
         public int Id { get; set; }
 
+        public Title Title { get; set; }
+
         [Description("The first name of the person")]
         public string FirstName { get; set; }
 

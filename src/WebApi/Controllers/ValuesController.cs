@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApi.Models;
 using WebApi.Models.Examples;
+using Newtonsoft.Json.Converters;
 
 namespace WebApi.Controllers
 {
@@ -15,7 +16,7 @@ namespace WebApi.Controllers
 
         [SwaggerResponse(200, typeof(PersonResponse), "Successfully found the person")]
         // [SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]
-        [SwaggerResponseExample(200, typeof(PersonResponseExample))]
+        [SwaggerResponseExample(200, typeof(PersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
 
         [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
         [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
@@ -23,7 +24,7 @@ namespace WebApi.Controllers
         [SwaggerResponse(500, typeof(ErrorResponse), "There was an unexpected error")]
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
 
-        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample))]
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
         public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
