@@ -112,9 +112,9 @@ public class DeliveryOptionsSearchModelExample : IExamplesProvider
 
 Decorate your methods with the new SwaggerResponseExample attribute:
 ```
-[SwaggerResponse(HttpStatusCode.OK, Type=typeof(IEnumerable<Country>))]
-[SwaggerResponseExample(HttpStatusCode.OK, typeof(CountryExamples))]
-[SwaggerResponse(HttpStatusCode.BadRequest, Type = typeof(IEnumerable<ErrorResource>))]
+[SwaggerResponse(200, Type=typeof(IEnumerable<Country>))]
+[SwaggerResponseExample(200, typeof(CountryExamples))]
+[SwaggerResponse(400, Type = typeof(IEnumerable<ErrorResource>))]
 public async Task<HttpResponseMessage> Get(string lang)
 ```
 
