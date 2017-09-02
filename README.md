@@ -171,7 +171,7 @@ The default is camelCase. If you want PascalCase you can pass in a `DefaultContr
 `[SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]`
 
 ## Render Enums as strings
-By default `enum`s will output their integer values. If you want to output strings you can pass in a StringEnumConverter like so:
+By default `enum`s will output their integer values. If you want to output strings you can pass in a `StringEnumConverter` like so:
 `[SwaggerResponseExample(200, typeof(PersonResponseExample), jsonConverter: typeof(StringEnumConverter))]`
 
 ## Advanced: Examples with Dependency injection
