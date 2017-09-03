@@ -24,12 +24,6 @@ namespace Swashbuckle.AspNetCore.Examples
             SetResponseModelExamples(operation, context.ApiDescription);
         }
 
-        public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
-        {
-            SetRequestModelExamples(operation, schemaRegistry, apiDescription);
-            SetResponseModelExamples(operation, apiDescription);
-        }
-
         private static void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
             var actionAttributes = apiDescription.ActionAttributes();
