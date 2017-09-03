@@ -39,10 +39,7 @@ namespace Swashbuckle.AspNetCore.Examples
 
                 if (request != null)
                 {
-                    var provider = _services == null
-                        ? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType)
-                        : (IExamplesProvider)_services.GetService(attr.ExamplesProviderType)
-                        ?? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
+                    var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
 
                     var name = attr.RequestType.Name;
 
@@ -51,7 +48,7 @@ namespace Swashbuckle.AspNetCore.Examples
                         var definitionToUpdate = schemaRegistry.Definitions[name];
                         var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
-                        definitionToUpdate.Example = ((dynamic)FormatAsJson(provider, serializerSettings))["application/json"];
+                        definitionToUpdate.Example = FormatJson(provider, serializerSettings);
                     }
                 }
             }
@@ -73,35 +70,31 @@ namespace Swashbuckle.AspNetCore.Examples
                 {
                     if (response.Value != null)
                     {
-                        var provider = _services == null
-                            ? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType)
-                            : (IExamplesProvider)_services.GetService(attr.ExamplesProviderType)
-                              ?? (IExamplesProvider)Activator.CreateInstance(attr.ExamplesProviderType);
+                        var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
 
                         var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
-                        response.Value.Examples = ConvertToDesiredCase(provider.GetExamples(), serializerSettings);
+                        response.Value.Examples = FormatJson(provider, serializerSettings);
                     }
                 }
             }
         }
 
-        private static object ConvertToDesiredCase(object examples, JsonSerializerSettings serializerSettings)
+        private static IExamplesProvider ExamplesProvider(IServiceProvider services, Type examplesProviderType)
         {
-            var jsonString = JsonConvert.SerializeObject(examples, serializerSettings);
-            return JsonConvert.DeserializeObject(jsonString);
+            var provider = services == null
+                ? (IExamplesProvider)Activator.CreateInstance(examplesProviderType)
+                : (IExamplesProvider)services.GetService(examplesProviderType)
+                  ?? (IExamplesProvider)Activator.CreateInstance(examplesProviderType);
+            return provider;
         }
 
-        private static object FormatAsJson(IExamplesProvider provider, JsonSerializerSettings serializerSettings)
+        private static object FormatJson(IExamplesProvider provider, JsonSerializerSettings serializerSettings)
         {
-            var examples = new Dictionary<string, object>
-            {
-                {
-                    "application/json", provider.GetExamples()
-                }
-            };
-
-            return ConvertToDesiredCase(examples, serializerSettings);
+            var examples = provider.GetExamples();
+            var jsonString = JsonConvert.SerializeObject(examples, serializerSettings);
+            var result = JsonConvert.DeserializeObject(jsonString);
+            return result;
         }
 
         private static JsonSerializerSettings SerializerSettings(IContractResolver attributeContractResolver, JsonConverter attributeJsonConverter)
