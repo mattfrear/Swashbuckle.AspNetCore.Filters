@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -28,6 +29,22 @@ namespace WebApi.Controllers
         public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+            return personResponse;
+        }
+
+        [HttpPost]
+        [Route("api/values/genericperson")]
+        [SwaggerResponse(200, typeof(ResponseWrapper<PersonResponse>), "Successfully found the person")]
+        [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
+        // [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        public ResponseWrapper<PersonResponse> GetGenericPerson([FromBody]RequestWrapper<PersonRequest> personRequest)
+        {
+            var personResponse = new ResponseWrapper<PersonResponse>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Body = new PersonResponse { Id = 1, FirstName = "Dave" }
+            };
+
             return personResponse;
         }
 

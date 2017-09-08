@@ -41,7 +41,14 @@ namespace Swashbuckle.AspNetCore.Examples
                 {
                     var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
 
-                    var name = attr.RequestType.Name;
+                    // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
+                    var parts = schema.Ref?.Split('/');
+                    if (parts == null)
+                    {
+                        continue;
+                    }
+
+                    var name = parts.Last();
 
                     if (schemaRegistry.Definitions.ContainsKey(name))
                     {
