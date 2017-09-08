@@ -1,4 +1,4 @@
-1. Update the version number in the .csproj and the .nuspec
+1. Update the version number in the .csproj
 2. dotnet pack --configuration release
 3. cd src\Swashbuckle.AspNetCore.Examples\bin\Release
 4. Open the package with NuGet Package explorer and fix the metadata, because stupid dotnet pack ignores the NuSpec file.
