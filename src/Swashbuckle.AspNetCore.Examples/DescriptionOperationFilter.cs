@@ -35,15 +35,18 @@ namespace Swashbuckle.AspNetCore.Examples
                 {
                     if (response.Value != null)
                     {
-                        var definition = schemaRegistry.Definitions[ResolveDefinitionKey(attr.Type)];
-
-                        var propertiesWithDescription = attr.Type.GetProperties().Where(prop => prop.IsDefined(typeof(DescriptionAttribute), false));
-
-                        foreach (var prop in propertiesWithDescription)
+                        if (schemaRegistry.Definitions.ContainsKey(attr.Type.Name))
                         {
-                            var descriptionAttribute = (DescriptionAttribute)prop.GetCustomAttributes(typeof(DescriptionAttribute), false).First();
-                            var propName = ToCamelCase(prop.Name);
-                            definition.Properties[propName].Description = descriptionAttribute.Description;
+                            var definition = schemaRegistry.Definitions[ResolveDefinitionKey(attr.Type)];
+
+                            var propertiesWithDescription = attr.Type.GetProperties().Where(prop => prop.IsDefined(typeof(DescriptionAttribute), false));
+
+                            foreach (var prop in propertiesWithDescription)
+                            {
+                                var descriptionAttribute = (DescriptionAttribute)prop.GetCustomAttributes(typeof(DescriptionAttribute), false).First();
+                                var propName = ToCamelCase(prop.Name);
+                                definition.Properties[propName].Description = descriptionAttribute.Description;
+                            }
                         }
                     }
                 }
