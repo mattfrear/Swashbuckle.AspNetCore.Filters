@@ -108,6 +108,14 @@ public class DeliveryOptionsSearchModelExample : IExamplesProvider
     }
 ```
 
+In the Swagger document, this will populate the request's schema object [example property](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schemaExample).
+The spec for this says:
+
+Field Name | Type | Description
+---|:---:|---
+example | Any | A free-form property to include an example of an instance for this schema.
+
+
 ## How to use - Response examples
 
 Decorate your methods with the new SwaggerResponseExample attribute:
@@ -133,6 +141,30 @@ public class CountryExamples : IExamplesProvider
     }
 }
 ```
+
+In the Swagger document, this will populate the response's [example object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#exampleObject).
+The spec for this says:
+
+Field Pattern | Type | Description
+---|:---:|---
+{mime type} | Any | The name of the property MUST be one of the Operation produces values (either implicit or inherited). The value SHOULD be an example of what such a response would look like.
+
+Example response for application/json mimetype of a Pet data type:
+
+```js
+{
+  "application/json": {
+    "name": "Puma",
+    "type": "Dog",
+    "color": "Black",
+    "gender": "Female",
+    "breed": "Mixed"
+  }
+}
+```
+
+Note that this differs from the Request example in that the mime type is a required property on the response example but not so on the request example.
+
 ### Known issues
 - Although you can add a response examples for each HTTP status code (200, 400, 404 etc), and they will appear in the
 swagger.json, they will not display correctly. This is due to an bug in swagger-ui. [Issue 9](https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples/issues/9)

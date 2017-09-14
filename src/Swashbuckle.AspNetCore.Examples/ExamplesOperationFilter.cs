@@ -55,7 +55,7 @@ namespace Swashbuckle.AspNetCore.Examples
                         var definitionToUpdate = schemaRegistry.Definitions[name];
                         var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
-                        definitionToUpdate.Example = FormatJson(provider, serializerSettings);
+                        definitionToUpdate.Example = FormatJson(provider, serializerSettings, false);
                     }
                 }
             }
@@ -81,7 +81,7 @@ namespace Swashbuckle.AspNetCore.Examples
 
                         var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
-                        response.Value.Examples = FormatJson(provider, serializerSettings);
+                        response.Value.Examples = FormatJson(provider, serializerSettings, true);
                     }
                 }
             }
@@ -96,9 +96,23 @@ namespace Swashbuckle.AspNetCore.Examples
             return provider;
         }
 
-        private static object FormatJson(IExamplesProvider provider, JsonSerializerSettings serializerSettings)
+        private static object FormatJson(IExamplesProvider provider, JsonSerializerSettings serializerSettings, bool includeMediaType)
         {
-            var examples = provider.GetExamples();
+            object examples;
+            if (includeMediaType)
+            {
+                examples = new Dictionary<string, object>
+                {
+                    {
+                        "application/json", provider.GetExamples()
+                    }
+                };
+            }
+            else
+            {
+                examples = provider.GetExamples();
+            }
+
             var jsonString = JsonConvert.SerializeObject(examples, serializerSettings);
             var result = JsonConvert.DeserializeObject(jsonString);
             return result;
