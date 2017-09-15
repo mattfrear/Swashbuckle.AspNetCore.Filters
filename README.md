@@ -169,6 +169,10 @@ Note that this differs from the Request example in that the mime type is a requi
 - Although you can add a response examples for each HTTP status code (200, 400, 404 etc), and they will appear in the
 swagger.json, they will not display correctly. This is due to an bug in swagger-ui. [Issue 9](https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples/issues/9)
 
+- The response example is displayed wrapped in a JSON object which has the media type, i.e. "application/json" as the key, and the example as the value. 
+[Issue 16](https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples/issues/16) Our response example is correct as per the Swagger spec, so I'm not sure 
+why it is being displayed incorrectly - I suspect it's a bug in swagger-ui, as this didn't happen with older versions of Swashbuckle.
+
 ## How to use - Document response properties
 Define the SwaggerResponse, as usual:
 ```
