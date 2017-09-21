@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,11 +22,12 @@ namespace Swashbuckle.AspNetCore.Examples
         private static void SetResponseModelDescriptions(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
             var actionAttributes = apiDescription.ActionAttributes();
-            var swaggerResponseExampleAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerResponseAttribute));
+            var swaggerResponseAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerResponseAttribute));
 
-            foreach (var attribute in swaggerResponseExampleAttributes)
+            foreach (var attribute in swaggerResponseAttributes)
             {
                 var attr = (SwaggerResponseAttribute)attribute;
+
                 var statusCode = attr.StatusCode.ToString();
 
                 var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode);

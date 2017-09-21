@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
         [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
 
-        [SwaggerResponse(500, typeof(ErrorResponse), "There was an unexpected error")]
+        [SwaggerResponse(500, null, "There was an unexpected error")]
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
 
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
