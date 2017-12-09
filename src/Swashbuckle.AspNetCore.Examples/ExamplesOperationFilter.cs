@@ -6,16 +6,20 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Swashbuckle.AspNetCore.Examples
 {
     public class ExamplesOperationFilter : IOperationFilter
     {
         private static IServiceProvider _services;
+        private static IOptions<MvcJsonOptions> _mvcJsonOptions;
 
-        public ExamplesOperationFilter(IServiceProvider services = null)
+        public ExamplesOperationFilter(IOptions<MvcJsonOptions> mvcJsonOptions, IServiceProvider services = null)
         {
             _services = services;
+            _mvcJsonOptions = mvcJsonOptions;
         }
 
         public void Apply(Operation operation, OperationFilterContext context)
@@ -120,11 +124,12 @@ namespace Swashbuckle.AspNetCore.Examples
 
         private static JsonSerializerSettings SerializerSettings(IContractResolver attributeContractResolver, JsonConverter attributeJsonConverter)
         {
-            var serializerSettings = new JsonSerializerSettings
+            var serializerSettings = DuplicateSerializerSettings(_mvcJsonOptions.Value.SerializerSettings);
+            if (attributeContractResolver != null)
             {
-                ContractResolver = attributeContractResolver,
-                NullValueHandling = NullValueHandling.Ignore // ignore null values because swagger does not support null objects https://github.com/OAI/OpenAPI-Specification/issues/229
-            };
+                serializerSettings.ContractResolver = attributeContractResolver;
+            }
+            serializerSettings.NullValueHandling = NullValueHandling.Ignore; // ignore nulls on any RequestExample properies because swagger does not support null objects https://github.com/OAI/OpenAPI-Specification/issues/229
 
             if (attributeJsonConverter != null)
             {
@@ -132,6 +137,39 @@ namespace Swashbuckle.AspNetCore.Examples
             }
 
             return serializerSettings;
+        }
+
+        // Duplicate the controller's serializer settings because I don't want to overwrite them
+        private static JsonSerializerSettings DuplicateSerializerSettings(JsonSerializerSettings controllerSerializerSettings)
+        {
+            if (controllerSerializerSettings == null)
+            {
+                return new JsonSerializerSettings();
+            }
+
+            return new JsonSerializerSettings
+            {
+                Binder = controllerSerializerSettings.Binder,
+                Converters = new List<JsonConverter>(controllerSerializerSettings.Converters),
+                CheckAdditionalContent = controllerSerializerSettings.CheckAdditionalContent,
+                ConstructorHandling = controllerSerializerSettings.ConstructorHandling,
+                Context = controllerSerializerSettings.Context,
+                ContractResolver = controllerSerializerSettings.ContractResolver,
+                Culture = controllerSerializerSettings.Culture,
+                DateFormatHandling = controllerSerializerSettings.DateFormatHandling,
+                DateParseHandling = controllerSerializerSettings.DateParseHandling,
+                DateTimeZoneHandling = controllerSerializerSettings.DateTimeZoneHandling,
+                DefaultValueHandling = controllerSerializerSettings.DefaultValueHandling,
+                Error = controllerSerializerSettings.Error,
+                Formatting = controllerSerializerSettings.Formatting,
+                MaxDepth = controllerSerializerSettings.MaxDepth,
+                MissingMemberHandling = controllerSerializerSettings.MissingMemberHandling,
+                NullValueHandling = controllerSerializerSettings.NullValueHandling,
+                ObjectCreationHandling = controllerSerializerSettings.ObjectCreationHandling,
+                PreserveReferencesHandling = controllerSerializerSettings.PreserveReferencesHandling,
+                ReferenceLoopHandling = controllerSerializerSettings.ReferenceLoopHandling,
+                TypeNameHandling = controllerSerializerSettings.TypeNameHandling,
+            };
         }
     }
 }
