@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApi.Models;
 using WebApi.Models.Examples;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace WebApi.Controllers
 {
@@ -16,8 +17,8 @@ namespace WebApi.Controllers
         [Route("api/values/person")]
 
         [SwaggerResponse(200, typeof(PersonResponse), "Successfully found the person")]
-        // [SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]
-        [SwaggerResponseExample(200, typeof(PersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerResponseExample(200, typeof(PersonResponseExample))]
+        // [SwaggerResponseExample(200, typeof(PersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
 
         [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
         [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
@@ -36,7 +37,7 @@ namespace WebApi.Controllers
         [Route("api/values/genericperson")]
         [SwaggerResponse(200, typeof(ResponseWrapper<PersonResponse>), "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
-        // [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
         public ResponseWrapper<PersonResponse> GetGenericPerson([FromBody]RequestWrapper<PersonRequest> personRequest)
         {
             var personResponse = new ResponseWrapper<PersonResponse>

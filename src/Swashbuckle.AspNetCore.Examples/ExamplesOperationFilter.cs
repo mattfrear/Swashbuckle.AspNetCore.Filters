@@ -139,6 +139,7 @@ namespace Swashbuckle.AspNetCore.Examples
             return serializerSettings;
         }
 
+        // Duplicate the controller's serializer settings because I don't want to overwrite them
         private static JsonSerializerSettings DuplicateSerializerSettings(JsonSerializerSettings controllerSerializerSettings)
         {
             if (controllerSerializerSettings == null)
