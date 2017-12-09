@@ -35,7 +35,7 @@ namespace Swashbuckle.AspNetCore.Examples
                 var schema = schemaRegistry.GetOrRegister(attr.RequestType);
 
                 var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
-                var request = bodyParameters.FirstOrDefault(p => p.Schema.Ref == schema.Ref);
+                var request = bodyParameters.FirstOrDefault(p => p.Schema.Ref == schema.Ref || p.Schema.Items.Ref == schema.Ref);
 
                 if (request != null)
                 {
