@@ -17,14 +17,14 @@ namespace Swashbuckle.AspNetCore.Examples
         /// </summary>
         /// <param name="statusCode">The HTTP status code, e.g. 200</param>
         /// <param name="examplesProviderType">A type that inherits from IExamplesProvider</param>
-        /// <param name="contractResolver">If null then the CamelCasePropertyNamesContractResolver will be used. For PascalCase you can pass in typeof(DefaultContractResolver)</param>
+        /// <param name="contractResolver">An optional json contract Resolver if you want to override the one you use</param>
         /// <param name="jsonConverter">An optional jsonConverter to use, e.g. typeof(StringEnumConverter) will render strings as enums</param>
         public SwaggerResponseExampleAttribute(int statusCode, Type examplesProviderType, Type contractResolver = null, Type jsonConverter = null)
         {
             StatusCode = statusCode;
             ExamplesProviderType = examplesProviderType;
             JsonConverter = jsonConverter == null ? null : (JsonConverter)Activator.CreateInstance(jsonConverter);
-            ContractResolver = (IContractResolver)Activator.CreateInstance(contractResolver ?? typeof(CamelCasePropertyNamesContractResolver));
+            ContractResolver = contractResolver == null ? null : (IContractResolver)Activator.CreateInstance(contractResolver);
         }
 
         public Type ExamplesProviderType { get; }
@@ -33,6 +33,6 @@ namespace Swashbuckle.AspNetCore.Examples
 
         public int StatusCode { get; }
 
-        public IContractResolver ContractResolver { get; private set; }
+        public IContractResolver ContractResolver { get; }
     }
 }
