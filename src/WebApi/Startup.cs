@@ -39,6 +39,8 @@ namespace WebApi
                 c.OperationFilter<ExamplesOperationFilter>();
                 c.OperationFilter<DescriptionOperationFilter>();
                 c.OperationFilter<AuthorizationInputOperationFilter>();
+
+                c.DescribeAllEnumsAsStrings();
             });
         }
 

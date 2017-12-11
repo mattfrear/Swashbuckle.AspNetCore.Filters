@@ -30,12 +30,12 @@ namespace Swashbuckle.AspNetCore.Examples
 
         private static void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
-            var actionAttributes = apiDescription.ActionAttributes();
-            var swaggerRequestAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerRequestExampleAttribute));
+            var actionAttributes = apiDescription
+                .ActionAttributes()
+                .OfType<SwaggerRequestExampleAttribute>();
 
-            foreach (var attribute in swaggerRequestAttributes)
+            foreach (var attr in actionAttributes)
             {
-                var attr = (SwaggerRequestExampleAttribute)attribute;
                 var schema = schemaRegistry.GetOrRegister(attr.RequestType);
 
                 var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
@@ -67,12 +67,12 @@ namespace Swashbuckle.AspNetCore.Examples
 
         private static void SetResponseModelExamples(Operation operation, ApiDescription apiDescription)
         {
-            var actionAttributes = apiDescription.ActionAttributes();
-            var swaggerResponseExampleAttributes = actionAttributes.Where(r => r.GetType() == typeof(SwaggerResponseExampleAttribute));
+            var actionAttributes = apiDescription
+                .ActionAttributes()
+                .OfType<SwaggerResponseExampleAttribute>();
 
-            foreach (var attribute in swaggerResponseExampleAttributes)
+            foreach (var attr in actionAttributes)
             {
-                var attr = (SwaggerResponseExampleAttribute)attribute;
                 var statusCode = attr.StatusCode.ToString();
 
                 var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode);
