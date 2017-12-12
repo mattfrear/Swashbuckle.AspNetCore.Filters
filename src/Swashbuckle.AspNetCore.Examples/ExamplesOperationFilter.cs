@@ -149,7 +149,7 @@ namespace Swashbuckle.AspNetCore.Examples
 
             return new JsonSerializerSettings
             {
-                Binder = controllerSerializerSettings.Binder,
+                // Binder = controllerSerializerSettings.Binder, // Obsolete in Json.NET 10.0 - experiment
                 Converters = new List<JsonConverter>(controllerSerializerSettings.Converters),
                 CheckAdditionalContent = controllerSerializerSettings.CheckAdditionalContent,
                 ConstructorHandling = controllerSerializerSettings.ConstructorHandling,
