@@ -25,7 +25,6 @@ namespace Swashbuckle.AspNetCore.Examples
         {
             var swaggerResponseAttributes = apiDescription
                 .ActionAttributes()
-                .Where(r => r.GetType() == typeof(SwaggerResponseAttribute))
                 .OfType<SwaggerResponseAttribute>()
                 .ToList();
 
