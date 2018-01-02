@@ -62,7 +62,6 @@ namespace WebApi.Controllers
             return people;
         }
 
-        [HttpPost]
         [AddSwaggerFileUploadButton]
         [HttpPost("upload")]
         public IActionResult UploadFile(IFormFile file)

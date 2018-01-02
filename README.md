@@ -256,7 +256,6 @@ Authorization input to *every* controller action, regardless of if the endpoint 
 
 Add the `[AddSwaggerFileUploadButton]` attribute to any controller actions which takes an IFormFile, e.g.
 ```
-[HttpPost]
 [AddSwaggerFileUploadButton]
 [HttpPost("upload")]
 public IActionResult UploadFile(IFormFile file)
