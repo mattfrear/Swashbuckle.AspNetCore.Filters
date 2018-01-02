@@ -195,6 +195,8 @@ You may want to use Swashbuckle's  `[SwaggerResponseRemoveDefaults]` attribute t
 [Issue 16](https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples/issues/16) Our response example is correct as per the Swagger spec, so I'm not sure 
 why it is being displayed incorrectly - I suspect it's a bug in swagger-ui, as this didn't happen with older versions of Swashbuckle.
 
+- Response examples which are only a simple type, i.e. string, int, etc and not an object may cause the swagger-ui page to stop rendering correctly. See [Issue 25](https://github.com/mattfrear/Swashbuckle.Examples/issues/25) for a possible workaround.
+
 - For requests, in the Swagger 2.0 spec there is only one schema for each request object defined across all the API endpoints. So if you are using the same request object in multiple API endpoints,
 i.e. on multiple controller actions like this:
 
