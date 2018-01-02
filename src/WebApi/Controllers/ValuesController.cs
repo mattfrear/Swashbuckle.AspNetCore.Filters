@@ -7,6 +7,9 @@ using WebApi.Models;
 using WebApi.Models.Examples;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace WebApi.Controllers
 {
@@ -57,6 +60,14 @@ namespace WebApi.Controllers
         {
             var people = new[] { new PersonResponse { Id = 1, FirstName = "Sally" } };
             return people;
+        }
+
+        [HttpPost]
+        [AddSwaggerFileUploadButton]
+        [HttpPost("upload")]
+        public IActionResult UploadFile(IFormFile file)
+        {
+            return Ok();
         }
     }
 }

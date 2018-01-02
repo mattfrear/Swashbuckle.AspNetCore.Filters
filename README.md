@@ -32,17 +32,27 @@ You'll see some more realistic data (or whatever you want):
 
 ![response with awesome data](https://mattfrear.files.wordpress.com/2015/04/response-new.png?w=700&h=358)
 
-## Documenting Response properties (new!)
+## Documenting Response properties
 
 Lets you add a comment-like description to properties on your response, e.g.
 ![descriptions](https://mattfrear.files.wordpress.com/2017/09/descriptions.jpg)
 
-## Authorization header input box (new!)
+## Authorization header input box
 
 Adds an input so that you can send an Authorization header to your API. Useful for API endpoints that have JWT token
 authentication. e.g.
 
 ![authorization](https://mattfrear.files.wordpress.com/2017/09/authorization.jpg)
+
+## File upload button
+
+Adds a button for uploading a file via IFormFile
+![file upload button](https://mattfrear.files.wordpress.com/2018/01/fileupload.jpg)
+
+## Add a request header
+
+Adds any string to your request headers for all requests. I use this for adding a correlationId to all requests.
+![request header](https://mattfrear.files.wordpress.com/2018/01/header.jpg)
 
 ## Installation
 Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/), then enable whichever filters 
@@ -61,6 +71,8 @@ public void ConfigureServices(IServiceCollection services)
         c.OperationFilter<ExamplesOperationFilter>(); // [SwaggerRequestExample] & [SwaggerResponseExample]
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on Response properties
         c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint
+		c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
+		c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
     });
 }
 ```
@@ -238,7 +250,22 @@ public class PersonResponse
 ## How to use - Authorization input
 
 Just enable the `AuthorizationInputOperationFilter` as described in the Installation section above. Note this this will add an
-Authorization input to EVERY endpoint, regardless of if the endpoint is actually secured.
+Authorization input to *every* controller action, regardless of if the endpoint is actually secured.
+
+## How to use - File upload button
+
+Add the `[AddSwaggerFileUploadButton]` attribute to any controller actions which takes an IFormFile, e.g.
+```
+[HttpPost]
+[AddSwaggerFileUploadButton]
+[HttpPost("upload")]
+public IActionResult UploadFile(IFormFile file)
+{
+```
+
+## How to use - Request Header
+When you enable the filter in your `Startup.cs`, as per the Installation section above, you can specify the name and description of the new header parameter.
+This will add the input box to *every* controller action.
 
 ## Pascal case or Camel case?
 The default is camelCase. If you want PascalCase you can pass in a `DefaultContractResolver` like so:
