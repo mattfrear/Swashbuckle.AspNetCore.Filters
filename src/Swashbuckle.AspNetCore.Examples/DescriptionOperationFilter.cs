@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -102,6 +103,12 @@ namespace Swashbuckle.AspNetCore.Examples
                 var dataMemberAttribute = (DataMemberAttribute)prop.GetCustomAttributes(typeof(DataMemberAttribute), false).First();
                 return dataMemberAttribute.Name ?? prop.Name;
             }
+            else if (prop.IsDefined(typeof(JsonPropertyAttribute), false))
+            {
+                var jsonPropertyAttribute = (JsonPropertyAttribute)prop.GetCustomAttributes(typeof(JsonPropertyAttribute), false).First();
+                return jsonPropertyAttribute.PropertyName ?? prop.Name;
+            }
+
             return prop.Name;
         }
 
