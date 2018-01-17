@@ -54,6 +54,11 @@ Adds a button for uploading a file via IFormFile
 Adds any string to your request headers for all requests. I use this for adding a correlationId to all requests.
 ![request header](https://mattfrear.files.wordpress.com/2018/01/header.jpg)
 
+## Add a response header (new!)
+
+Allows you to specify response headers for any operation
+![response headers](https://user-images.githubusercontent.com/169179/35051682-b8217740-fb9d-11e7-8bec-98d4b088dfa5.png)
+
 ## Installation
 Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/), then enable whichever filters 
 you need when you enable SwaggerGen:
@@ -73,6 +78,7 @@ public void ConfigureServices(IServiceCollection services)
         c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint
 		c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
 		c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
+		c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
     });
 }
 ```
@@ -266,6 +272,16 @@ public IActionResult UploadFile(IFormFile file)
 When you enable the filter in your `Startup.cs`, as per the Installation section above, you can specify the name and description of the new header parameter.
 This will add the input box to *every* controller action.
 
+## How to use - Response headers
+
+Specify one or more `[SwaggerResponseHeader]` attributes on your controller action, like so:
+```
+[SwaggerResponseHeader(HttpStatusCode.OK, "Location", "string", "Location of the newly created resource")]
+[SwaggerResponseHeader(HttpStatusCode.OK, "ETag", "string", "An ETag of the resource")]
+public IHttpActionResult GetPerson(PersonRequest personRequest)
+{
+```
+
 ## Pascal case or Camel case?
 The default is camelCase. If you want PascalCase you can pass in a `DefaultContractResolver` like so:
 `[SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]`
@@ -276,7 +292,7 @@ By default `enum`s will output their integer values. If you want to output strin
 
 ## Advanced: Examples with Dependency injection
 
-If for some reason you need to have examples with DI (for example read them from database) you may:
+If for some reason you need to have examples with DI (for example, read them from a database) you may:
 
 Provide required dependencies in example provider classes:
 

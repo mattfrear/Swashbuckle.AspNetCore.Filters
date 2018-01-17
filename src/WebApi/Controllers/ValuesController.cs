@@ -30,6 +30,9 @@ namespace WebApi.Controllers
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
 
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
+
+        [SwaggerResponseHeader(200, "Location", "string", "Location of the newly created resource")]
+        [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
         public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };

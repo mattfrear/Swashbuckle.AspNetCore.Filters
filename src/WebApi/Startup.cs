@@ -43,6 +43,8 @@ namespace WebApi
 
                 c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
 
+                c.OperationFilter<AddResponseHeadersFilter>();
+
                 c.DescribeAllEnumsAsStrings();
             });
         }
