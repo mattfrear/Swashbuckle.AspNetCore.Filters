@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Examples;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
     public class FakeActions
     {
-        [ProducesResponseType(typeof(void), 204)]
-        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
-        public IActionResult AnnotatedWithResponseTypeAttributes()
-        {
-            throw new NotImplementedException();
-        }
-
-        [SwaggerResponse(204, typeof(void), "No content is returned.")]
-        [SwaggerResponse(400, typeof(IDictionary<string, string>), "This returns a dictionary.")]
-        public IActionResult AnnotatedWithSwaggerResponseAttributes()
+        [SwaggerResponse(200, typeof(PersonResponse))]
+        [SwaggerResponseExample(200, typeof(PersonResponseExample))]
+        public IActionResult AnnotatedWithSwaggerResponseExampleAttributes()
         {
             throw new NotImplementedException();
         }
