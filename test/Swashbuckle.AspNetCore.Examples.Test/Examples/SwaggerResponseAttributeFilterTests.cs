@@ -19,7 +19,6 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 
             // Assert
             var responses = operation.Responses;
-            Assert.Equal(new[] { "204", "400" }, responses.Keys.ToArray());
             var response1 = responses["204"];
             Assert.Equal("No content is returned.", response1.Description);
             Assert.Null(response1.Schema);
