@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3C314E2-1A92-43F6-B38B-7FA0FC1863EA}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,13 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{32C79B97-862
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Examples", "src\Swashbuckle.AspNetCore.Examples\Swashbuckle.AspNetCore.Examples.csproj", "{BF2A4583-1466-440D-B818-0169634DA8F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\WebApi\WebApi.csproj", "{606B769A-F3D7-4518-82F9-3D53A20D2DC4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{B47A2133-3F12-4616-BC3B-1C85E25087E9}"
 	ProjectSection(SolutionItems) = preProject
 		tools\key.snk = tools\key.snk
 		tools\NuGet instructions.txt = tools\NuGet instructions.txt
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "test\WebApi\WebApi.csproj", "{A620ACEF-381A-48A1-93A8-AE0A68DE934D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C0D0AB6-777A-4327-92B6-41AA086FC049}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Examples.Test", "test\Swashbuckle.AspNetCore.Examples.Test\Swashbuckle.AspNetCore.Examples.Test.csproj", "{8D343046-925C-4D1E-829E-BF7A03E2426D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,16 +35,24 @@ Global
 		{BF2A4583-1466-440D-B818-0169634DA8F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF2A4583-1466-440D-B818-0169634DA8F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF2A4583-1466-440D-B818-0169634DA8F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{606B769A-F3D7-4518-82F9-3D53A20D2DC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{606B769A-F3D7-4518-82F9-3D53A20D2DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{606B769A-F3D7-4518-82F9-3D53A20D2DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{606B769A-F3D7-4518-82F9-3D53A20D2DC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A620ACEF-381A-48A1-93A8-AE0A68DE934D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A620ACEF-381A-48A1-93A8-AE0A68DE934D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A620ACEF-381A-48A1-93A8-AE0A68DE934D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A620ACEF-381A-48A1-93A8-AE0A68DE934D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D343046-925C-4D1E-829E-BF7A03E2426D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D343046-925C-4D1E-829E-BF7A03E2426D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D343046-925C-4D1E-829E-BF7A03E2426D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D343046-925C-4D1E-829E-BF7A03E2426D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF2A4583-1466-440D-B818-0169634DA8F0} = {32C79B97-862D-4E61-99FA-9D4A894BA3A1}
-		{606B769A-F3D7-4518-82F9-3D53A20D2DC4} = {32C79B97-862D-4E61-99FA-9D4A894BA3A1}
+		{A620ACEF-381A-48A1-93A8-AE0A68DE934D} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
+		{8D343046-925C-4D1E-829E-BF7A03E2426D} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24267CCB-C313-45F2-83DE-727185B6A4D7}
 	EndGlobalSection
 EndGlobal
