@@ -49,7 +49,10 @@ namespace Swashbuckle.AspNetCore.Examples
         {
             foreach (var parameterDescription in apiDescription.ParameterDescriptions)
             {
-                UpdateDescriptions(schemaRegistry, parameterDescription.Type, true);
+                if (parameterDescription.Type != null)
+                {
+                    UpdateDescriptions(schemaRegistry, parameterDescription.Type, true);
+                }
             }
         }
 
