@@ -64,7 +64,7 @@ Allows you to specify response headers for any operation
 If you use the `[Authorize]` attribute  to your controller or to any actions, then (Auth) is added to the action's summary,
 along with any specified policies or roles.
 
-TODO add image
+![authorization](https://user-images.githubusercontent.com/169179/36599686-1d939bcc-18a8-11e8-8f81-d8706f1f0dc1.JPG)
 
 ## Installation
 Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/), then enable whichever filters 
