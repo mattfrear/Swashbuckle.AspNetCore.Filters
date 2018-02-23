@@ -54,10 +54,17 @@ Adds a button for uploading a file via IFormFile
 Adds any string to your request headers for all requests. I use this for adding a correlationId to all requests.
 ![request header](https://mattfrear.files.wordpress.com/2018/01/header.jpg)
 
-## Add a response header (new!)
+## Add a response header
 
 Allows you to specify response headers for any operation
 ![response headers](https://user-images.githubusercontent.com/169179/35051682-b8217740-fb9d-11e7-8bec-98d4b088dfa5.png)
+
+## Add Authorization to Summary
+
+If you use the `[Authorize]` attribute  to your controller or to any actions, then (Auth) is added to the action's summary,
+along with any specified policies or roles.
+
+TODO add image
 
 ## Installation
 Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/), then enable whichever filters 
@@ -76,9 +83,10 @@ public void ConfigureServices(IServiceCollection services)
         c.OperationFilter<ExamplesOperationFilter>(); // [SwaggerRequestExample] & [SwaggerResponseExample]
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on Response properties
         c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint
-	c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
-	c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
-	c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
+		c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
+		c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
+		c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
+		c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
     });
 }
 ```
@@ -281,6 +289,18 @@ Specify one or more `[SwaggerResponseHeader]` attributes on your controller acti
 public IHttpActionResult GetPerson(PersonRequest personRequest)
 {
 ```
+## How to use - Authorization summary
+Specify `[Authorization]` headers on either a Controller:
+```
+[Authorize]
+public class ValuesController : Controller
+```
+or on an action:
+```
+[Authorize("Customer")]
+public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
+```
+You can optionally specify policies `[Authorize("Customer")]` or roles `[Authorize(Roles = "Customer")]` and they will be added to the Summary too.
 
 ## Pascal case or Camel case?
 The default is camelCase. If you want PascalCase you can pass in a `DefaultContractResolver` like so:

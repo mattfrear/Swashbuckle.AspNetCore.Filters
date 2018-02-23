@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -45,7 +47,18 @@ namespace WebApi
 
                 c.OperationFilter<AddResponseHeadersFilter>();
 
+                c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+
                 c.DescribeAllEnumsAsStrings();
+
+                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "WebApi.xml");
+                c.IncludeXmlComments(filePath);
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrator", authBuilder => authBuilder.RequireRole("Administrator"));
+                options.AddPolicy("Customer", authBuilder => authBuilder.RequireRole("Customer"));
             });
         }
 

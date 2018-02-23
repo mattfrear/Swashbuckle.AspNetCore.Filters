@@ -10,12 +10,19 @@ using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        /// <summary>
+        /// Gets a person
+        /// </summary>
+        /// <param name="personRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/values/person")]
 
@@ -33,6 +40,7 @@ namespace WebApi.Controllers
 
         [SwaggerResponseHeader(200, "Location", "string", "Location of the newly created resource")]
         [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
+        [Authorize("Customer")]
         public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
@@ -44,6 +52,7 @@ namespace WebApi.Controllers
         [SwaggerResponse(200, typeof(ResponseWrapper<PersonResponse>), "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        [Authorize(Roles = "Customer")]
         public ResponseWrapper<PersonResponse> GetGenericPerson([FromBody]RequestWrapper<PersonRequest> personRequest)
         {
             var personResponse = new ResponseWrapper<PersonResponse>
@@ -65,6 +74,13 @@ namespace WebApi.Controllers
             return people;
         }
 
+        /// <summary>
+        /// Upload a file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [Authorize("Administrator")]
+        [Authorize("Customer")]
         [AddSwaggerFileUploadButton]
         [HttpPost("upload")]
         public IActionResult UploadFile(IFormFile file)
