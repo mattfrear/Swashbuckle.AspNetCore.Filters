@@ -25,9 +25,7 @@ namespace Swashbuckle.AspNetCore.Examples
                 AppendPolicies(authorizeAttributes, authorizationDescription);
                 AppendRoles(authorizeAttributes, authorizationDescription);
 
-                authorizationDescription.Append(")");
-
-                operation.Summary += authorizationDescription;
+                operation.Summary += authorizationDescription.ToString().TrimEnd(';') + ")";
             }
         }
 

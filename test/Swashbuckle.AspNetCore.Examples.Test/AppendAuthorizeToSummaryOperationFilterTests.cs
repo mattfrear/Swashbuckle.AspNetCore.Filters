@@ -41,7 +41,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator;)");
+            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator)");
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator, Customer;)");
+            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator, Customer)");
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator;)");
+            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator)");
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator, Customer;)");
+            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator, Customer)");
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator, Customer;)");
+            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator, Customer)");
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator; roles: Customer;)");
+            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator; roles: Customer)");
         }
 
         [Fact]
