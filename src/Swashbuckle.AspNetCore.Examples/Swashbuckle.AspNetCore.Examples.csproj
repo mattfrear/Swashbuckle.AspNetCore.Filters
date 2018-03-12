@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>2.7.0</VersionPrefix>
+    <VersionPrefix>2.8.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
