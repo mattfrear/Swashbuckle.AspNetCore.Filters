@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Shouldly;
-using System;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -23,12 +22,12 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         }
 
         [Fact]
-        public void Apply_SetsResponseExamples_FromAttributes()
+        public void Apply_SetsResponseExamples_FromMethodAttributes()
         {
             // Arrange
             var operation = new Operation { OperationId = "foobar" };
             var filterContext = FilterContextFor(nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributes));
-            SetSwaggerResponsesOnOperation(operation, filterContext);
+            SetSwaggerResponses(operation, filterContext);
 
             // Act
             sut.Apply(operation, filterContext);
@@ -43,7 +42,27 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         }
 
         [Fact]
-        public void Apply_SetsRequestExamples_FromAttributes()
+        public void Apply_SetsResponseExamples_FromControllerAttributes()
+        {
+            // Arrange
+            var operation = new Operation { Summary = "Test summary" };
+            var filterContext = FilterContextFor(nameof(FakeActions.None), nameof(FakeControllers.SwaggerResponseExampleController));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var examples = (JObject)operation.Responses["200"].Examples;
+            var actualExample = examples["application/json"];
+
+            var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
+            actualExample["id"].ShouldBe(expectedExample.Id);
+            actualExample["first"].ShouldBe(expectedExample.FirstName);
+        }
+
+        [Fact]
+        public void Apply_SetsRequestExamples_FromMethodAttributes()
         {
             // Arrange
             var operation = new Operation { OperationId = "foobar", Parameters = new[] { new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } } } };
@@ -60,7 +79,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             actualExample["age"].ShouldBe(expectedExample.Age);
         }
 
-        private void SetSwaggerResponsesOnOperation(Operation operation, OperationFilterContext filterContext)
+        private void SetSwaggerResponses(Operation operation, OperationFilterContext filterContext)
         {
             var swaggerResponseFilter = new SwaggerResponseAttributeFilter();
             swaggerResponseFilter.Apply(operation, filterContext);

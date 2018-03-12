@@ -6,16 +6,15 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApi.Models;
 using WebApi.Models.Examples;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
+    [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
+    [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
     public class ValuesController : Controller
     {
         /// <summary>
@@ -30,8 +29,8 @@ namespace WebApi.Controllers
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
         // [SwaggerResponseExample(200, typeof(PersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
 
-        [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
-        [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
+        // [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
+        // [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
 
         [SwaggerResponse(500, null, "There was an unexpected error")]
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]

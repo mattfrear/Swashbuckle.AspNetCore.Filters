@@ -67,11 +67,14 @@ namespace Swashbuckle.AspNetCore.Examples
 
         private static void SetResponseModelExamples(Operation operation, ApiDescription apiDescription)
         {
-            var actionAttributes = apiDescription
+            var responseAttributes = apiDescription
                 .ActionAttributes()
-                .OfType<SwaggerResponseExampleAttribute>();
+                .OfType<SwaggerResponseExampleAttribute>()
+                .ToList();
 
-            foreach (var attr in actionAttributes)
+            responseAttributes.AddRange(apiDescription.ControllerAttributes().OfType<SwaggerResponseExampleAttribute>());
+
+            foreach (var attr in responseAttributes)
             {
                 var statusCode = attr.StatusCode.ToString();
 

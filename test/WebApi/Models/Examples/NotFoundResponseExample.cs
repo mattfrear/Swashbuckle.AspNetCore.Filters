@@ -6,7 +6,7 @@ namespace WebApi.Models.Examples
     {
         public object GetExamples()
         {
-            return new ErrorResponse { ErrorCode = 404 };
+            return new ErrorResponse { ErrorCode = 404, Message = "The entity was not found" };
         }
     }
 }
