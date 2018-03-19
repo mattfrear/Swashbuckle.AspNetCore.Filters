@@ -142,6 +142,20 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             operation.Summary.ShouldBe("Test summary (Auth)");
         }
 
+        [Fact]
+        public void Apply_DoesNotAppendWhenMethodHasAllowAnonymous()
+        {
+            // Arrange
+            var operation = new Operation { Summary = "Test summary" };
+            var filterContext = FilterContextFor(nameof(FakeActions.AllowAnonymous), nameof(FakeControllers.AuthController));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Summary.ShouldBe("Test summary");
+        }
+
         private OperationFilterContext FilterContextFor(
             string actionFixtureName,
             string controllerFixtureName = "NotAnnotated")

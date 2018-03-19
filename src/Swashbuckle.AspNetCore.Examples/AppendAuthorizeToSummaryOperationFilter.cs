@@ -16,6 +16,11 @@ namespace Swashbuckle.AspNetCore.Examples
                 .OfType<AuthorizeAttribute>()
                 .ToList();
 
+            if (context.ApiDescription.ActionAttributes().OfType<AllowAnonymousAttribute>().Any())
+            {
+                return;
+            }
+
             authorizeAttributes.AddRange(context.ApiDescription.ControllerAttributes().OfType<AuthorizeAttribute>());
 
             if (authorizeAttributes.Any())

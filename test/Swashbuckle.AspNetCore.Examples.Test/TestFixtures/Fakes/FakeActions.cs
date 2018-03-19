@@ -66,6 +66,12 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             throw new NotImplementedException();
         }
 
+        [AllowAnonymous]
+        public IActionResult AllowAnonymous()
+        {
+            throw new NotImplementedException();
+        }
+
         public IActionResult None()
         {
             throw new NotImplementedException();
