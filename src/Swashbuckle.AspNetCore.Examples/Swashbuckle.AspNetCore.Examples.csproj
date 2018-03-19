@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
+    <PackageVersion>2.8.0</PackageVersion>
+    <Authors>Matt Frear</Authors>
+    <Description>Adds the SwaggerRequestExample and SwaggerResponseExample attribute for Swashbuckle. This will populate the example property of a schema object in the output swagger.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>2018</Copyright>
+    <PackageTags>Swagger Swashbuckle</PackageTags>
+    <PackageReleaseNotes>TBC</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,5 +30,5 @@
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
+  
 </Project>
