@@ -21,6 +21,12 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             throw new NotImplementedException();
         }
 
+        [SwaggerRequestExample(typeof(PersonResponse), typeof(PersonRequestExample))]
+        public IActionResult AnnotatedWithIncorrectSwaggerRequestExampleAttribute(PersonRequest personRequest)
+        {
+            throw new NotImplementedException();
+        }
+
         [Authorize]
         public IActionResult Authorize()
         {

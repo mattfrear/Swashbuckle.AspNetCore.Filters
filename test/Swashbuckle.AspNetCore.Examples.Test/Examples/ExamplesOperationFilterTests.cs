@@ -79,6 +79,19 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             actualExample["age"].ShouldBe(expectedExample.Age);
         }
 
+        [Fact]
+        public void Apply_WhenRequestIncorrect_ShouldNotThrowException()
+        {
+            // Arrange
+            var operation = new Operation { OperationId = "foobar", Parameters = new[] { new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } } } };
+            var filterContext = FilterContextFor(nameof(FakeActions.AnnotatedWithIncorrectSwaggerRequestExampleAttribute));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+        }
+
         private void SetSwaggerResponses(Operation operation, OperationFilterContext filterContext)
         {
             var swaggerResponseFilter = new SwaggerResponseAttributeFilter();
