@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Examples;
+using Swashbuckle.AspNetCore.Examples.Test.TestFixtures.Fakes.Examples;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -23,6 +25,12 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 
         [SwaggerRequestExample(typeof(PersonResponse), typeof(PersonRequestExample))]
         public IActionResult AnnotatedWithIncorrectSwaggerRequestExampleAttribute(PersonRequest personRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample))]
+        public IActionResult AnnotatedWithDictionarySwaggerRequestExampleAttribute(Dictionary<string, object> personRequest)
         {
             throw new NotImplementedException();
         }

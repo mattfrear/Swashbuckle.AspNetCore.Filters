@@ -64,7 +64,9 @@ namespace Swashbuckle.AspNetCore.Examples
                             name = $"{friendlyName}[{string.Join(",", attr.RequestType.GetGenericArguments().Select(a => a.Name).ToList())}]";
                         }
                         else
+                        {
                             name = attr.RequestType.Name;
+                        }
                     }
                     if(string.IsNullOrEmpty(name))
                         continue;
@@ -78,7 +80,7 @@ namespace Swashbuckle.AspNetCore.Examples
                     }
                     else
                     {
-                        // default schema not found, so put example directly to request
+                        // default schema not found, so put example directly on request
                         request.Schema.Example = FormatJson(provider, serializerSettings, false);
                     }
 
