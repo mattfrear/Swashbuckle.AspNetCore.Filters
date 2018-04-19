@@ -7,6 +7,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Shouldly;
+using Swashbuckle.AspNetCore.Examples.Test.TestFixtures.Fakes.Examples;
+using System.Collections.Generic;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -88,8 +90,23 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 
             // Act
             sut.Apply(operation, filterContext);
+        }
+
+        [Fact]
+        public void Apply_WhenPassingDictionary_ShouldSetExampleOnRequestSchema()
+        {
+            // Arrange
+            var bodyParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/object" } };
+            var operation = new Operation { OperationId = "foobar", Parameters = new[] { bodyParameter } };
+            var filterContext = FilterContextFor(nameof(FakeActions.AnnotatedWithDictionarySwaggerRequestExampleAttribute));
+
+            // Act
+            sut.Apply(operation, filterContext);
 
             // Assert
+            var actualExample = (JObject)bodyParameter.Schema.Example;
+            actualExample["PropertyInt"].ShouldBe(1);
+            actualExample["PropertyString"].ShouldBe("Some string");
         }
 
         private void SetSwaggerResponses(Operation operation, OperationFilterContext filterContext)

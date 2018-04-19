@@ -24,14 +24,8 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/values/person")]
-
         [SwaggerResponse(200, typeof(PersonResponse), "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
-        // [SwaggerResponseExample(200, typeof(PersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
-
-        // [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
-        // [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
-
         [SwaggerResponse(500, null, "There was an unexpected error")]
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
 
@@ -85,6 +79,38 @@ namespace WebApi.Controllers
         public IActionResult UploadFile(IFormFile file)
         {
             return Ok();
+        }
+
+        /// <summary>
+        /// Gets dynamic data passing a Dictionary of string, object and returns a Dictionary
+        /// </summary>
+        /// <param name="dynamicDictionary"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/values/dictionary")]
+        [SwaggerResponse(200, typeof(Dictionary<string, object>), "Successfully found the data")]
+        [SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
+        [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        public Dictionary<string, object> GetDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
+        {
+            return new Dictionary<string, object> { { "Some", 1 } };
+        }
+
+        /// <summary>
+        /// Gets dynamic data passing a DynamicData and returning a DynamicData
+        /// </summary>
+        /// <param name="personRequest"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/values/data")]
+        [SwaggerResponse(200, typeof(DynamicData), "Successfully found the data")]
+        [SwaggerResponseExample(200, typeof(DynamicDataResponseExample))]
+        [SwaggerRequestExample(typeof(DynamicData), typeof(DynamicDataRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        public DynamicData GetData([FromBody]DynamicData personRequest)
+        {
+            var personResponse = new DynamicData();
+            personResponse.Payload.Add("Property", "val");
+            return personResponse;
         }
     }
 }

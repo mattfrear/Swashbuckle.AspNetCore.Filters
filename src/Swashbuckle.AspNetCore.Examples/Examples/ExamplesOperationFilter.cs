@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -37,30 +38,56 @@ namespace Swashbuckle.AspNetCore.Examples
             foreach (var attr in actionAttributes)
             {
                 var schema = schemaRegistry.GetOrRegister(attr.RequestType);
-
+                
                 var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
                 var request = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Ref || p.Schema?.Items?.Ref == schema.Ref);
 
-                if (request != null)
+                if (request == null)
                 {
-                    var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
+                    continue; // The type in their [SwaggerRequestExample(typeof(requestType), ...] is not passed to their controller action method
+                }
 
-                    // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
-                    var parts = schema.Ref?.Split('/');
-                    if (parts == null)
+                var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
+                string name = null;
+                // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
+                var parts = schema.Ref?.Split('/');
+
+                if (parts != null)
+                {
+                    name = parts.Last();
+                }
+                else
+                {
+                    // schema.Ref can be null for some types, so we have to try get it by attr.RequestType.Name
+                    if (attr.RequestType.GetTypeInfo().IsGenericType)
                     {
-                        continue;
+                        // remove `# from the generic type name
+                        var friendlyName = attr.RequestType.Name.Remove(attr.RequestType.Name.IndexOf('`'));
+                        // for generic, Schema will be TypeName[GenericTypeName]
+                        name = $"{friendlyName}[{string.Join(",", attr.RequestType.GetGenericArguments().Select(a => a.Name).ToList())}]";
                     }
-
-                    var name = parts.Last();
-
-                    if (schemaRegistry.Definitions.ContainsKey(name))
+                    else
                     {
-                        var definitionToUpdate = schemaRegistry.Definitions[name];
-                        var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
-
-                        definitionToUpdate.Example = FormatJson(provider, serializerSettings, false);
+                        name = attr.RequestType.Name;
                     }
+                }
+
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
+                var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
+
+                if (schemaRegistry.Definitions.ContainsKey(name))
+                {
+                    var definitionToUpdate = schemaRegistry.Definitions[name];
+                    definitionToUpdate.Example = FormatJson(provider, serializerSettings, false);
+                }
+                else
+                {
+                    // schema not found in registry, so put example directly on request schema
+                    request.Schema.Example = FormatJson(provider, serializerSettings, false);
                 }
             }
         }
