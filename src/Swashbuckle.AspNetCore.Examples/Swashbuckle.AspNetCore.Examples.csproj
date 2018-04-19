@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
-    <PackageVersion>2.8.2</PackageVersion>
+    <PackageVersion>2.9.0</PackageVersion>
     <Authors>Matt Frear</Authors>
     <Description>Adds the SwaggerRequestExample and SwaggerResponseExample attribute for Swashbuckle. This will populate the example property of a schema object in the output swagger.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -11,11 +11,11 @@
     <PackageLicenseUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>2018</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
-    <PackageReleaseNotes>Fix NullReferenceException when SwaggerRequestExample requestType is incorrect</PackageReleaseNotes>
+    <PackageReleaseNotes>Support request examples for Dictionary. @antonGritsenko pull request</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>2.8.2</VersionPrefix>
+    <VersionPrefix>2.9.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
