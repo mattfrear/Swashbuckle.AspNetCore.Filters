@@ -42,48 +42,52 @@ namespace Swashbuckle.AspNetCore.Examples
                 var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
                 var request = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Ref || p.Schema?.Items?.Ref == schema.Ref);
 
-                if (request != null)
+                if (request == null)
                 {
-                    var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
-                    string name = null;
-                    // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
-                    var parts = schema.Ref?.Split('/');
-                    
-                    if (parts != null)
+                    continue; // The type in their [SwaggerRequestExample(typeof(requestType), ...] is not passed to their controller action method
+                }
+
+                var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
+                string name = null;
+                // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
+                var parts = schema.Ref?.Split('/');
+
+                if (parts != null)
+                {
+                    name = parts.Last();
+                }
+                else
+                {
+                    // schema.Ref can be null for some types, so we have to try get it by attr.RequestType.Name
+                    if (attr.RequestType.GetTypeInfo().IsGenericType)
                     {
-                        name = parts.Last();
+                        // remove `# from the generic type name
+                        var friendlyName = attr.RequestType.Name.Remove(attr.RequestType.Name.IndexOf('`'));
+                        // for generic, Schema will be TypeName[GenericTypeName]
+                        name = $"{friendlyName}[{string.Join(",", attr.RequestType.GetGenericArguments().Select(a => a.Name).ToList())}]";
                     }
                     else
                     {
-                        // schema.Ref can be null for some types, so we have to try get it by attr.RequestType.Name
-                        if (attr.RequestType.GetTypeInfo().IsGenericType)
-                        {
-                            // remove `# from the generic type name
-                            var friendlyName = attr.RequestType.Name.Remove(attr.RequestType.Name.IndexOf('`'));
-                            // for generic, Schema will be TypeName[GenericTypeName]
-                            name = $"{friendlyName}[{string.Join(",", attr.RequestType.GetGenericArguments().Select(a => a.Name).ToList())}]";
-                        }
-                        else
-                        {
-                            name = attr.RequestType.Name;
-                        }
+                        name = attr.RequestType.Name;
                     }
-                    if(string.IsNullOrEmpty(name))
-                        continue;
+                }
 
-                    var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
+                if (string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
 
-                    if (schemaRegistry.Definitions.ContainsKey(name))
-                    {
-                        var definitionToUpdate = schemaRegistry.Definitions[name];
-                        definitionToUpdate.Example = FormatJson(provider, serializerSettings, false);
-                    }
-                    else
-                    {
-                        // default schema not found, so put example directly on request
-                        request.Schema.Example = FormatJson(provider, serializerSettings, false);
-                    }
+                var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
+                if (schemaRegistry.Definitions.ContainsKey(name))
+                {
+                    var definitionToUpdate = schemaRegistry.Definitions[name];
+                    definitionToUpdate.Example = FormatJson(provider, serializerSettings, false);
+                }
+                else
+                {
+                    // schema not found in registry, so put example directly on request schema
+                    request.Schema.Example = FormatJson(provider, serializerSettings, false);
                 }
             }
         }
