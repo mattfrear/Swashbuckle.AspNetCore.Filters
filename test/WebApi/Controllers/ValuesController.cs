@@ -8,12 +8,13 @@ using WebApi.Models.Examples;
 using Newtonsoft.Json.Converters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    [SwaggerResponse(404, typeof(ErrorResponse), "Could not find the person")]
+    [SwaggerResponse(404, type: typeof(ErrorResponse), description: "Could not find the person")]
     [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
     public class ValuesController : Controller
     {
@@ -24,9 +25,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/values/person")]
-        [SwaggerResponse(200, typeof(PersonResponse), "Successfully found the person")]
+        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
-        [SwaggerResponse(500, null, "There was an unexpected error")]
+        [SwaggerResponse(500, type: null, description: "There was an unexpected error")]
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
 
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
@@ -42,7 +43,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("api/values/genericperson")]
-        [SwaggerResponse(200, typeof(ResponseWrapper<PersonResponse>), "Successfully found the person")]
+        [SwaggerResponse(200, type: typeof(ResponseWrapper<PersonResponse>), description: "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
         [Authorize(Roles = "Customer")]
@@ -59,7 +60,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("api/values/listperson")]
-        [SwaggerResponse(200, typeof(IEnumerable<PersonResponse>), "Successfully found the people")]
+        [SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>), description: "Successfully found the people")]
         [SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample), jsonConverter: typeof(StringEnumConverter))]
         public IEnumerable<PersonResponse> GetPersonList([FromBody]List<PeopleRequest> peopleRequest)
         {
@@ -88,7 +89,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/values/dictionary")]
-        [SwaggerResponse(200, typeof(Dictionary<string, object>), "Successfully found the data")]
+        [SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
         [SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
         [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
         public Dictionary<string, object> GetDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
@@ -103,7 +104,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/values/data")]
-        [SwaggerResponse(200, typeof(DynamicData), "Successfully found the data")]
+        [SwaggerResponse(200, type: typeof(DynamicData), description: "Successfully found the data")]
         [SwaggerResponseExample(200, typeof(DynamicDataResponseExample))]
         [SwaggerRequestExample(typeof(DynamicData), typeof(DynamicDataRequestExample), jsonConverter: typeof(StringEnumConverter))]
         public DynamicData GetData([FromBody]DynamicData personRequest)

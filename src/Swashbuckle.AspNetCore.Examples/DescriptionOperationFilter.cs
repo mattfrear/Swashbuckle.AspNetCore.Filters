@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -18,16 +19,13 @@ namespace Swashbuckle.AspNetCore.Examples
     
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            SetResponseModelDescriptions(operation, context.SchemaRegistry, context.ApiDescription);
+            SetResponseModelDescriptions(operation, context.SchemaRegistry, context);
             SetRequestModelDescriptions(operation, context.SchemaRegistry, context.ApiDescription);
         }
 
-        private static void SetResponseModelDescriptions(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
+        private static void SetResponseModelDescriptions(Operation operation, ISchemaRegistry schemaRegistry, OperationFilterContext context)
         {
-            var swaggerResponseAttributes = apiDescription
-                .ActionAttributes()
-                .OfType<SwaggerResponseAttribute>()
-                .ToList();
+            var swaggerResponseAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseAttribute>().ToList();
 
             foreach (var attribute in swaggerResponseAttributes)
             {

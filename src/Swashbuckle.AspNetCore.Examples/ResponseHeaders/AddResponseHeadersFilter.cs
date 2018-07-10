@@ -3,6 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Examples
 {
@@ -10,7 +11,7 @@ namespace Swashbuckle.AspNetCore.Examples
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var responseAttributes = context.ApiDescription.ActionAttributes().OfType<SwaggerResponseHeaderAttribute>();
+            var responseAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseHeaderAttribute>();
 
             foreach (var attr in responseAttributes)
             {
