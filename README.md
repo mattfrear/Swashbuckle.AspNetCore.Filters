@@ -325,16 +325,16 @@ Provide required dependencies in example provider classes:
 ```
 internal class PersonRequestExample : IExamplesProvider
 {
-	private readonly IHostingEnvironment _env;
+    private readonly IHostingEnvironment _env;
 
-	public PersonRequestExample(IHostingEnvironment env)
-	{
-		_env = env;
-	}
-	public object GetExamples()
-	{
-		return new PersonRequest { Age = 24, FirstName = _env.IsDevelopment() ? "Development" : "Production", Income = null };
-	}
+    public PersonRequestExample(IHostingEnvironment env)
+    {
+        _env = env;
+    }
+    public object GetExamples()
+    {
+        return new PersonRequest { Age = 24, FirstName = _env.IsDevelopment() ? "Development" : "Production", Income = null };
+    }
 }
 ```
 
@@ -349,7 +349,7 @@ Pass service collection to ExamplesOperationFilter as a parameter:
 ```
 services.AddSwaggerGen(c =>
 {
-	c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-	c.OperationFilter<ExamplesOperationFilter>(services.BuildServiceProvider());
+    c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+    c.OperationFilter<ExamplesOperationFilter>(services.BuildServiceProvider());
 });
 ```
