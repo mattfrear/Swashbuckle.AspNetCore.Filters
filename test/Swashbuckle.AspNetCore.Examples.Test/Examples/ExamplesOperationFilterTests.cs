@@ -116,7 +116,6 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         private void SetSwaggerResponses(Operation operation, OperationFilterContext filterContext)
         {
             var swaggerResponseFilter = new AnnotationsOperationFilter();
-            while (false == Debugger.IsAttached) { }
             swaggerResponseFilter.Apply(operation, filterContext);
         }
 
