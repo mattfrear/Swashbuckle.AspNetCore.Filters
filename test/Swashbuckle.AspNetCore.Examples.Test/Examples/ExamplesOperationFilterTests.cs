@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
 using System;
+using System.Diagnostics;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -30,7 +31,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         public void Apply_SetsResponseExamples_FromMethodAttributes()
         {
             // Arrange
-            var operation = new Operation { OperationId = "foobar" };
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string,Response>() };
             var filterContext = FilterContextFor(nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributes));
             SetSwaggerResponses(operation, filterContext);
 
@@ -50,8 +51,8 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         public void Apply_SetsResponseExamples_FromControllerAttributes()
         {
             // Arrange
-            var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.None), nameof(FakeControllers.SwaggerResponseExampleController));
+            var operation = new Operation { Summary = "Test summary", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(nameof(FakeActions.None), nameof(FakeControllers.SwaggerResponseExampleController), typeof(FakeControllers.SwaggerResponseExampleController));
             SetSwaggerResponses(operation, filterContext);
 
             // Act
@@ -115,12 +116,14 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         private void SetSwaggerResponses(Operation operation, OperationFilterContext filterContext)
         {
             var swaggerResponseFilter = new AnnotationsOperationFilter();
+            while (false == Debugger.IsAttached) { }
             swaggerResponseFilter.Apply(operation, filterContext);
         }
 
         private OperationFilterContext FilterContextFor(
             string actionFixtureName,
-            string controllerFixtureName = "NotAnnotated")
+            string controllerFixtureName = "NotAnnotated",
+            Type controllerType = null)
         {
             var fakeProvider = new FakeApiDescriptionGroupCollectionProvider();
             var apiDescription = fakeProvider
@@ -128,7 +131,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
                 .ApiDescriptionGroups.Items.First()
                 .Items.First();
 
-            var mi = typeof(FakeActions).GetMethod(actionFixtureName);
+            var mi = (controllerType ?? typeof(FakeActions)).GetMethod(actionFixtureName);
 
             return new OperationFilterContext(
                 apiDescription,
