@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.Examples;
 using Shouldly;
 using System.Reflection;
+using System;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -134,7 +135,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.None), nameof(FakeControllers.AuthController));
+            var filterContext = FilterContextFor(nameof(FakeActions.None), nameof(FakeControllers.AuthController), typeof(FakeControllers.AuthController));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -148,7 +149,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.AllowAnonymous), nameof(FakeControllers.AuthController));
+            var filterContext = FilterContextFor(nameof(FakeControllers.AuthController.AllowAnonymous), nameof(FakeControllers.AuthController), typeof(FakeControllers.AuthController));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -159,7 +160,8 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 
         private OperationFilterContext FilterContextFor(
             string actionFixtureName,
-            string controllerFixtureName = "NotAnnotated")
+            string controllerFixtureName = "NotAnnotated",
+            Type controllerType = null)
         {
             var fakeProvider = new FakeApiDescriptionGroupCollectionProvider();
             var apiDescription = fakeProvider
@@ -167,7 +169,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
                 .ApiDescriptionGroups.Items.First()
                 .Items.First();
 
-            var mi = typeof(FakeActions).GetMethod(actionFixtureName);
+            var mi = (controllerType ?? typeof(FakeActions)).GetMethod(actionFixtureName);
 
             return new OperationFilterContext(
                 apiDescription,
