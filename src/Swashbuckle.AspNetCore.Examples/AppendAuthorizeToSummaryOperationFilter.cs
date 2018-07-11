@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Examples
 {
@@ -11,17 +12,14 @@ namespace Swashbuckle.AspNetCore.Examples
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var authorizeAttributes = context.ApiDescription
-                .ActionAttributes()
-                .OfType<AuthorizeAttribute>()
-                .ToList();
+            var authorizeAttributes = context.MethodInfo.GetCustomAttributes<AuthorizeAttribute>().ToList();
 
-            if (context.ApiDescription.ActionAttributes().OfType<AllowAnonymousAttribute>().Any())
+            if (context.MethodInfo.GetCustomAttributes<AllowAnonymousAttribute>().Any())
             {
                 return;
             }
 
-            authorizeAttributes.AddRange(context.ApiDescription.ControllerAttributes().OfType<AuthorizeAttribute>());
+            authorizeAttributes.AddRange(context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<AuthorizeAttribute>());
 
             if (authorizeAttributes.Any())
             {

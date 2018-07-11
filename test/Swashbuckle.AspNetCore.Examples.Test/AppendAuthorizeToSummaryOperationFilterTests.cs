@@ -4,6 +4,7 @@ using Xunit;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.Examples;
 using Shouldly;
+using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -166,9 +167,12 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
                 .ApiDescriptionGroups.Items.First()
                 .Items.First();
 
+            var mi = typeof(FakeActions).GetMethod(actionFixtureName);
+
             return new OperationFilterContext(
                 apiDescription,
-                new SchemaRegistry(new JsonSerializerSettings()));
+                new SchemaRegistry(new JsonSerializerSettings()),
+                mi);
         }
     }
 }

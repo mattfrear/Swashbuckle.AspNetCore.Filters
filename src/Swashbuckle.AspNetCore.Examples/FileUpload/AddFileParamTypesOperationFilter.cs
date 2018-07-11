@@ -2,6 +2,7 @@
 using System.Linq;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Examples
 { 
@@ -11,8 +12,7 @@ namespace Swashbuckle.AspNetCore.Examples
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var actionAttributes = context.ApiDescription.ActionAttributes();
-            var operationHasFileUploadButton = actionAttributes.Any(r => r.GetType() == typeof(AddSwaggerFileUploadButtonAttribute));
+            var operationHasFileUploadButton = context.MethodInfo.GetCustomAttributes<AddSwaggerFileUploadButtonAttribute>().Any();
 
             if (!operationHasFileUploadButton)
             {

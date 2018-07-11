@@ -9,6 +9,9 @@ using Newtonsoft.Json.Linq;
 using Shouldly;
 using Swashbuckle.AspNetCore.Examples.Test.TestFixtures.Fakes.Examples;
 using System.Collections.Generic;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Reflection;
+using System;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -111,7 +114,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 
         private void SetSwaggerResponses(Operation operation, OperationFilterContext filterContext)
         {
-            var swaggerResponseFilter = new SwaggerResponseAttributeFilter();
+            var swaggerResponseFilter = new AnnotationsOperationFilter();
             swaggerResponseFilter.Apply(operation, filterContext);
         }
 
@@ -125,9 +128,12 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
                 .ApiDescriptionGroups.Items.First()
                 .Items.First();
 
+            var mi = typeof(FakeActions).GetMethod(actionFixtureName);
+
             return new OperationFilterContext(
                 apiDescription,
-                new SchemaRegistry(new JsonSerializerSettings()));
+                new SchemaRegistry(new JsonSerializerSettings()),
+                mi);
         }
     }
 }

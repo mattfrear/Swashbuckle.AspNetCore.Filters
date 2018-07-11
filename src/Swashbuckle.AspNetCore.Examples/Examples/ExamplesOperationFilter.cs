@@ -25,15 +25,13 @@ namespace Swashbuckle.AspNetCore.Examples
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            SetRequestModelExamples(operation, context.SchemaRegistry, context.ApiDescription);
-            SetResponseModelExamples(operation, context.ApiDescription);
+            SetRequestModelExamples(operation, context.SchemaRegistry, context);
+            SetResponseModelExamples(operation, context);
         }
 
-        private static void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
+        private static void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, OperationFilterContext context)
         {
-            var actionAttributes = apiDescription
-                .ActionAttributes()
-                .OfType<SwaggerRequestExampleAttribute>();
+            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
 
             foreach (var attr in actionAttributes)
             {
@@ -92,14 +90,11 @@ namespace Swashbuckle.AspNetCore.Examples
             }
         }
 
-        private static void SetResponseModelExamples(Operation operation, ApiDescription apiDescription)
+        private static void SetResponseModelExamples(Operation operation, OperationFilterContext context)
         {
-            var responseAttributes = apiDescription
-                .ActionAttributes()
-                .OfType<SwaggerResponseExampleAttribute>()
-                .ToList();
+            var responseAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>().ToList();
 
-            responseAttributes.AddRange(apiDescription.ControllerAttributes().OfType<SwaggerResponseExampleAttribute>());
+            responseAttributes.AddRange(context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<SwaggerResponseExampleAttribute>());
 
             foreach (var attr in responseAttributes)
             {

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
-    <PackageVersion>2.9.0</PackageVersion>
+    <PackageVersion>3.0.0</PackageVersion>
     <Authors>Matt Frear</Authors>
     <Description>Adds the SwaggerRequestExample and SwaggerResponseExample attribute for Swashbuckle. This will populate the example property of a schema object in the output swagger.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>2.9.0</VersionPrefix>
+    <VersionPrefix>3.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
@@ -23,7 +23,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="1.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
