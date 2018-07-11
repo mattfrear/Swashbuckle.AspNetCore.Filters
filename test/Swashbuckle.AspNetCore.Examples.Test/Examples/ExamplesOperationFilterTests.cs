@@ -13,6 +13,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
 using System;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -32,7 +34,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         {
             // Arrange
             var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string,Response>() };
-            var filterContext = FilterContextFor(nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributes));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributes));
             SetSwaggerResponses(operation, filterContext);
 
             // Act
@@ -52,7 +54,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary", Responses = new Dictionary<string, Response>() };
-            var filterContext = FilterContextFor(nameof(FakeActions.None), nameof(FakeControllers.SwaggerResponseExampleController), typeof(FakeControllers.SwaggerResponseExampleController));
+            var filterContext = FilterContextFor(typeof(FakeControllers.SwaggerResponseExampleController), nameof(FakeControllers.SwaggerResponseExampleController.None));
             SetSwaggerResponses(operation, filterContext);
 
             // Act
@@ -72,7 +74,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         {
             // Arrange
             var operation = new Operation { OperationId = "foobar", Parameters = new[] { new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } } } };
-            var filterContext = FilterContextFor(nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttributes));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttributes));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -90,7 +92,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         {
             // Arrange
             var operation = new Operation { OperationId = "foobar", Parameters = new[] { new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } } } };
-            var filterContext = FilterContextFor(nameof(FakeActions.AnnotatedWithIncorrectSwaggerRequestExampleAttribute));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithIncorrectSwaggerRequestExampleAttribute));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -102,7 +104,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             // Arrange
             var bodyParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/object" } };
             var operation = new Operation { OperationId = "foobar", Parameters = new[] { bodyParameter } };
-            var filterContext = FilterContextFor(nameof(FakeActions.AnnotatedWithDictionarySwaggerRequestExampleAttribute));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithDictionarySwaggerRequestExampleAttribute));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -119,23 +121,21 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
             swaggerResponseFilter.Apply(operation, filterContext);
         }
 
-        private OperationFilterContext FilterContextFor(
-            string actionFixtureName,
-            string controllerFixtureName = "NotAnnotated",
-            Type controllerType = null)
+        private OperationFilterContext FilterContextFor(Type controllerType, string actionName)
         {
-            var fakeProvider = new FakeApiDescriptionGroupCollectionProvider();
-            var apiDescription = fakeProvider
-                .Add("GET", "collection", actionFixtureName, controllerFixtureName)
-                .ApiDescriptionGroups.Items.First()
-                .Items.First();
-
-            var mi = (controllerType ?? typeof(FakeActions)).GetMethod(actionFixtureName);
+            var apiDescription = new ApiDescription
+            {
+                ActionDescriptor = new ControllerActionDescriptor
+                {
+                    ControllerTypeInfo = controllerType.GetTypeInfo(),
+                    MethodInfo = controllerType.GetMethod(actionName)
+                }
+            };
 
             return new OperationFilterContext(
                 apiDescription,
                 new SchemaRegistry(new JsonSerializerSettings()),
-                mi);
+                (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
         }
     }
 }
