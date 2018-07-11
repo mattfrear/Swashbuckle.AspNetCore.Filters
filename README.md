@@ -1,10 +1,15 @@
-# Swashbuckle.AspNetCore.Examples
-A simple library which adds the `[SwaggerRequestExample]`, `[SwaggerResponseExample]` attributes to [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore). Can also add read the `[Description]` attributes off your Response objects, and can also add an input box for entering an Authorization header.
+# Swashbuckle.AspNetCore.Filters
+| :mega: Rename to Swashbuckle.AspNetCore.Filters |
+|--------------|
+| This project was formerly called Swashbuckle.AspNetCore.Examples, but it has grown from there to become a grab-bag of various filters I have created as I have used Swashbuckle over the last 3 or so years. So I have renamed it.|
 
-Blog articles: https://mattfrear.com/2016/01/25/generating-swagger-example-requests-with-swashbuckle/
+This library includes a bunch of filters for [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+
+Original blog articles: https://mattfrear.com/2016/01/25/generating-swagger-example-requests-with-swashbuckle/
 and: https://mattfrear.com/2015/04/21/generating-swagger-example-responses-with-swashbuckle/
 
-## Request example
+## What's included
+### Request example
 
 Populate swagger's `definitions.YourObject.example` with whatever object you like.
 
@@ -22,7 +27,7 @@ navigating to swagger/v1/swagger.json
 
 ![swagger.json](https://mattfrear.files.wordpress.com/2016/01/capture.jpg)
 
-## Response example
+### Response example
 
 Allows you to add custom data to the example response shown in Swagger. So instead of seeing the default boring data like so:
 
@@ -32,34 +37,34 @@ You'll see some more realistic data (or whatever you want):
 
 ![response with awesome data](https://mattfrear.files.wordpress.com/2015/04/response-new.png?w=700&h=358)
 
-## Documenting Response properties
+### Documenting Response properties
 
 Lets you add a comment-like description to properties on your response, e.g.
 ![descriptions](https://mattfrear.files.wordpress.com/2017/09/descriptions.jpg)
 
-## Authorization header input box
+### Authorization header input box
 
 Adds an input so that you can send an Authorization header to your API. Useful for API endpoints that have JWT token
 authentication. e.g.
 
 ![authorization](https://mattfrear.files.wordpress.com/2017/09/authorization.jpg)
 
-## File upload button
+### File upload button
 
 Adds a button for uploading a file via IFormFile
 ![file upload button](https://mattfrear.files.wordpress.com/2018/01/fileupload.jpg)
 
-## Add a request header
+### Add a request header
 
 Adds any string to your request headers for all requests. I use this for adding a correlationId to all requests.
 ![request header](https://mattfrear.files.wordpress.com/2018/01/header.jpg)
 
-## Add a response header
+### Add a response header
 
 Allows you to specify response headers for any operation
 ![response headers](https://user-images.githubusercontent.com/169179/35051682-b8217740-fb9d-11e7-8bec-98d4b088dfa5.png)
 
-## Add Authorization to Summary
+### Add Authorization to Summary
 
 If you use the `[Authorize]` attribute  to your controller or to any actions, then (Auth) is added to the action's summary,
 along with any specified policies or roles.
@@ -83,15 +88,16 @@ public void ConfigureServices(IServiceCollection services)
         c.OperationFilter<ExamplesOperationFilter>(); // [SwaggerRequestExample] & [SwaggerResponseExample]
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on Response properties
         c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint
-		c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
-		c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
-		c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
-		c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
+        c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
+        c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
+        c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
+        c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
     });
 }
 ```
 
-## How to use - Request examples
+## How to use
+### How to use - Request examples
 
 Decorate your controller methods with the included SwaggerRequestExample attribute:
 
@@ -141,7 +147,7 @@ Field Name | Type | Description
 ---|:---:|---
 example | Any | A free-form property to include an example of an instance for this schema.
 
-### List Request examples
+#### List Request examples
 As of version 2.4, `List<T>` request examples are supported. For any `List<T>` in the request, you may define a SwaggerRequestExample for `T`. 
 Your IExamplesProvider should only return a single `T` and not a `List<T>`.
 Working example:
@@ -163,7 +169,7 @@ public class ListPeopleRequestExample : IExamplesProvider
 
 ```
 
-## How to use - Response examples
+### How to use - Response examples
 
 Decorate your methods with the new SwaggerResponseExample attribute:
 ```
@@ -212,7 +218,7 @@ Example response for application/json mimetype of a Pet data type:
 
 Note that this differs from the Request example in that the mime type is a required property on the response example but not so on the request example.
 
-### Known issues
+#### Known issues
 - Although you can add a response examples for each HTTP status code (200, 201, 400, 404 etc), and they will all appear in the
 swagger.json, **only one example for responses will display on the swagger-ui page**. This is due to a bug in swagger-ui. [Issue 9](https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples/issues/9) 
 You may want to use Swashbuckle's  `[SwaggerResponseRemoveDefaults]` attribute to remove 200 from your list of response codes, if for example your API returns 201s and not 200s [Issue 26](https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples/issues/26)
@@ -237,7 +243,7 @@ public async Task<IHttpActionResult> Search(DeliveryOptionsSearchModel search)
 
 That DeliveryOptionsSearchModel object is only defined once in the entire Swagger document and it can only have one **request** example defined.
 
-## How to use - Document response properties
+### How to use - Document response properties
 Define the SwaggerResponse, as usual:
 ```
 [HttpPost]
@@ -261,12 +267,12 @@ public class PersonResponse
 	public int Age { get; set; }
 ```
 
-## How to use - Authorization input
+### How to use - Authorization input
 
 Just enable the `AuthorizationInputOperationFilter` as described in the Installation section above. Note this this will add an
 Authorization input to *every* controller action, regardless of if the endpoint is actually secured.
 
-## How to use - File upload button
+### How to use - File upload button
 
 Add the `[AddSwaggerFileUploadButton]` attribute to any controller actions which takes an IFormFile, e.g.
 ```
@@ -276,11 +282,11 @@ public IActionResult UploadFile(IFormFile file)
 {
 ```
 
-## How to use - Request Header
+### How to use - Request Header
 When you enable the filter in your `Startup.cs`, as per the Installation section above, you can specify the name and description of the new header parameter.
 This will add the input box to *every* controller action.
 
-## How to use - Response headers
+### How to use - Response headers
 
 Specify one or more `[SwaggerResponseHeader]` attributes on your controller action, like so:
 ```
@@ -289,7 +295,7 @@ Specify one or more `[SwaggerResponseHeader]` attributes on your controller acti
 public IHttpActionResult GetPerson(PersonRequest personRequest)
 {
 ```
-## How to use - Authorization summary
+### How to use - Authorization summary
 Specify `[Authorization]` headers on either a Controller:
 ```
 [Authorize]
