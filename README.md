@@ -13,6 +13,15 @@ This library includes a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 - Add any old response header to all responses
 - Add an indicator to each endpoint to show if it has an `[Authorize]` header (and for which roles)
 
+## Where to get it
+From NuGet.
+
+| Version of Swashbuckle | Package |
+|------------------------|---------|
+| Swashbuckle | https://www.nuget.org/packages/Swashbuckle.Examples/ |
+| Swashbuckle.AspNetCore version 1.0.0 - 2.5.0 | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/ |
+| Swashbuckle.AspNetCore version 3.0 and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ |
+
 ## What's included
 ### Request example
 
