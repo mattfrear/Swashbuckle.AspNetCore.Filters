@@ -113,5 +113,14 @@ namespace WebApi.Controllers
             personResponse.Payload.Add("Property", "val");
             return personResponse;
         }
+
+        [HttpPost]
+        [Route("api/values/differentperson")]
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2), jsonConverter: typeof(StringEnumConverter))]
+        public PersonResponse GetDifferentPerson([FromBody]PersonRequest personRequest)
+        {
+            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+            return personResponse;
+        }
     }
 }

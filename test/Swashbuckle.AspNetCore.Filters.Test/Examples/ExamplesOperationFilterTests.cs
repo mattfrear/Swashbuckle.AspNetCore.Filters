@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Xunit;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.Examples;
@@ -7,12 +6,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Shouldly;
-using Swashbuckle.AspNetCore.Examples.Test.TestFixtures.Fakes.Examples;
 using System.Collections.Generic;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
 using System;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 
@@ -73,18 +70,27 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         public void Apply_SetsRequestExamples_FromMethodAttributes()
         {
             // Arrange
-            var operation = new Operation { OperationId = "foobar", Parameters = new[] { new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } } } };
+            var personRequestParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } };
+            var operation = new Operation { OperationId = "foobar", Parameters = new[] { personRequestParameter } };
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttributes));
 
             // Act
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = (JObject)filterContext.SchemaRegistry.Definitions["PersonRequest"].Example;
+            var actualSchemaExample = (JObject)filterContext.SchemaRegistry.Definitions["PersonRequest"].Example;
             var expectedExample = (PersonRequest)new PersonRequestExample().GetExamples();
-            actualExample["title"].ShouldBe(expectedExample.Title.ToString());
-            actualExample["firstName"].ShouldBe(expectedExample.FirstName);
-            actualExample["age"].ShouldBe(expectedExample.Age);
+            AssertPersonRequestExampleMatches(actualSchemaExample, expectedExample);
+
+            var actualParameterExample = (JObject)personRequestParameter.Schema.Example;
+            AssertPersonRequestExampleMatches(actualParameterExample, expectedExample);
+        }
+
+        private static void AssertPersonRequestExampleMatches(JObject actualSchemaExample, PersonRequest expectedExample)
+        {
+            actualSchemaExample["title"].ShouldBe(expectedExample.Title.ToString());
+            actualSchemaExample["firstName"].ShouldBe(expectedExample.FirstName);
+            actualSchemaExample["age"].ShouldBe(expectedExample.Age);
         }
 
         [Fact]

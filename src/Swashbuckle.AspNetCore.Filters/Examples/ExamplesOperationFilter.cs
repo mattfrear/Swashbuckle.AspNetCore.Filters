@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
@@ -46,6 +45,12 @@ namespace Swashbuckle.AspNetCore.Examples
                 }
 
                 var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
+
+                var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
+
+                var example = FormatJson(provider, serializerSettings, false);
+                request.Schema.Example = example; // set example on the paths/parameters/schema/example property
+
                 string name = null;
                 // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
                 var parts = schema.Ref?.Split('/');
@@ -75,17 +80,14 @@ namespace Swashbuckle.AspNetCore.Examples
                     continue;
                 }
 
-                var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
-
+                // now that we have the name, additionally set the example on the object in the schema registry (this is what swagger-ui will display)
                 if (schemaRegistry.Definitions.ContainsKey(name))
                 {
                     var definitionToUpdate = schemaRegistry.Definitions[name];
-                    definitionToUpdate.Example = FormatJson(provider, serializerSettings, false);
-                }
-                else
-                {
-                    // schema not found in registry, so put example directly on request schema
-                    request.Schema.Example = FormatJson(provider, serializerSettings, false);
+                    if (definitionToUpdate.Example == null)
+                    {
+                        definitionToUpdate.Example = example;
+                    }
                 }
             }
         }
