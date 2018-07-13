@@ -11,7 +11,7 @@
     <PackageLicenseUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>2018</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
-    <PackageReleaseNotes>Supports Swashbuckle 3.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Supports Swashbuckle 3.0 and .NET Standard 2.0</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCoreFilters.git</RepositoryUrl>
   </PropertyGroup>
