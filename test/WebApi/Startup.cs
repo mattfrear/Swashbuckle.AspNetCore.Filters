@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Examples;
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApi
@@ -38,7 +39,8 @@ namespace WebApi
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 
-                c.OperationFilter<ExamplesOperationFilter>();
+                c.AddSwaggerExamples(services);
+
                 c.OperationFilter<DescriptionOperationFilter>();
                 c.OperationFilter<AuthorizationInputOperationFilter>();
                 c.OperationFilter<AddFileParamTypesOperationFilter>();

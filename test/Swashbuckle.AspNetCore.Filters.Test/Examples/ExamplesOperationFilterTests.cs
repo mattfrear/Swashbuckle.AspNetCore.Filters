@@ -12,6 +12,7 @@ using System.Reflection;
 using System;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Swashbuckle.AspNetCore.Filters.Examples;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
@@ -23,7 +24,14 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         {
             var mvcJsonOptions = new MvcJsonOptions();
             var options = Options.Create(mvcJsonOptions);
-            sut = new ExamplesOperationFilter(options);
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options);
+
+            var jsonFormatter = new JsonFormatter();
+
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);
+
+            sut = new ExamplesOperationFilter(requestExample, responseExample);
         }
 
         [Fact]
