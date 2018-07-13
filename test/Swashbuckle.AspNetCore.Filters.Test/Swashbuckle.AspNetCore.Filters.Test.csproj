@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Swashbuckle.AspNetCore.Examples\Swashbuckle.AspNetCore.Examples.csproj" />
+    <ProjectReference Include="..\..\src\Swashbuckle.AspNetCore.Filters\Swashbuckle.AspNetCore.Filters.csproj" />
   </ItemGroup>
 
   <ItemGroup>
