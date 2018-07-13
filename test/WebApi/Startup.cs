@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
@@ -53,7 +48,7 @@ namespace WebApi
 
                 c.DescribeAllEnumsAsStrings();
 
-                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "WebApi.xml");
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "WebApi.xml");
                 c.IncludeXmlComments(filePath);
             });
 
