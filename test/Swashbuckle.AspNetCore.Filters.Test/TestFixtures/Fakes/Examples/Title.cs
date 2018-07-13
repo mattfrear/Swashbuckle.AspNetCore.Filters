@@ -1,4 +1,4 @@
-﻿namespace Swashbuckle.AspNetCore.SwaggerGen.Test
+namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 {
     public enum Title
     {

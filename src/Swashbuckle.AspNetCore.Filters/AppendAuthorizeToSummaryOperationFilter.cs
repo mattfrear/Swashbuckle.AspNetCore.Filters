@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     public class AppendAuthorizeToSummaryOperationFilter : IOperationFilter
     {

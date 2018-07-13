@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 { 
     public class AddFileParamTypesOperationFilter : IOperationFilter
     {

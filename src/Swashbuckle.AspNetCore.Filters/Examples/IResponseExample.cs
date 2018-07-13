@@ -1,7 +1,7 @@
-﻿using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Swashbuckle.AspNetCore.Filters.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     internal interface IResponseExample
     {

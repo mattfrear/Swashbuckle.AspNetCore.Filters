@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Examples;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Swashbuckle.AspNetCore.Filters.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     internal class JsonFormatter
     {

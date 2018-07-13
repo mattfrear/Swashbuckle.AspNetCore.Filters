@@ -2,7 +2,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using Newtonsoft.Json;
 
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     /// <inheritdoc />
     /// <summary>

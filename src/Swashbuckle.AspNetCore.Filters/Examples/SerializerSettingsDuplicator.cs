@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 
-namespace Swashbuckle.AspNetCore.Filters.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     internal class SerializerSettingsDuplicator
     {

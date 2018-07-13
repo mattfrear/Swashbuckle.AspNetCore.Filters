@@ -1,4 +1,3 @@
-﻿using Swashbuckle.AspNetCore.Examples;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -6,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
-namespace Swashbuckle.AspNetCore.Filters.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     internal class ResponseExample : IResponseExample
     {

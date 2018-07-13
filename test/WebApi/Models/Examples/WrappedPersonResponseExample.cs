@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Swashbuckle.AspNetCore.Examples;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace WebApi.Models.Examples
 {

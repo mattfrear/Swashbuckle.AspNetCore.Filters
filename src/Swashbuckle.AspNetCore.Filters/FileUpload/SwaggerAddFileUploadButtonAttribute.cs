@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class AddSwaggerFileUploadButtonAttribute : Attribute

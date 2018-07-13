@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Examples;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Filters;
 using WebApi.Models;
 using WebApi.Models.Examples;
 using Newtonsoft.Json.Converters;
