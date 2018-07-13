@@ -80,7 +80,7 @@ along with any specified policies or roles.
 Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/), then enable whichever filters 
 you need when you enable SwaggerGen:
 
-```
+```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
 public void ConfigureServices(IServiceCollection services)
 {
@@ -106,7 +106,7 @@ public void ConfigureServices(IServiceCollection services)
 
 Decorate your controller methods with the included SwaggerRequestExample attribute:
 
-```
+```csharp
 [SwaggerRequestExample(typeof(DeliveryOptionsSearchModel), typeof(DeliveryOptionsSearchModelExample))]
 public async Task<IHttpActionResult> DeliveryOptionsForAddress(DeliveryOptionsSearchModel search)
 ```
@@ -114,7 +114,7 @@ public async Task<IHttpActionResult> DeliveryOptionsForAddress(DeliveryOptionsSe
 Now implement it, in this case via a DeliveryOptionsSearchModelExample (which should implement IExamplesProvider), 
 which will generate the example data. It should return the type you specified when you specified the `[SwaggerRequestExample]`.
 	
-```
+```csharp
 public class DeliveryOptionsSearchModelExample : IExamplesProvider
 {
     public object GetExamples()
@@ -157,7 +157,7 @@ As of version 2.4, `List<T>` request examples are supported. For any `List<T>` i
 Your IExamplesProvider should only return a single `T` and not a `List<T>`.
 Working example:
 
-```
+```csharp
 [SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample), jsonConverter: typeof(StringEnumConverter))]
 public IEnumerable<PersonResponse> GetPersonList([FromBody]List<PeopleRequest> peopleRequest)
 {
@@ -177,7 +177,7 @@ public class ListPeopleRequestExample : IExamplesProvider
 ### How to use - Response examples
 
 Decorate your methods with the new SwaggerResponseExample attribute:
-```
+```csharp
 [SwaggerResponse(200, Type=typeof(IEnumerable<Country>))]
 [SwaggerResponseExample(200, typeof(CountryExamples))]
 [SwaggerResponse(400, Type = typeof(IEnumerable<ErrorResource>))]
@@ -186,7 +186,7 @@ public async Task<HttpResponseMessage> Get(string lang)
 
 Now you’ll need to add an Examples class, which will implement IExamplesProvider to generate the example data
 
-```	
+```csharp	
 public class CountryExamples : IExamplesProvider
 {
     public object GetExamples()
@@ -227,7 +227,7 @@ Note that this differs from the Request example in that the mime type is a requi
 - For requests, in the Swagger 2.0 spec there is only one schema for each request object defined across all the API endpoints. So if you are using the same request object in multiple API endpoints,
 i.e. on multiple controller actions like this:
 
-```
+```csharp
 DeliveryOptions.cs
 public async Task<IHttpActionResult> DeliveryOptionsForAddress(DeliveryOptionsSearchModel search)
 ...
@@ -240,7 +240,7 @@ That DeliveryOptionsSearchModel object is only defined once in the entire Swagge
 
 ### How to use - Document response properties
 Define the SwaggerResponse, as usual:
-```
+```csharp
 [HttpPost]
 [Route("api/values/person")]
 [SwaggerResponse(200, typeof(PersonResponse), "Successfully found the person")]
@@ -248,7 +248,7 @@ public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
 {
 ```
 Now add `System.ComponentModel.Description` attributes to your Response object:
-```
+```csharp
 public class PersonResponse
 {
 	public int Id { get; set; }
@@ -270,7 +270,7 @@ Authorization input to *every* controller action, regardless of if the endpoint 
 ### How to use - File upload button
 
 Add the `[AddSwaggerFileUploadButton]` attribute to any controller actions which takes an IFormFile, e.g.
-```
+```csharp
 [AddSwaggerFileUploadButton]
 [HttpPost("upload")]
 public IActionResult UploadFile(IFormFile file)
@@ -284,7 +284,7 @@ This will add the input box to *every* controller action.
 ### How to use - Response headers
 
 Specify one or more `[SwaggerResponseHeader]` attributes on your controller action, like so:
-```
+```csharp
 [SwaggerResponseHeader(HttpStatusCode.OK, "Location", "string", "Location of the newly created resource")]
 [SwaggerResponseHeader(HttpStatusCode.OK, "ETag", "string", "An ETag of the resource")]
 public IHttpActionResult GetPerson(PersonRequest personRequest)
@@ -292,12 +292,12 @@ public IHttpActionResult GetPerson(PersonRequest personRequest)
 ```
 ### How to use - Authorization summary
 Specify `[Authorization]` headers on either a Controller:
-```
+```csharp
 [Authorize]
 public class ValuesController : Controller
 ```
 or on an action:
-```
+```csharp
 [Authorize("Customer")]
 public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
 ```
@@ -317,7 +317,7 @@ If for some reason you need to have examples with DI (for example, read them fro
 
 Provide required dependencies in example provider classes:
 
-```
+```csharp
 internal class PersonRequestExample : IExamplesProvider
 {
     private readonly IHostingEnvironment _env;
@@ -335,13 +335,13 @@ internal class PersonRequestExample : IExamplesProvider
 
 Register your example provider as a service in Startup:
 
-```
+```csharp
 services.AddTransient<PersonRequestExample>();
 ```
 
 Pass service collection to ExamplesOperationFilter as a parameter:
 
-```
+```csharp
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
