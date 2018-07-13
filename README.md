@@ -16,9 +16,11 @@ This library includes a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 ## Where to get it
 From NuGet.
 
-If you are using Swashbuckle, then get https://www.nuget.org/packages/Swashbuckle.Examples/
-If you are using Swashbuckle.AspNetCore version 1.0.0 - 2.5.0, then get https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/
-If you are using Swashbuckle.AspNetCore version 3.0, then get https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/
+| Version of Swashbuckle | Package |
+|------------------------|---------|
+| Swashbuckle | https://www.nuget.org/packages/Swashbuckle.Examples/ |
+| Swashbuckle.AspNetCore version 1.0.0 - 2.5.0 | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/ |
+| Swashbuckle.AspNetCore version 3.0 and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ |
 
 ## What's included
 ### Request example
