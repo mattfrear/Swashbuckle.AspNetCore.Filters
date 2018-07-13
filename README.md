@@ -3,7 +3,15 @@
 |--------------|
 | This project was formerly called Swashbuckle.AspNetCore.Examples, but it has grown from there to become a grab-bag of various filters I have created as I have used Swashbuckle over the last 3 or so years. So I have renamed it.|
 
-This library includes a bunch of filters for [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+This library includes a bunch of filters for [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
+- Add example requests
+- Add example responses
+- Add comments for request and response properties
+- Add an authorisation header box (deprecated)
+- Add a file upload button
+- Add any old request header to all requests
+- Add any old response header to all responses
+- Add an indicator to each endpoint to show if it has an `[Authorize]` header (and for which roles)
 
 Original blog articles: https://mattfrear.com/2016/01/25/generating-swagger-example-requests-with-swashbuckle/
 and: https://mattfrear.com/2015/04/21/generating-swagger-example-responses-with-swashbuckle/
