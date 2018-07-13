@@ -178,9 +178,9 @@ public class ListPeopleRequestExample : IExamplesProvider
 
 Decorate your methods with the new SwaggerResponseExample attribute:
 ```csharp
-[SwaggerResponse(200, Type=typeof(IEnumerable<Country>))]
+[SwaggerResponse(200, type: typeof(IEnumerable<Country>))]
 [SwaggerResponseExample(200, typeof(CountryExamples))]
-[SwaggerResponse(400, Type = typeof(IEnumerable<ErrorResource>))]
+[SwaggerResponse(400, type: typeof(IEnumerable<ErrorResource>))]
 public async Task<HttpResponseMessage> Get(string lang)
 ```
 
@@ -243,7 +243,7 @@ Define the SwaggerResponse, as usual:
 ```csharp
 [HttpPost]
 [Route("api/values/person")]
-[SwaggerResponse(200, typeof(PersonResponse), "Successfully found the person")]
+[SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
 public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
 {
 ```
