@@ -121,5 +121,15 @@ namespace WebApi.Controllers
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
         }
+
+        [HttpPost]
+        [Route("api/values/dependencyinjectionperson")]
+        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        [SwaggerResponseExample(200, typeof(PersonResponseDependencyInjectionExample))]
+        public PersonResponse GetDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
+        {
+            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+            return personResponse;
+        }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
+using WebApi.Models.Examples;
 
 namespace WebApi
 {
@@ -28,6 +29,8 @@ namespace WebApi
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddSingleton<PersonResponseDependencyInjectionExample>();
 
             services.AddSwaggerGen(c =>
             {
