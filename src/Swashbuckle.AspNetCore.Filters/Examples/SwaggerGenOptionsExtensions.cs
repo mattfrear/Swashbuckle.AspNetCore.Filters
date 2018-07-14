@@ -1,17 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
     public static class SwaggerGenOptionsExtensions
     {
-        // todo, add tests for this
-
-        public static void AddSwaggerExamples(this SwaggerGenOptions options, IServiceCollection services)
+        public static void AddSwaggerExamples(this SwaggerGenOptions options, IServiceCollection services = null)
         {
+            // todo, I can't get DI working, figure out why
+
             //services.AddSingleton(typeof(IRequestExample), typeof(RequestExample));
             //services.AddSingleton(typeof(IResponseExample), typeof(ResponseExample));
             //services.AddSingleton<JsonFormatter>();
@@ -30,8 +29,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var jsonFormatter = new JsonFormatter();
 
-            var serviceProvider = services.BuildServiceProvider();
-            var exampleProviderFactory = new ExamplesProviderFactory(serviceProvider);
+            var exampleProviderFactory = new ExamplesProviderFactory(services?.BuildServiceProvider());
 
             var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
             var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);

@@ -13,7 +13,9 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public IExamplesProvider Create(Type examplesProviderType)
         {
-            return (IExamplesProvider)serviceProvider.GetService(examplesProviderType)
+            return serviceProvider == null
+                ? (IExamplesProvider)Activator.CreateInstance(examplesProviderType)
+                : (IExamplesProvider)serviceProvider.GetService(examplesProviderType)
                   ?? (IExamplesProvider)Activator.CreateInstance(examplesProviderType);
         }
     }
