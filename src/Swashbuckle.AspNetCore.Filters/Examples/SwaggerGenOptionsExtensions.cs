@@ -8,6 +8,8 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     public static class SwaggerGenOptionsExtensions
     {
+        // todo, add tests for this
+
         public static void AddSwaggerExamples(this SwaggerGenOptions options, IServiceCollection services)
         {
             //services.AddSingleton(typeof(IRequestExample), typeof(RequestExample));
@@ -15,6 +17,7 @@ namespace Swashbuckle.AspNetCore.Filters
             //services.AddSingleton<JsonFormatter>();
             //services.AddSingleton<SerializerSettingsDuplicator>();
             //services.AddSingleton<ExamplesOperationFilter>();
+            //services.AddSingleton<ExamplesProviderFactory>();
 
             //var serviceProvider = services.BuildServiceProvider();
             //services.AddSingleton(serviceProvider);
@@ -28,9 +31,10 @@ namespace Swashbuckle.AspNetCore.Filters
             var jsonFormatter = new JsonFormatter();
 
             var serviceProvider = services.BuildServiceProvider();
+            var exampleProviderFactory = new ExamplesProviderFactory(serviceProvider);
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, serviceProvider);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, serviceProvider);
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
 
             options.OperationFilter<ExamplesOperationFilter>(requestExample, responseExample);
         }

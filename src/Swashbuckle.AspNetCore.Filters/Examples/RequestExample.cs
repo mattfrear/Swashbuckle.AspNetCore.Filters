@@ -1,6 +1,5 @@
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Linq;
 using System.Reflection;
 
@@ -10,16 +9,16 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
-        private readonly IServiceProvider serviceProvider;
+        private readonly ExamplesProviderFactory examplesProviderFactory;
 
         public RequestExample(
             JsonFormatter jsonFormatter,
             SerializerSettingsDuplicator serializerSettingsDuplicator,
-            IServiceProvider serviceProvider = null)
+            ExamplesProviderFactory examplesProviderFactory)
         {
             this.jsonFormatter = jsonFormatter;
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
-            this.serviceProvider = serviceProvider;
+            this.examplesProviderFactory = examplesProviderFactory;
         }
 
         public void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, OperationFilterContext context)
@@ -38,11 +37,11 @@ namespace Swashbuckle.AspNetCore.Filters
                     continue; // The type in their [SwaggerRequestExample(typeof(requestType), ...] is not passed to their controller action method
                 }
 
-                var provider = ExamplesProvider(serviceProvider, attr.ExamplesProviderType);
+                var examplesProvider = examplesProviderFactory.Create(attr.ExamplesProviderType);
 
                 var serializerSettings = serializerSettingsDuplicator.SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
-                var example = jsonFormatter.FormatJson(provider, serializerSettings, false);
+                var example = jsonFormatter.FormatJson(examplesProvider.GetExamples(), serializerSettings, includeMediaType: false);
                 request.Schema.Example = example; // set example on the paths/parameters/schema/example property
 
                 string name = SchemaDefinitionName(attr, schema);
@@ -91,15 +90,6 @@ namespace Swashbuckle.AspNetCore.Filters
             }
 
             return name;
-        }
-
-        private static IExamplesProvider ExamplesProvider(IServiceProvider services, Type examplesProviderType)
-        {
-            var provider = services == null
-                ? (IExamplesProvider)Activator.CreateInstance(examplesProviderType)
-                : (IExamplesProvider)services.GetService(examplesProviderType)
-                  ?? (IExamplesProvider)Activator.CreateInstance(examplesProviderType);
-            return provider;
         }
     }
 }

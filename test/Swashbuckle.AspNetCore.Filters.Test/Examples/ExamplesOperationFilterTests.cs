@@ -28,9 +28,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options);
 
             var jsonFormatter = new JsonFormatter();
+            var exampleProviderFactory = new ExamplesProviderFactory(new FakeServiceProvider());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
 
             sut = new ExamplesOperationFilter(requestExample, responseExample);
         }

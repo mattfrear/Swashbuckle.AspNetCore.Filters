@@ -11,16 +11,16 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
-        private readonly IServiceProvider serviceProvider;
+        private readonly ExamplesProviderFactory examplesProviderFactory;
 
         public ResponseExample(
             JsonFormatter jsonFormatter,
             SerializerSettingsDuplicator serializerSettingsDuplicator,
-            IServiceProvider serviceProvider = null)
+            ExamplesProviderFactory examplesProviderFactory)
         {
             this.jsonFormatter = jsonFormatter;
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
-            this.serviceProvider = serviceProvider;
+            this.examplesProviderFactory = examplesProviderFactory;
         }
 
         public void SetResponseModelExamples(Operation operation, OperationFilterContext context)
@@ -37,22 +37,13 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 if (response.Equals(default(KeyValuePair<string, Response>)) == false && response.Value != null)
                 {
-                    var examplesProvider = ExamplesProvider(serviceProvider, attr.ExamplesProviderType);
+                    var examplesProvider = examplesProviderFactory.Create(attr.ExamplesProviderType);
 
                     var serializerSettings = serializerSettingsDuplicator.SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
-                    response.Value.Examples = jsonFormatter.FormatJson(examplesProvider, serializerSettings, true);
+                    response.Value.Examples = jsonFormatter.FormatJson(examplesProvider.GetExamples(), serializerSettings, includeMediaType: true);
                 }
             }
-        }
-
-        private static IExamplesProvider ExamplesProvider(IServiceProvider services, Type examplesProviderType)
-        {
-            var provider = services == null
-                ? (IExamplesProvider)Activator.CreateInstance(examplesProviderType)
-                : (IExamplesProvider)services.GetService(examplesProviderType)
-                  ?? (IExamplesProvider)Activator.CreateInstance(examplesProviderType);
-            return provider;
         }
     }
 }
