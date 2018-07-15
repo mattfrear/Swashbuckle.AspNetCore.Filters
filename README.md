@@ -100,9 +100,9 @@ public void ConfigureServices(IServiceCollection services)
     {
         c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
         
-		// version < 3.0 does this: c.OperationFilter<ExamplesOperationFilter>(); // [SwaggerRequestExample] & [SwaggerResponseExample]
-
-		c.AddSwaggerExamples(services); // version 3.0 and above
+        // [SwaggerRequestExample] & [SwaggerResponseExample]
+        // version < 3.0 does this: c.OperationFilter<ExamplesOperationFilter>(); 
+        c.AddSwaggerExamples(services); // version 3.0 and above
 
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on Response properties
         c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint
