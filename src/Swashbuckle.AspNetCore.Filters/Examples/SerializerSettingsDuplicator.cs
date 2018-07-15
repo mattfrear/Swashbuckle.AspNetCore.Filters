@@ -22,6 +22,7 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 serializerSettings.ContractResolver = attributeContractResolver;
             }
+
             serializerSettings.NullValueHandling = NullValueHandling.Ignore; // ignore nulls on any RequestExample properies because swagger does not support null objects https://github.com/OAI/OpenAPI-Specification/issues/229
 
             if (attributeJsonConverter != null)

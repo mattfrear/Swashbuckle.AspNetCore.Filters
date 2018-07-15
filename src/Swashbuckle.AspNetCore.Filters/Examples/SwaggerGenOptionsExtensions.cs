@@ -7,34 +7,26 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     public static class SwaggerGenOptionsExtensions
     {
-        public static void AddSwaggerExamples(this SwaggerGenOptions options, IServiceCollection services = null)
+        public static void AddSwaggerExamples(this SwaggerGenOptions swaggerGenOptions, IServiceCollection services)
         {
-            // todo, I can't get DI working, figure out why
+            // I thought about registering all my types with the service collection and then using DI
+            // but I'm not sure it's a good idea to pollute the user's IServiceCollection with all of my
+            // types. Maybe that's OK, I don't know. 
+            // To do that I need to register my dependencies BEFORE the call to AddSwaggerGen
+            // Maybe newing up everything here is bad too because this could be a memory leak?
 
-            //services.AddSingleton(typeof(IRequestExample), typeof(RequestExample));
-            //services.AddSingleton(typeof(IResponseExample), typeof(ResponseExample));
-            //services.AddSingleton<JsonFormatter>();
-            //services.AddSingleton<SerializerSettingsDuplicator>();
-            //services.AddSingleton<ExamplesOperationFilter>();
-            //services.AddSingleton<ExamplesProviderFactory>();
+            var serviceProvider = services.BuildServiceProvider();
+            var mvcJsonOptions = serviceProvider.GetService<IOptions<MvcJsonOptions>>();
 
-            //var serviceProvider = services.BuildServiceProvider();
-            //services.AddSingleton(serviceProvider);
-
-            //options.OperationFilter<ExamplesOperationFilter>();
-
-            var mvcJsonOptions = new MvcJsonOptions();
-            var options2 = Options.Create(mvcJsonOptions);
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options2);
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions);
 
             var jsonFormatter = new JsonFormatter();
-
-            var exampleProviderFactory = new ExamplesProviderFactory(services?.BuildServiceProvider());
+            var exampleProviderFactory = new ExamplesProviderFactory(serviceProvider);
 
             var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
             var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
 
-            options.OperationFilter<ExamplesOperationFilter>(requestExample, responseExample);
+            swaggerGenOptions.OperationFilter<ExamplesOperationFilter>(requestExample, responseExample);
         }
     }
 }

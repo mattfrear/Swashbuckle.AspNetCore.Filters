@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 using WebApi.Models.Examples;
@@ -28,7 +29,9 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services
+                .AddMvc()
+                .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
             services.AddSingleton<PersonResponseDependencyInjectionExample>();
 
