@@ -125,11 +125,5 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample["PropertyInt"].ShouldBe(1);
             actualExample["PropertyString"].ShouldBe("Some string");
         }
-
-        private void SetSwaggerResponses(Operation operation, OperationFilterContext filterContext)
-        {
-            var swaggerResponseFilter = new AnnotationsOperationFilter();
-            swaggerResponseFilter.Apply(operation, filterContext);
-        }
     }
 }
