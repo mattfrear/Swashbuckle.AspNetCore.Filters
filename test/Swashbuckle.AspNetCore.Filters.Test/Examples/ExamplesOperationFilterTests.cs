@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using Xunit;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.Extensions.Options;
@@ -7,17 +6,13 @@ using Newtonsoft.Json.Linq;
 using Shouldly;
 using System.Collections.Generic;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Reflection;
-using System;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
-    public class ExamplesOperationFilterTests
+    public class ExamplesOperationFilterTests : BaseOperationFilterTests
     {
         private readonly IOperationFilter sut;
 
@@ -135,23 +130,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             var swaggerResponseFilter = new AnnotationsOperationFilter();
             swaggerResponseFilter.Apply(operation, filterContext);
-        }
-
-        private OperationFilterContext FilterContextFor(Type controllerType, string actionName)
-        {
-            var apiDescription = new ApiDescription
-            {
-                ActionDescriptor = new ControllerActionDescriptor
-                {
-                    ControllerTypeInfo = controllerType.GetTypeInfo(),
-                    MethodInfo = controllerType.GetMethod(actionName)
-                }
-            };
-
-            return new OperationFilterContext(
-                apiDescription,
-                new SchemaRegistry(new JsonSerializerSettings()),
-                (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
         }
     }
 }

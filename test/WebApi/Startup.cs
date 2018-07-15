@@ -55,6 +55,8 @@ namespace WebApi
 
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, "WebApi.xml");
                 c.IncludeXmlComments(filePath);
+
+                // c.CustomSchemaIds((type) => type.FullName);
             });
 
             services.AddAuthorization(options =>

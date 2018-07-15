@@ -1,16 +1,12 @@
-using System.Linq;
-using Newtonsoft.Json;
 using Xunit;
 using Swashbuckle.AspNetCore.Swagger;
 using Shouldly;
-using System;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
-using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
 {
-    public class AppendAuthorizeToSummaryOperationFilterTests
+    public class AppendAuthorizeToSummaryOperationFilterTests : BaseOperationFilterTests
     {
         private readonly IOperationFilter sut;
 
@@ -24,7 +20,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.Authorize));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.Authorize));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -38,7 +34,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.AuthorizeAdministratorPolicy));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AuthorizeAdministratorPolicy));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -52,7 +48,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.AuthorizeMultiplePolicies));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AuthorizeMultiplePolicies));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -66,7 +62,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.AuthorizeAdministratorRole));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AuthorizeAdministratorRole));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -80,7 +76,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.AuthorizeMultipleRoles));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AuthorizeMultipleRoles));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -94,7 +90,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.AuthorizeMultipleRolesInOneAttribute));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AuthorizeMultipleRolesInOneAttribute));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -108,7 +104,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.AuthorizePolicyAndRole));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AuthorizePolicyAndRole));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -122,7 +118,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.None));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.None));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -136,7 +132,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeActions.None), nameof(FakeControllers.AuthController), typeof(FakeControllers.AuthController));
+            var filterContext = FilterContextFor(typeof(FakeControllers.AuthController), nameof(FakeActions.None));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -150,32 +146,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(nameof(FakeControllers.AuthController.AllowAnonymous), nameof(FakeControllers.AuthController), typeof(FakeControllers.AuthController));
+            var filterContext = FilterContextFor(typeof(FakeControllers.AuthController), nameof(FakeControllers.AuthController.AllowAnonymous));
 
             // Act
             sut.Apply(operation, filterContext);
 
             // Assert
             operation.Summary.ShouldBe("Test summary");
-        }
-
-        private OperationFilterContext FilterContextFor(
-            string actionFixtureName,
-            string controllerFixtureName = "NotAnnotated",
-            Type controllerType = null)
-        {
-            var fakeProvider = new FakeApiDescriptionGroupCollectionProvider();
-            var apiDescription = fakeProvider
-                .Add("GET", "collection", actionFixtureName, controllerFixtureName)
-                .ApiDescriptionGroups.Items.First()
-                .Items.First();
-
-            var mi = (controllerType ?? typeof(FakeActions)).GetMethod(actionFixtureName);
-
-            return new OperationFilterContext(
-                apiDescription,
-                new SchemaRegistry(new JsonSerializerSettings()),
-                mi);
         }
     }
 }
