@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    internal class RequestExample : IRequestExample
+    internal class RequestExample
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;

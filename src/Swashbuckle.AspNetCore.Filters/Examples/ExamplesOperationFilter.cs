@@ -5,12 +5,12 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class ExamplesOperationFilter : IOperationFilter
     {
-        private readonly IRequestExample requestExample;
-        private readonly IResponseExample responseExample;
+        private readonly RequestExample requestExample;
+        private readonly ResponseExample responseExample;
 
         public ExamplesOperationFilter(
-            IRequestExample requestExample,
-            IResponseExample responseExample)
+            RequestExample requestExample,
+            ResponseExample responseExample)
         {
             this.requestExample = requestExample;
             this.responseExample = responseExample;

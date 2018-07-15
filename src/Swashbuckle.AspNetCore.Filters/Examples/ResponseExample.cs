@@ -1,13 +1,12 @@
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    internal class ResponseExample : IResponseExample
+    internal class ResponseExample
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
