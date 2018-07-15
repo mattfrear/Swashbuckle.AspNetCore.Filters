@@ -6,6 +6,7 @@ using Shouldly;
 using System;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
+using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
 {
