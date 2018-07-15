@@ -124,11 +124,6 @@ namespace Swashbuckle.AspNetCore.Filters
 
             return prop.Name;
         }
-
-        private static string ResolveDefinitionKey(Type type)
-        {
-          return _idManager.IdFor(type);
-        }
         
         private static string ToCamelCase(string value)
         {
