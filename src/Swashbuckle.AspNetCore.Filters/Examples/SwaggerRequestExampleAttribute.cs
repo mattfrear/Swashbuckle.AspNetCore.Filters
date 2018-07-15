@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Serialization;
 using System;
 using Newtonsoft.Json;
 
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     /// <inheritdoc />
     /// <summary>
@@ -14,6 +14,7 @@ namespace Swashbuckle.AspNetCore.Examples
     {
         /// <inheritdoc />
         /// <summary>
+        /// Add example data for a request
         /// </summary>
         /// <param name="requestType">The type passed to the request</param>
         /// <param name="examplesProviderType">A type that inherits from IExamplesProvider</param>

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
-using Swashbuckle.AspNetCore.Examples;
+using Newtonsoft.Json.Converters;
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
+using WebApi.Models.Examples;
 
 namespace WebApi
 {
@@ -32,13 +29,18 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services
+                .AddMvc()
+                .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()));
+
+            services.AddSingleton<PersonResponseDependencyInjectionExample>();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 
-                c.OperationFilter<ExamplesOperationFilter>();
+                c.AddSwaggerExamples(services);
+
                 c.OperationFilter<DescriptionOperationFilter>();
                 c.OperationFilter<AuthorizationInputOperationFilter>();
                 c.OperationFilter<AddFileParamTypesOperationFilter>();
@@ -51,7 +53,7 @@ namespace WebApi
 
                 c.DescribeAllEnumsAsStrings();
 
-                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "WebApi.xml");
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "WebApi.xml");
                 c.IncludeXmlComments(filePath);
             });
 

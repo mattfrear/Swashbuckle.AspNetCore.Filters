@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace Swashbuckle.AspNetCore.SwaggerGen.Test
+namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 {
     [DataContract]
     public class PersonResponse

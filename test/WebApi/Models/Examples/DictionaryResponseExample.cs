@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Swashbuckle.AspNetCore.Examples;
 
 namespace WebApi.Models.Examples
 {

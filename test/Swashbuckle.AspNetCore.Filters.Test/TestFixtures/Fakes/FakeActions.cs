@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Annotations;
-using Swashbuckle.AspNetCore.Examples;
-using Swashbuckle.AspNetCore.Examples.Test.TestFixtures.Fakes.Examples;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 
-namespace Swashbuckle.AspNetCore.SwaggerGen.Test
+namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 {
     public class FakeActions
     {

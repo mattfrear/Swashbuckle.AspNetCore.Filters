@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
@@ -25,7 +25,7 @@ using Microsoft.Extensions.ObjectPool;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 
-namespace Swashbuckle.AspNetCore.SwaggerGen.Test
+namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 {
     public class FakeApiDescriptionGroupCollectionProvider : IApiDescriptionGroupCollectionProvider
     {

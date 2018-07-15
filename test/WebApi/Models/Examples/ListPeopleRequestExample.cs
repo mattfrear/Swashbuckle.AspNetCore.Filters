@@ -1,4 +1,4 @@
-﻿using Swashbuckle.AspNetCore.Examples;
+﻿using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Generic;
 
 namespace WebApi.Models.Examples

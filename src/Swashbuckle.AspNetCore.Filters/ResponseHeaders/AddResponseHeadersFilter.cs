@@ -1,11 +1,11 @@
-﻿using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     public class AddResponseHeadersFilter : IOperationFilter
     {

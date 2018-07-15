@@ -1,4 +1,4 @@
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     public interface IExamplesProvider
     {

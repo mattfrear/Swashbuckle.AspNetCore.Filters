@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Examples;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Filters;
 using WebApi.Models;
 using WebApi.Models.Examples;
 using Newtonsoft.Json.Converters;
@@ -118,6 +117,16 @@ namespace WebApi.Controllers
         [Route("api/values/differentperson")]
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2), jsonConverter: typeof(StringEnumConverter))]
         public PersonResponse GetDifferentPerson([FromBody]PersonRequest personRequest)
+        {
+            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+            return personResponse;
+        }
+
+        [HttpPost]
+        [Route("api/values/dependencyinjectionperson")]
+        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        [SwaggerResponseExample(200, typeof(PersonResponseDependencyInjectionExample))]
+        public PersonResponse GetDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;

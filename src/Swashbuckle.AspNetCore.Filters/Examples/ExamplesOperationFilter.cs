@@ -1,202 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
-    public class ExamplesOperationFilter : IOperationFilter
+    /// <summary>
+    /// Adds custom Request and Response examples.
+    /// You should install it using the .AddSwaggerExamples() extension method
+    /// </summary>
+    internal class ExamplesOperationFilter : IOperationFilter
     {
-        private static IServiceProvider _services;
-        private static IOptions<MvcJsonOptions> _mvcJsonOptions;
+        private readonly RequestExample requestExample;
+        private readonly ResponseExample responseExample;
 
-        public ExamplesOperationFilter(IOptions<MvcJsonOptions> mvcJsonOptions, IServiceProvider services = null)
+        public ExamplesOperationFilter(
+            RequestExample requestExample,
+            ResponseExample responseExample)
         {
-            _services = services;
-            _mvcJsonOptions = mvcJsonOptions;
+            this.requestExample = requestExample;
+            this.responseExample = responseExample;
         }
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            SetRequestModelExamples(operation, context.SchemaRegistry, context);
-            SetResponseModelExamples(operation, context);
-        }
-
-        private static void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, OperationFilterContext context)
-        {
-            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
-
-            foreach (var attr in actionAttributes)
-            {
-                var schema = schemaRegistry.GetOrRegister(attr.RequestType);
-                
-                var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
-                var request = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Ref || p.Schema?.Items?.Ref == schema.Ref);
-
-                if (request == null)
-                {
-                    continue; // The type in their [SwaggerRequestExample(typeof(requestType), ...] is not passed to their controller action method
-                }
-
-                var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
-
-                var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
-
-                var example = FormatJson(provider, serializerSettings, false);
-                request.Schema.Example = example; // set example on the paths/parameters/schema/example property
-
-                string name = null;
-                // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
-                var parts = schema.Ref?.Split('/');
-
-                if (parts != null)
-                {
-                    name = parts.Last();
-                }
-                else
-                {
-                    // schema.Ref can be null for some types, so we have to try get it by attr.RequestType.Name
-                    if (attr.RequestType.GetTypeInfo().IsGenericType)
-                    {
-                        // remove `# from the generic type name
-                        var friendlyName = attr.RequestType.Name.Remove(attr.RequestType.Name.IndexOf('`'));
-                        // for generic, Schema will be TypeName[GenericTypeName]
-                        name = $"{friendlyName}[{string.Join(",", attr.RequestType.GetGenericArguments().Select(a => a.Name).ToList())}]";
-                    }
-                    else
-                    {
-                        name = attr.RequestType.Name;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(name))
-                {
-                    continue;
-                }
-
-                // now that we have the name, additionally set the example on the object in the schema registry (this is what swagger-ui will display)
-                if (schemaRegistry.Definitions.ContainsKey(name))
-                {
-                    var definitionToUpdate = schemaRegistry.Definitions[name];
-                    if (definitionToUpdate.Example == null)
-                    {
-                        definitionToUpdate.Example = example;
-                    }
-                }
-            }
-        }
-
-        private static void SetResponseModelExamples(Operation operation, OperationFilterContext context)
-        {
-            var responseAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>().ToList();
-
-            responseAttributes.AddRange(context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<SwaggerResponseExampleAttribute>());
-
-            foreach (var attr in responseAttributes)
-            {
-                var statusCode = attr.StatusCode.ToString();
-
-                var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode);
-
-                if (response.Equals(default(KeyValuePair<string, Response>)) == false)
-                {
-                    if (response.Value != null)
-                    {
-                        var provider = ExamplesProvider(_services, attr.ExamplesProviderType);
-
-                        var serializerSettings = SerializerSettings(attr.ContractResolver, attr.JsonConverter);
-
-                        response.Value.Examples = FormatJson(provider, serializerSettings, true);
-                    }
-                }
-            }
-        }
-
-        private static IExamplesProvider ExamplesProvider(IServiceProvider services, Type examplesProviderType)
-        {
-            var provider = services == null
-                ? (IExamplesProvider)Activator.CreateInstance(examplesProviderType)
-                : (IExamplesProvider)services.GetService(examplesProviderType)
-                  ?? (IExamplesProvider)Activator.CreateInstance(examplesProviderType);
-            return provider;
-        }
-
-        private static object FormatJson(IExamplesProvider provider, JsonSerializerSettings serializerSettings, bool includeMediaType)
-        {
-            object examples;
-            if (includeMediaType)
-            {
-                examples = new Dictionary<string, object>
-                {
-                    {
-                        "application/json", provider.GetExamples()
-                    }
-                };
-            }
-            else
-            {
-                examples = provider.GetExamples();
-            }
-
-            var jsonString = JsonConvert.SerializeObject(examples, serializerSettings);
-            var result = JsonConvert.DeserializeObject(jsonString);
-            return result;
-        }
-
-        private static JsonSerializerSettings SerializerSettings(IContractResolver attributeContractResolver, JsonConverter attributeJsonConverter)
-        {
-            var serializerSettings = DuplicateSerializerSettings(_mvcJsonOptions.Value.SerializerSettings);
-            if (attributeContractResolver != null)
-            {
-                serializerSettings.ContractResolver = attributeContractResolver;
-            }
-            serializerSettings.NullValueHandling = NullValueHandling.Ignore; // ignore nulls on any RequestExample properies because swagger does not support null objects https://github.com/OAI/OpenAPI-Specification/issues/229
-
-            if (attributeJsonConverter != null)
-            {
-                serializerSettings.Converters.Add(attributeJsonConverter);
-            }
-
-            return serializerSettings;
-        }
-
-        // Duplicate the controller's serializer settings because I don't want to overwrite them
-        private static JsonSerializerSettings DuplicateSerializerSettings(JsonSerializerSettings controllerSerializerSettings)
-        {
-            if (controllerSerializerSettings == null)
-            {
-                return new JsonSerializerSettings();
-            }
-
-            return new JsonSerializerSettings
-            {
-                // Binder = controllerSerializerSettings.Binder, // Obsolete in Json.NET 10.0 - experiment
-                Converters = new List<JsonConverter>(controllerSerializerSettings.Converters),
-                CheckAdditionalContent = controllerSerializerSettings.CheckAdditionalContent,
-                ConstructorHandling = controllerSerializerSettings.ConstructorHandling,
-                Context = controllerSerializerSettings.Context,
-                ContractResolver = controllerSerializerSettings.ContractResolver,
-                Culture = controllerSerializerSettings.Culture,
-                DateFormatHandling = controllerSerializerSettings.DateFormatHandling,
-                DateParseHandling = controllerSerializerSettings.DateParseHandling,
-                DateTimeZoneHandling = controllerSerializerSettings.DateTimeZoneHandling,
-                DefaultValueHandling = controllerSerializerSettings.DefaultValueHandling,
-                Error = controllerSerializerSettings.Error,
-                Formatting = controllerSerializerSettings.Formatting,
-                MaxDepth = controllerSerializerSettings.MaxDepth,
-                MissingMemberHandling = controllerSerializerSettings.MissingMemberHandling,
-                NullValueHandling = controllerSerializerSettings.NullValueHandling,
-                ObjectCreationHandling = controllerSerializerSettings.ObjectCreationHandling,
-                PreserveReferencesHandling = controllerSerializerSettings.PreserveReferencesHandling,
-                ReferenceLoopHandling = controllerSerializerSettings.ReferenceLoopHandling,
-                TypeNameHandling = controllerSerializerSettings.TypeNameHandling,
-            };
+            requestExample.SetRequestModelExamples(operation, context.SchemaRegistry, context);
+            responseExample.SetResponseModelExamples(operation, context);
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Xunit;
 using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.Examples;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -12,8 +11,11 @@ using System.Reflection;
 using System;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 
-namespace Swashbuckle.AspNetCore.SwaggerGen.Test
+namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
     public class ExamplesOperationFilterTests
     {
@@ -23,7 +25,15 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
         {
             var mvcJsonOptions = new MvcJsonOptions();
             var options = Options.Create(mvcJsonOptions);
-            sut = new ExamplesOperationFilter(options);
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options);
+
+            var jsonFormatter = new JsonFormatter();
+            var exampleProviderFactory = new ExamplesProviderFactory(null);
+
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
+
+            sut = new ExamplesOperationFilter(requestExample, responseExample);
         }
 
         [Fact]

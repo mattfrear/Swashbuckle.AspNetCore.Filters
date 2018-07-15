@@ -99,7 +99,11 @@ public void ConfigureServices(IServiceCollection services)
     services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-        c.OperationFilter<ExamplesOperationFilter>(); // [SwaggerRequestExample] & [SwaggerResponseExample]
+        
+		// version < 3.0 does this: c.OperationFilter<ExamplesOperationFilter>(); // [SwaggerRequestExample] & [SwaggerResponseExample]
+
+		c.AddSwaggerExamples(services); // version 3.0 and above
+
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on Response properties
         c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint
         c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
@@ -275,6 +279,9 @@ public class PersonResponse
 
 Just enable the `AuthorizationInputOperationFilter` as described in the Installation section above. Note this this will add an
 Authorization input to *every* controller action, regardless of if the endpoint is actually secured.
+
+N.B. I have now marked this as Obsolete, because a better way is to use this filter:
+https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/test/WebSites/OAuth2Integration/ResourceServer/Swagger/SecurityRequirementsOperationFilter.cs
 
 ### How to use - File upload button
 

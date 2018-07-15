@@ -1,6 +1,4 @@
-﻿using Swashbuckle.AspNetCore.Examples;
-
-namespace Swashbuckle.AspNetCore.SwaggerGen.Test
+namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 {
     internal class PersonRequestExample : IExamplesProvider
     {

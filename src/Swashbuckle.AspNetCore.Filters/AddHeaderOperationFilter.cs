@@ -1,8 +1,8 @@
-﻿using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 
-namespace Swashbuckle.AspNetCore.Examples
+namespace Swashbuckle.AspNetCore.Filters
 {
     public class AddHeaderOperationFilter : IOperationFilter
     {

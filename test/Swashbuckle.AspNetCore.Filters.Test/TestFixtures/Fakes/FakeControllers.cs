@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using Swashbuckle.AspNetCore.Examples;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 using System;
 
-namespace Swashbuckle.AspNetCore.SwaggerGen.Test
+namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 {
-    public class FakeControllers
+    public static class FakeControllers
     {
         public class NotAnnotated
         {}

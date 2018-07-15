@@ -1,13 +1,14 @@
-﻿using System.Linq;
+using System.Linq;
 using Newtonsoft.Json;
 using Xunit;
 using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.Examples;
 using Shouldly;
-using System.Reflection;
 using System;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
+using System.Reflection;
 
-namespace Swashbuckle.AspNetCore.SwaggerGen.Test
+namespace Swashbuckle.AspNetCore.Filters.Test
 {
     public class AppendAuthorizeToSummaryOperationFilterTests
     {

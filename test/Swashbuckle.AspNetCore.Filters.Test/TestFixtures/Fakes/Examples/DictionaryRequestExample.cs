@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using Swashbuckle.AspNetCore.Filters;
+using System.Collections.Generic;
 
-namespace Swashbuckle.AspNetCore.Examples.Test.TestFixtures.Fakes.Examples
+namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 {
     public class DictionaryRequestExample : IExamplesProvider
     {
