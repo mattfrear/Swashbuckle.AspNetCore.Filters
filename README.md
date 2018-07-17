@@ -86,7 +86,7 @@ along with any specified policies or roles.
 ![authorization](https://user-images.githubusercontent.com/169179/36599686-1d939bcc-18a8-11e8-8f81-d8706f1f0dc1.JPG)
 
 ## Installation
-Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/), then enable whichever filters 
+Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/), then enable whichever filters 
 you need when you enable SwaggerGen:
 
 ```csharp
