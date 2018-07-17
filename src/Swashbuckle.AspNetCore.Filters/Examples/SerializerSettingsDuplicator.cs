@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
@@ -8,16 +6,16 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class SerializerSettingsDuplicator
     {
-        private readonly IOptions<MvcJsonOptions> mvcJsonOptions;
+        private readonly JsonSerializerSettings jsonSerializerSettings;
 
-        public SerializerSettingsDuplicator(IOptions<MvcJsonOptions> mvcJsonOptions)
+        public SerializerSettingsDuplicator(JsonSerializerSettings jsonSerializerSettings)
         {
-            this.mvcJsonOptions = mvcJsonOptions;
+            this.jsonSerializerSettings = jsonSerializerSettings;
         }
 
         public JsonSerializerSettings SerializerSettings(IContractResolver attributeContractResolver, JsonConverter attributeJsonConverter)
         {
-            var serializerSettings = DuplicateSerializerSettings(mvcJsonOptions.Value.SerializerSettings);
+            var serializerSettings = DuplicateSerializerSettings(jsonSerializerSettings);
             if (attributeContractResolver != null)
             {
                 serializerSettings.ContractResolver = attributeContractResolver;

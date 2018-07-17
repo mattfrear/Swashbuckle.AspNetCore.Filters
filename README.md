@@ -102,7 +102,7 @@ public void ConfigureServices(IServiceCollection services)
         
         // [SwaggerRequestExample] & [SwaggerResponseExample]
         // version < 3.0 does this: c.OperationFilter<ExamplesOperationFilter>(); 
-        c.AddSwaggerExamples(services); // version 3.0 and above
+        c.AddSwaggerExamples(services.BuildServiceProvider()); // version 3.0 and above
 
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on Response properties
         c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint

@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.0\WebApi.xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\WebApi1.1\Controllers\ValuesController.cs" Link="Controllers\ValuesController.cs" />
+    <Compile Include="..\WebApi1.1\Models\DynamicData.cs" Link="Models\DynamicData.cs" />
+    <Compile Include="..\WebApi1.1\Models\ErrorResponse.cs" Link="Models\ErrorResponse.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\DictionaryRequestExample.cs" Link="Models\Examples\DictionaryRequestExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\DictionaryResponseExample.cs" Link="Models\Examples\DictionaryResponseExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\DynamicDataRequestExample.cs" Link="Models\Examples\DynamicDataRequestExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\DynamicDataResponseExample.cs" Link="Models\Examples\DynamicDataResponseExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\InternalServerResponseExample.cs" Link="Models\Examples\InternalServerResponseExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\ListPeopleRequestExample.cs" Link="Models\Examples\ListPeopleRequestExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\NotFoundResponseExample.cs" Link="Models\Examples\NotFoundResponseExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\PersonRequestExample.cs" Link="Models\Examples\PersonRequestExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\PersonRequestExample2.cs" Link="Models\Examples\PersonRequestExample2.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseDependencyInjectionExample.cs" Link="Models\Examples\PersonResponseDependencyInjectionExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseExample.cs" Link="Models\Examples\PersonResponseExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\WrappedPersonRequestExample.cs" Link="Models\Examples\WrappedPersonRequestExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\WrappedPersonResponseExample.cs" Link="Models\Examples\WrappedPersonResponseExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\PeopleRequest.cs" Link="Models\PeopleRequest.cs" />
+    <Compile Include="..\WebApi1.1\Models\PersonRequest.cs" Link="Models\PersonRequest.cs" />
+    <Compile Include="..\WebApi1.1\Models\PersonResponse.cs" Link="Models\PersonResponse.cs" />
+    <Compile Include="..\WebApi1.1\Models\RequestWrapper.cs" Link="Models\RequestWrapper.cs" />
+    <Compile Include="..\WebApi1.1\Models\ResponseWrapper.cs" Link="Models\ResponseWrapper.cs" />
+    <Compile Include="..\WebApi1.1\Models\Title.cs" Link="Models\Title.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Models\Examples\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Swashbuckle.AspNetCore.Filters\Swashbuckle.AspNetCore.Filters.csproj" />
+  </ItemGroup>
+
+</Project>
