@@ -51,9 +51,9 @@ You'll see some more realistic data (or whatever you want):
 
 ![response with awesome data](https://mattfrear.files.wordpress.com/2015/04/response-new.png?w=700&h=358)
 
-### Documenting Response properties
+### Document request or response properties
 
-Lets you add a comment-like description to properties on your response, e.g.
+Lets you add a comment-like description to properties on your request or response, e.g.
 ![descriptions](https://mattfrear.files.wordpress.com/2017/09/descriptions.jpg)
 
 ### Authorization header input box
@@ -104,7 +104,7 @@ public void ConfigureServices(IServiceCollection services)
         // version < 3.0 does this: c.OperationFilter<ExamplesOperationFilter>(); 
         c.AddSwaggerExamples(services.BuildServiceProvider()); // version 3.0 and above
 
-        c.OperationFilter<DescriptionOperationFilter>(); // [Description] on Response properties
+        c.OperationFilter<DescriptionOperationFilter>(); // [Description] on request or response properties
         c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint
         c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
         c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
@@ -251,7 +251,7 @@ public async Task<IHttpActionResult> Search(DeliveryOptionsSearchModel search)
 
 That DeliveryOptionsSearchModel object is only defined once in the entire Swagger document and it can only have one **request** example defined.
 
-### How to use - Document response properties
+### How to use - Document request and response properties
 Define the SwaggerResponse, as usual:
 ```csharp
 [HttpPost]
@@ -260,7 +260,7 @@ Define the SwaggerResponse, as usual:
 public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
 {
 ```
-Now add `System.ComponentModel.Description` attributes to your Response object:
+Now add `System.ComponentModel.Description` attributes to your request or response object:
 ```csharp
 public class PersonResponse
 {
