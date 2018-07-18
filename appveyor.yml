@@ -12,22 +12,22 @@ before_build:
   # Display .NET Core version
   - cmd: dotnet --version
   # Display minimal restore text
-  - cmd: dotnet restore ./src/Swashbuckle.AspNetCore.Filters.csproj --verbosity m
+  - cmd: dotnet restore ./src/Swashbuckle.AspNetCore.Filters/Swashbuckle.AspNetCore.Filters.csproj --verbosity m
 build_script:
   # output will be in ./src/bin/debug/netcoreapp1.1/publish
-  - cmd: dotnet publish ./src/Swashbuckle.AspNetCore.Filters.csproj
+  # - cmd: dotnet publish ./src/Swashbuckle.AspNetCore.Filters/Swashbuckle.AspNetCore.Filters.csproj -f netstandard1.6
 after_build:
   # For once the build has completed
 artifacts:
- - path: '\src\bin\Debug\netcoreapp1.1\publish'
-   name: WebSite
-   type: WebDeployPackage
+ # - path: '\src\bin\Debug\netcoreapp1.1\publish'
+ #  name: WebSite
+ #  type: WebDeployPackage
 clone_depth: 1
 test_script:
   # restore packages for our unit tests
   - cmd: dotnet restore ./test/Swashbuckle.AspNetCore.Filters.Test/Swashbuckle.AspNetCore.Filters.Test.csproj --verbosity m
   # run the unit tests (requires changing into the test directory)
-  - cmd: cd test/Swashbuckle.AspNetCore.Filters.Test
+  - cmd: cd ./test/Swashbuckle.AspNetCore.Filters.Test
   - cmd: dotnet xunit
 on_finish :
   # any cleanup in here
