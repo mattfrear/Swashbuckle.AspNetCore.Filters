@@ -14,6 +14,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test
     {
         protected OperationFilterContext FilterContextFor(Type controllerType, string actionName)
         {
+            return FilterContextFor(controllerType, actionName, new CamelCasePropertyNamesContractResolver());
+        }
+
+        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, IContractResolver contractResolver)
+        {
             var apiDescription = new ApiDescription
             {
                 ActionDescriptor = new ControllerActionDescriptor
@@ -25,7 +30,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
 
             var jsonSerializerSettings = new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = contractResolver
             };
 
             return new OperationFilterContext(

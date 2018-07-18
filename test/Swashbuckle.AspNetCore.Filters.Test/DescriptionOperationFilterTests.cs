@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using Xunit;
 using System;
+using Newtonsoft.Json.Serialization;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
 {
@@ -36,6 +37,28 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             var schema = filterContext.SchemaRegistry.Definitions["PersonResponse"];
             schema.Properties["first"].Description.ShouldBe("The first name of the person");
             schema.Properties["last"].Description.ShouldBe("The last name of the person");
+            schema.Properties["age"].Description.ShouldBe("His age, in years");
+        }
+
+        [Fact]
+        public void Apply_SetsResponseDescriptionsWithDefaultContractResolver()
+        {
+            // Arrange
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(
+                typeof(FakeActions),
+                nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributes),
+                new DefaultContractResolver());
+
+            SetSwaggerResponses(operation, filterContext);
+            filterContext.SchemaRegistry.GetOrRegister(typeof(PersonResponse));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var schema = filterContext.SchemaRegistry.Definitions["PersonResponse"];
+            schema.Properties["Age"].Description.ShouldBe("His age, in years");
         }
 
         [Fact]
@@ -55,6 +78,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             var schema = filterContext.SchemaRegistry.Definitions[fullName];
             schema.Properties["first"].Description.ShouldBe("The first name of the person");
             schema.Properties["last"].Description.ShouldBe("The last name of the person");
+            schema.Properties["age"].Description.ShouldBe("His age, in years");
         }
 
         [Fact]

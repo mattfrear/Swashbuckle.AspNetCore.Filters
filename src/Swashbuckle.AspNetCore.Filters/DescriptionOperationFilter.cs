@@ -101,11 +101,14 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private static void UpdatePropertyDescription(PropertyInfo prop, Schema schema)
         {
-            var propName = ToCamelCase(GetPropertyName(prop));
-            if (schema.Properties.ContainsKey(propName))
+            var propName = GetPropertyName(prop);
+            foreach (var schemaProperty in schema.Properties)
             {
-                var descriptionAttribute = (DescriptionAttribute)prop.GetCustomAttributes(typeof(DescriptionAttribute), false).First();
-                schema.Properties[propName].Description = descriptionAttribute.Description;
+                if (string.Equals(schemaProperty.Key, propName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var descriptionAttribute = (DescriptionAttribute)prop.GetCustomAttributes(typeof(DescriptionAttribute), false).First();
+                    schemaProperty.Value.Description = descriptionAttribute.Description;
+                }
             }
         }
 
@@ -123,12 +126,6 @@ namespace Swashbuckle.AspNetCore.Filters
             }
 
             return prop.Name;
-        }
-        
-        private static string ToCamelCase(string value)
-        {
-            // lower case the first letter
-            return value.Substring(0, 1).ToLower() + value.Substring(1);
         }
     }
 }
