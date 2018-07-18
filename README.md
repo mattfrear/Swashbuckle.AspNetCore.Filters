@@ -1,4 +1,6 @@
 # Swashbuckle.AspNetCore.Filters
+[![Build status](https://ci.appveyor.com/api/projects/status/l6cowxsqp2n9e4sl?svg=true)](https://ci.appveyor.com/project/mattfrear/swashbuckle-aspnetcore-examples)
+
 | :mega: Rename to Swashbuckle.AspNetCore.Filters |
 |--------------|
 | This project was formerly called Swashbuckle.AspNetCore.Examples, but it has grown from there to become a grab-bag of various filters I have created as I have used Swashbuckle over the last 3 or so years. So I have renamed it.|
