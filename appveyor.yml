@@ -15,7 +15,7 @@ before_build:
   - cmd: dotnet restore ./src/Swashbuckle.AspNetCore.Filters/Swashbuckle.AspNetCore.Filters.csproj --verbosity m
 build_script:
   # output will be in ./src/bin/debug/netcoreapp1.1/publish
-  # - cmd: dotnet publish ./src/Swashbuckle.AspNetCore.Filters/Swashbuckle.AspNetCore.Filters.csproj -f netstandard1.6
+  - cmd: dotnet publish ./src/Swashbuckle.AspNetCore.Filters/Swashbuckle.AspNetCore.Filters.csproj -f netstandard1.6
 after_build:
   # For once the build has completed
 artifacts:
