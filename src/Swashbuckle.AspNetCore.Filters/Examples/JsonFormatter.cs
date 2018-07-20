@@ -9,14 +9,21 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             if (includeMediaType)
             {
-                examples = new Dictionary<string, object>
+                var wrappedExamples = new Dictionary<string, object>
                 {
                     {
                         "application/json", examples
                     }
                 };
+
+                return SerializeDeserialize(wrappedExamples, serializerSettings);
             }
 
+            return SerializeDeserialize(examples, serializerSettings);
+        }
+
+        private static object SerializeDeserialize(object examples, JsonSerializerSettings serializerSettings)
+        {
             var jsonString = JsonConvert.SerializeObject(examples, serializerSettings);
             var result = JsonConvert.DeserializeObject(jsonString);
             return result;
