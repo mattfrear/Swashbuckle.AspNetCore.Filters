@@ -8,6 +8,8 @@ using Newtonsoft.Json.Converters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 
 namespace WebApi.Controllers
 {
@@ -127,6 +129,15 @@ namespace WebApi.Controllers
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(PersonResponseDependencyInjectionExample))]
         public PersonResponse GetDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
+        {
+            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+            return personResponse;
+        }
+
+        [HttpPatch]
+        [Route("api/values/patchperson")]
+        [SwaggerRequestExample(typeof(Operation), typeof(JsonPatchPersonRequestExample))]
+        public PersonResponse JsonPatchPerson([FromBody]JsonPatchDocument<PersonRequest> personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
