@@ -23,6 +23,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
                 throw new NotImplementedException();
             }
 
+            [Authorize("Customer")]
+            public IActionResult Customer()
+            {
+                throw new NotImplementedException();
+            }
+
             public IActionResult None()
             {
                 throw new NotImplementedException();
