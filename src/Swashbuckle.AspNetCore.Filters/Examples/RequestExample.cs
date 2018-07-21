@@ -30,9 +30,9 @@ namespace Swashbuckle.AspNetCore.Filters
                 var schema = schemaRegistry.GetOrRegister(attr.RequestType);
 
                 var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
-                var request = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Ref || p.Schema?.Items?.Ref == schema.Ref);
+                var bodyParameter = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Ref || p.Schema?.Items?.Ref == schema.Ref);
 
-                if (request == null)
+                if (bodyParameter == null)
                 {
                     continue; // The type in their [SwaggerRequestExample(typeof(requestType), ...] is not passed to their controller action method
                 }
@@ -42,7 +42,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 var serializerSettings = serializerSettingsDuplicator.SerializerSettings(attr.ContractResolver, attr.JsonConverter);
 
                 var example = jsonFormatter.FormatJson(examplesProvider.GetExamples(), serializerSettings, includeMediaType: false);
-                request.Schema.Example = example; // set example on the paths/parameters/schema/example property
+                bodyParameter.Schema.Example = example; // set example on the paths/parameters/schema/example property
 
                 string name = SchemaDefinitionName(attr, schema);
 

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
+using WebApi.Models;
 using WebApi.Models.Examples;
 
 namespace WebApi
@@ -35,11 +36,16 @@ namespace WebApi
 
             services.AddSingleton<PersonResponseDependencyInjectionExample>();
 
+            services.AddSingleton<IAutoExamplesProvider<PersonResponse>, PersonResponseAutoExample>();
+            services.AddSingleton<IAutoExamplesProvider<PersonRequest>, PersonRequestAutoExample>();
+
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 
                 options.AddSwaggerExamples(services.BuildServiceProvider());
+
+                options.OperationFilter<AutoExamplesOperationFilter>(services.BuildServiceProvider());
 
                 options.OperationFilter<DescriptionOperationFilter>();
 

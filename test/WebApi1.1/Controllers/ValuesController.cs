@@ -37,6 +37,15 @@ namespace WebApi.Controllers
             return personResponse;
         }
 
+        [HttpGet]
+        [Route("api/values/person/auto/{personId}")]
+        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        public PersonResponse GetAutoExamples(int personId, string name)
+        {
+            var personResponse = new PersonResponse { Id = personId, FirstName = "Dave" };
+            return personResponse;
+        }
+
         /// <summary>
         /// Posts a person
         /// </summary>
