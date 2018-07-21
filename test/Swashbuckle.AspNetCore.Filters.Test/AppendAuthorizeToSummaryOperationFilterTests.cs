@@ -3,6 +3,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Shouldly;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
+using static Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.FakeControllers;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
 {
@@ -132,7 +133,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(typeof(FakeControllers.AuthController), nameof(FakeActions.None));
+            var filterContext = FilterContextFor(typeof(AuthController), nameof(FakeActions.None));
 
             // Act
             sut.Apply(operation, filterContext);
@@ -146,7 +147,22 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(typeof(FakeControllers.AuthController), nameof(FakeControllers.AuthController.AllowAnonymous));
+            var filterContext = FilterContextFor(typeof(AuthController), nameof(AuthController.AllowAnonymous));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Summary.ShouldBe("Test summary");
+        }
+
+
+        [Fact]
+        public void Apply_DoesNotAppendWhenControllerHasAllowAnonymous()
+        {
+            // Arrange
+            var operation = new Operation { Summary = "Test summary" };
+            var filterContext = FilterContextFor(typeof(AllowAnonymousController), nameof(AllowAnonymousController.Customer));
 
             // Act
             sut.Apply(operation, filterContext);

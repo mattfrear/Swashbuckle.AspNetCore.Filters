@@ -13,7 +13,7 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            if (context.MethodInfo.GetCustomAttributes<AllowAnonymousAttribute>().Any())
+            if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
             {
                 return;
             }

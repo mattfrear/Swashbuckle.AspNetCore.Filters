@@ -20,6 +20,11 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
+            if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
+            {
+                return;
+            }
+
             var actionAttributes = context.GetControllerAndActionAttributes<AuthorizeAttribute>();
 
             if (!actionAttributes.Any())

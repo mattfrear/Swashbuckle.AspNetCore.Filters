@@ -35,6 +35,16 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             }
         }
 
+        [AllowAnonymous]
+        public class AllowAnonymousController
+        {
+            [Authorize("Customer")] // this does nothing, because [AllowAnonymous] on the controller overrides it
+            public IActionResult Customer()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         [SwaggerResponse(200, type: typeof(PersonResponse))]
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
         public class SwaggerResponseExampleController

@@ -36,6 +36,20 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
+        public void Apply_DoesNotSetSecurity_WhenNoAuthorize()
+        {
+            // Arrange
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.None));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Security.ShouldBeNull();
+        }
+
+        [Fact]
         public void Apply_SetsAuthorize_WithOnePolicy()
         {
             // Arrange
@@ -106,6 +120,34 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             security.ShouldContainKey("oauth2");
             var policies = security["oauth2"];
             policies.Single().ShouldBe("Customer");
+        }
+
+        [Fact]
+        public void Apply_DoesNotSetSecurity_WhenActionHasAllowAnonymous()
+        {
+            // Arrange
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(typeof(AuthController), nameof(AuthController.AllowAnonymous));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Security.ShouldBeNull();
+        }
+
+        [Fact]
+        public void Apply_DoesNotSetSecurity_WhenControllerHasAllowAnonymous()
+        {
+            // Arrange
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(typeof(AllowAnonymousController), nameof(AllowAnonymousController.Customer));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Security.ShouldBeNull();
         }
     }
 }
