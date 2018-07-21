@@ -315,10 +315,10 @@ Then, when you enable the SecurityRequirementsOperationFilter:
 	c.OperationFilter<SecurityRequirementsOperationFilter>();
 ```
 It adds a security property to each operation, which renders in Swagger-UI as a padlock next to the operation:
-[locked down actions](https://mattfrear.files.wordpress.com/2018/07/securityonaction.jpg)
+![locked down actions](https://mattfrear.files.wordpress.com/2018/07/securityonaction.jpg)
 
 By default, the SecurityRequirementsOperationFilter also adds 401 and 403 to each operation that has `[Authorize]` on it:
-[401 and 403](https://mattfrear.files.wordpress.com/2018/07/401-403.jpg)
+![401 and 403](https://mattfrear.files.wordpress.com/2018/07/401-403.jpg)
 
 If you don't want to do that you can pass false when you configure it:
 
