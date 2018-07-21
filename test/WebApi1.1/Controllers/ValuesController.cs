@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// Gets a person
         /// </summary>
-        /// <param name="personRequest"></param>
+        /// <param name="personId"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("api/values/person/{personId}")]
