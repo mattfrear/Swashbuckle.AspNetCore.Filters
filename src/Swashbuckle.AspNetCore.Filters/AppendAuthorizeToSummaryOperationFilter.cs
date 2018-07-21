@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using Swashbuckle.AspNetCore.Filters.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -12,14 +13,12 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var authorizeAttributes = context.MethodInfo.GetCustomAttributes<AuthorizeAttribute>().ToList();
-
             if (context.MethodInfo.GetCustomAttributes<AllowAnonymousAttribute>().Any())
             {
                 return;
             }
 
-            authorizeAttributes.AddRange(context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<AuthorizeAttribute>());
+            var authorizeAttributes = context.GetControllerAndActionAttributes<AuthorizeAttribute>();
 
             if (authorizeAttributes.Any())
             {

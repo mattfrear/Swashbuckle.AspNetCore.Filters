@@ -11,9 +11,9 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var responseAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseHeaderAttribute>();
+            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseHeaderAttribute>();
 
-            foreach (var attr in responseAttributes)
+            foreach (var attr in actionAttributes)
             {
                 var response = operation.Responses.FirstOrDefault(x => x.Key == ((int)attr.StatusCode).ToString(CultureInfo.InvariantCulture)).Value;
 

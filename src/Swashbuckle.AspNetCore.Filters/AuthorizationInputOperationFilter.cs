@@ -5,7 +5,7 @@ using System;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    [Obsolete("Use SecurityRequirementsOperationFilter from here instead: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/test/WebSites/OAuth2Integration/ResourceServer/Swagger/SecurityRequirementsOperationFilter.cs")]
+    [Obsolete("Use SecurityRequirementsOperationFilter instead")]
     public class AuthorizationInputOperationFilter : IOperationFilter
     {
         public void Apply(Operation operation, OperationFilterContext context)

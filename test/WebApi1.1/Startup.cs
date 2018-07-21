@@ -35,34 +35,53 @@ namespace WebApi
 
             services.AddSingleton<PersonResponseDependencyInjectionExample>();
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                options.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 
-                c.AddSwaggerExamples(services.BuildServiceProvider());
+                options.AddSwaggerExamples(services.BuildServiceProvider());
 
-                c.OperationFilter<DescriptionOperationFilter>();
-                c.OperationFilter<AuthorizationInputOperationFilter>();
-                c.OperationFilter<AddFileParamTypesOperationFilter>();
+                options.OperationFilter<DescriptionOperationFilter>();
 
-                c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
+                options.OperationFilter<AddFileParamTypesOperationFilter>();
 
-                c.OperationFilter<AddResponseHeadersFilter>();
+                options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
 
-                c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+                options.OperationFilter<AddResponseHeadersFilter>();
 
-                c.DescribeAllEnumsAsStrings();
+                options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+
+                options.DescribeAllEnumsAsStrings();
 
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, "WebApi.xml");
-                c.IncludeXmlComments(filePath);
+                options.IncludeXmlComments(filePath);
 
                 // c.CustomSchemaIds((type) => type.FullName);
+
+                options.AddSecurityDefinition("oauth2", new ApiKeyScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                    In = "header",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                });
+
+                // Assign scope requirements to operations based on AuthorizeAttribute
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Administrator", authBuilder => authBuilder.RequireRole("Administrator"));
-                options.AddPolicy("Customer", authBuilder => authBuilder.RequireRole("Customer"));
+                options.AddPolicy("Administrator", authBuilder =>
+                {
+                    authBuilder.AddAuthenticationSchemes("bearer");
+                    authBuilder.RequireRole("Administrator");
+                });
+                options.AddPolicy("Customer", authBuilder =>
+                {
+                    authBuilder.AddAuthenticationSchemes("Bearer");
+                    authBuilder.RequireRole("Customer");
+                });
             });
         }
 

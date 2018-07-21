@@ -13,21 +13,18 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Swashbuckle.AspNetCore.Filters
 {
     public class DescriptionOperationFilter : IOperationFilter
-    {
-        private static readonly SchemaRegistrySettings _settings = new SchemaRegistrySettings();
-        private static readonly SchemaIdManager _idManager = new SchemaIdManager(_settings.SchemaIdSelector);
-    
+    {    
         public void Apply(Operation operation, OperationFilterContext context)
         {
             SetResponseModelDescriptions(operation, context.SchemaRegistry, context);
-            SetRequestModelDescriptions(operation, context.SchemaRegistry, context.ApiDescription);
+            SetRequestModelDescriptions(context.SchemaRegistry, context.ApiDescription);
         }
 
         private static void SetResponseModelDescriptions(Operation operation, ISchemaRegistry schemaRegistry, OperationFilterContext context)
         {
-            var swaggerResponseAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseAttribute>().ToList();
+            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseAttribute>().ToList();
 
-            foreach (var attribute in swaggerResponseAttributes)
+            foreach (var attribute in actionAttributes)
             {
                 var statusCode = attribute.StatusCode.ToString();
 
@@ -40,7 +37,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
         }
 
-        private static void SetRequestModelDescriptions(Operation operation, ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
+        private static void SetRequestModelDescriptions(ISchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
             foreach (var parameterDescription in apiDescription.ParameterDescriptions)
             {

@@ -3,6 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using Swashbuckle.AspNetCore.Filters.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -24,9 +25,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public void SetResponseModelExamples(Operation operation, OperationFilterContext context)
         {
-            var responseAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>().ToList();
-
-            responseAttributes.AddRange(context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<SwaggerResponseExampleAttribute>());
+            var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>();
 
             foreach (var attr in responseAttributes)
             {
