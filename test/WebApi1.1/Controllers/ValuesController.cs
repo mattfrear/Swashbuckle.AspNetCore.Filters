@@ -24,6 +24,24 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="personRequest"></param>
         /// <returns></returns>
+        [HttpGet]
+        [Route("api/values/person/{personId}")]
+        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        [SwaggerResponseExample(200, typeof(PersonResponseExample))]
+        [SwaggerResponse(500, type: null, description: "There was an unexpected error")]
+        [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
+        [Authorize("Customer")]
+        public PersonResponse GetPerson(int personId)
+        {
+            var personResponse = new PersonResponse { Id = personId, FirstName = "Dave" };
+            return personResponse;
+        }
+
+        /// <summary>
+        /// Posts a person
+        /// </summary>
+        /// <param name="personRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/values/person")]
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
@@ -36,7 +54,7 @@ namespace WebApi.Controllers
         [SwaggerResponseHeader(200, "Location", "string", "Location of the newly created resource")]
         [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
         [Authorize("Customer")]
-        public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
+        public PersonResponse PostPerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
@@ -48,7 +66,7 @@ namespace WebApi.Controllers
         [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
         [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
         [Authorize(Roles = "Customer")]
-        public ResponseWrapper<PersonResponse> GetGenericPerson([FromBody]RequestWrapper<PersonRequest> personRequest)
+        public ResponseWrapper<PersonResponse> PostGenericPerson([FromBody]RequestWrapper<PersonRequest> personRequest)
         {
             var personResponse = new ResponseWrapper<PersonResponse>
             {
@@ -64,7 +82,7 @@ namespace WebApi.Controllers
         [Route("api/values/listperson")]
         [SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>), description: "Successfully found the people")]
         [SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample), jsonConverter: typeof(StringEnumConverter))]
-        public IEnumerable<PersonResponse> GetPersonList([FromBody]List<PeopleRequest> peopleRequest)
+        public IEnumerable<PersonResponse> PostPersonList([FromBody]List<PeopleRequest> peopleRequest)
         {
             var people = new[] { new PersonResponse { Id = 1, FirstName = "Sally" } };
             return people;
@@ -94,7 +112,7 @@ namespace WebApi.Controllers
         [SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
         [SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
         [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
-        public Dictionary<string, object> GetDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
+        public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
         {
             return new Dictionary<string, object> { { "Some", 1 } };
         }
@@ -119,7 +137,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("api/values/differentperson")]
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2), jsonConverter: typeof(StringEnumConverter))]
-        public PersonResponse GetDifferentPerson([FromBody]PersonRequest personRequest)
+        public PersonResponse PostDifferentPerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
@@ -129,7 +147,7 @@ namespace WebApi.Controllers
         [Route("api/values/dependencyinjectionperson")]
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(PersonResponseDependencyInjectionExample))]
-        public PersonResponse GetDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
+        public PersonResponse PostDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;

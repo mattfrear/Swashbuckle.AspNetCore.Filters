@@ -63,7 +63,6 @@ namespace WebApi2._0
                     Type = "apiKey"
                 });
 
-                // Assign scope requirements to operations based on AuthorizeAttribute
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
 

@@ -13,6 +13,10 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private readonly bool includeUnauthorizedAndForbiddenResponses;
 
+        /// <summary>
+        /// Constructor for SecurityRequirementsOperationFilter
+        /// </summary>
+        /// <param name="includeUnauthorizedAndForbiddenResponses">If true (default), then 401 and 403 responses will be added to every operation</param>
         public SecurityRequirementsOperationFilter(bool includeUnauthorizedAndForbiddenResponses = true)
         {
             this.includeUnauthorizedAndForbiddenResponses = includeUnauthorizedAndForbiddenResponses;
