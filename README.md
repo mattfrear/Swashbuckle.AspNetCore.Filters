@@ -58,12 +58,14 @@ You'll see some more realistic data (or whatever you want):
 Lets you add a comment-like description to properties on your request or response, e.g.
 ![descriptions](https://mattfrear.files.wordpress.com/2017/09/descriptions.jpg)
 
-### Authorization header input box
+### Security requirements filter
 
-Adds an input so that you can send an Authorization header to your API. Useful for API endpoints that have JWT token
+Adds security information to each operation so that you can send an Authorization header to your API. Useful for API endpoints that have JWT token
 authentication. e.g.
 
-![authorization](https://mattfrear.files.wordpress.com/2017/09/authorization.jpg)
+![authorization button](https://mattfrear.files.wordpress.com/2018/07/authbutton.jpg)
+
+![bearer token](https://mattfrear.files.wordpress.com/2018/07/authbuttonclicked.jpg)
 
 ### File upload button
 
@@ -107,11 +109,23 @@ public void ConfigureServices(IServiceCollection services)
         c.AddSwaggerExamples(services.BuildServiceProvider()); // version 3.0 and above
 
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on request or response properties
-        c.OperationFilter<AuthorizationInputOperationFilter>(); // Adds an Authorization input box to every endpoint
+        
         c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
         c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
         c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
         c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
+	
+	// add Security information to each operation for OAuth2
+	c.OperationFilter<SecurityRequirementsOperationFilter>();
+	
+	// if you're using the SecurityRequirementsOperationFilter, you also need to tell Swashbuckle you're using OAuth2
+        c.AddSecurityDefinition("oauth2", new ApiKeyScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+            In = "header",
+            Name = "Authorization",
+            Type = "apiKey"
+        });
     });
 }
 ```
@@ -277,13 +291,40 @@ public class PersonResponse
 	public int Age { get; set; }
 ```
 
-### How to use - Authorization input
+### How to use - Security requirements filter
 
-Just enable the `AuthorizationInputOperationFilter` as described in the Installation section above. Note this this will add an
-Authorization input to *every* controller action, regardless of if the endpoint is actually secured.
+First you need to already have OAuth2 configured correctly, and some of your controllers and actions locked down with the `[Authorize]` attribute.
 
-N.B. I have now marked this as Obsolete, because a better way is to use this filter:
-https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/test/WebSites/OAuth2Integration/ResourceServer/Swagger/SecurityRequirementsOperationFilter.cs
+Then you need to tell Swagger that you're using OAuth2, as shown in the Installation section above:
+```csharp
+    services.AddSwaggerGen(c =>
+    {
+        c.AddSecurityDefinition("oauth2", new ApiKeyScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+            In = "header",
+            Name = "Authorization",
+            Type = "apiKey"
+        });
+```
+This adds a securityDefinition to the bottom of the Swagger document, which Swagger-UI renders as an "Authorize" button, which when clicked brings up the Authorize dialog box shown above.
+
+Then, when you enable the SecurityRequirementsOperationFilter:
+```csharp
+	// add Security information to each operation for OAuth2
+	c.OperationFilter<SecurityRequirementsOperationFilter>();
+```
+It adds a security property to each operation, which renders in Swagger-UI as a padlock next to the operation:
+[locked down actions](https://mattfrear.files.wordpress.com/2018/07/securityonaction.jpg)
+
+By default, the SecurityRequirementsOperationFilter also adds 401 and 403 to each operation that has `[Authorize]` on it:
+[401 and 403](https://mattfrear.files.wordpress.com/2018/07/401-403.jpg)
+
+If you don't want to do that you can pass false when you configure it:
+
+```csharp
+	c.OperationFilter<SecurityRequirementsOperationFilter>(false);
+```
 
 ### How to use - File upload button
 
