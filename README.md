@@ -9,11 +9,11 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 - Add example requests https://mattfrear.com/2016/01/25/generating-swagger-example-requests-with-swashbuckle/
 - Add example responses https://mattfrear.com/2015/04/21/generating-swagger-example-responses-with-swashbuckle/
 - Add comments for request and response properties
-- Add security info to each operation that has an [Authorize] endpoint, allowing you to send OAuth2 bearer tokens via Swagger-UI https://mattfrear.com/2018/07/21/add-an-authorization-header-to-your-swagger-ui-with-swashbuckle-revisited/
+- Add security info to each operation that has an `[Authorize]` endpoint, allowing you to send OAuth2 bearer tokens via Swagger-UI https://mattfrear.com/2018/07/21/add-an-authorization-header-to-your-swagger-ui-with-swashbuckle-revisited/
 - Add a file upload button https://mattfrear.com/2018/01/02/add-an-upload-button-to-your-swagger-page/
 - Add any old request header to all requests
 - Add any old response header to all responses
-- Add an indicator to each endpoint to show if it has an `[Authorize]` header (and for which roles)
+- Add an indicator to each endpoint to show if it has an `[Authorize]` header (and for which policies and roles)
 
 ## Where to get it
 From NuGet.
