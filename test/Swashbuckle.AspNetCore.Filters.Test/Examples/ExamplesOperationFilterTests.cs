@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -16,7 +17,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public ExamplesOperationFilterTests()
         {
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(new MvcJsonOptions().SerializerSettings);
+            var options = Options.Create(new MvcJsonOptions());
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options);
 
             var jsonFormatter = new JsonFormatter();
             var exampleProviderFactory = new ExamplesProviderFactory(null);

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using NSubstitute;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -20,7 +21,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public ServiceProviderExamplesOperationFilterTests()
         {
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(new MvcJsonOptions().SerializerSettings);
+            var options = Options.Create(new MvcJsonOptions());
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options);
 
             var jsonFormatter = new JsonFormatter();
             var exampleProviderFactory = new ExamplesProviderFactory(null);
