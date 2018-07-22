@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Swashbuckle.AspNetCore.Filters.Extensions
+namespace Swashbuckle.AspNetCore.Filters
 {
     public static class ServiceCollectionExtensions
     {
@@ -25,6 +25,11 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
                 .FromAssemblyOf<T>()
                     .AddClasses(classes => classes.AssignableTo(typeof(IExamplesProvider<>)))
                     .AsImplementedInterfaces()
+                    .WithSingletonLifetime()
+
+                    .AddClasses(classes => classes.AssignableTo(typeof(IExamplesProvider)))
+                    .AsSelf()
+                    .WithSingletonLifetime()
             );
 
             return services;

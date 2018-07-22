@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters.Extensions
 {
-    public static class OperationFilterContextExtensions
+    internal static class OperationFilterContextExtensions
     {
         public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context) where T : Attribute
         {

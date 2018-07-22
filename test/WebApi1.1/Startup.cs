@@ -35,13 +35,6 @@ namespace WebApi
                 .AddMvc()
                 .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
-            services.AddSingleton<PersonResponseDependencyInjectionExample>();
-
-            //services.AddSingleton<IExamplesProvider<PersonResponse>, PersonResponseAutoExample>();
-            //services.AddSingleton<IExamplesProvider<MaleRequest>, MaleRequestExample>();
-
-            services.AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();
-
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
@@ -74,8 +67,8 @@ namespace WebApi
                 });
 
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
-            });
-            
+            })
+            .AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();
 
             services.AddAuthorization(options =>
             {
