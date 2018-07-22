@@ -7,22 +7,26 @@ using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    public class AutoExamplesOperationFilter : IOperationFilter
+    public class ServiceProviderExamplesOperationFilter : IOperationFilter
     {
         private readonly IServiceProvider serviceProvider;
 
-        public AutoExamplesOperationFilter(IServiceProvider serviceProvider)
+        public ServiceProviderExamplesOperationFilter(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
         }
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
+            SetRequestExamples(context);
             SetResponseExamples(context);
+        }
 
-            foreach(var parameterDescription in context.ApiDescription.ParameterDescriptions)
+        private void SetRequestExamples(OperationFilterContext context)
+        {
+            foreach (var parameterDescription in context.ApiDescription.ParameterDescriptions)
             {
-                var example = GetExampleFromServiceProvider(parameterDescription.Type);
+                var example = GetExampleForTypeFromServiceProvider(parameterDescription.Type);
 
                 // todo, set the example on the schema
             }
@@ -34,20 +38,20 @@ namespace Swashbuckle.AspNetCore.Filters
 
             foreach (var response in responseAttributes)
             {
-                var example = GetExampleFromServiceProvider(response.Type);
+                var example = GetExampleForTypeFromServiceProvider(response.Type);
 
                 // todo, set the example on the operation
             }
         }
 
-        private object GetExampleFromServiceProvider(Type type)
+        private object GetExampleForTypeFromServiceProvider(Type type)
         {
             if (type == null || type == typeof(void) || !type.GetTypeInfo().IsClass)
             {
                 return null;
             }
 
-            var exampleProviderType = typeof(IAutoExamplesProvider<>).MakeGenericType(type);
+            var exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);
             object exampleProviderObject = serviceProvider.GetService(exampleProviderType);
 
             if (exampleProviderObject == null)

@@ -36,8 +36,8 @@ namespace WebApi
 
             services.AddSingleton<PersonResponseDependencyInjectionExample>();
 
-            services.AddSingleton<IAutoExamplesProvider<PersonResponse>, PersonResponseAutoExample>();
-            services.AddSingleton<IAutoExamplesProvider<PersonRequest>, PersonRequestAutoExample>();
+            services.AddSingleton<IExamplesProvider<PersonResponse>, PersonResponseAutoExample>();
+            services.AddSingleton<IExamplesProvider<PersonRequest>, PersonRequestAutoExample>();
 
             services.AddSwaggerGen(options =>
             {
@@ -45,7 +45,7 @@ namespace WebApi
 
                 options.AddSwaggerExamples(services.BuildServiceProvider());
 
-                options.OperationFilter<AutoExamplesOperationFilter>(services.BuildServiceProvider());
+                options.OperationFilter<ServiceProviderExamplesOperationFilter>(services.BuildServiceProvider());
 
                 options.OperationFilter<DescriptionOperationFilter>();
 
