@@ -27,34 +27,41 @@ namespace Swashbuckle.AspNetCore.Filters
         public void Apply(Operation operation, OperationFilterContext context)
         {
             SetRequestExamples(operation, context);
-            SetResponseExamples(context);
+            SetResponseExamples(operation, context);
         }
 
         private void SetRequestExamples(Operation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
-            if (actionAttributes.Any())
-            {
-                return; // if [SwaggerRequestExample] is defined, then let ExamplesOperationFilter define the example
-            }
-
+            
             foreach (var parameterDescription in context.ApiDescription.ParameterDescriptions)
             {
+                if (actionAttributes.Any(a => a.RequestType == parameterDescription.Type))
+                {
+                    continue; // if [SwaggerRequestExample] is defined, then let ExamplesOperationFilter define the example
+                }
+
                 var example = GetExampleForTypeFromServiceProvider(parameterDescription.Type);
 
                 requestExample.SetRequestExampleForType(operation, context.SchemaRegistry, parameterDescription.Type, example);
             }
         }
 
-        private void SetResponseExamples(OperationFilterContext context)
+        private void SetResponseExamples(Operation operation, OperationFilterContext context)
         {
-            var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseAttribute>();
+            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>();
+            var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseAttribute>(); // or ProducesResponseTypeAttribute (todo)
 
             foreach (var response in responseAttributes)
             {
+                if (actionAttributes.Any(a => a.StatusCode == response.StatusCode))
+                {
+                    continue; // if [SwaggerResponseExample] is defined, then let ExamplesOperationFilter define the example
+                }
+
                 var example = GetExampleForTypeFromServiceProvider(response.Type);
 
-                // todo, set the example on the operation
+                responseExample.SetResponseExampleForStatusCode(operation, response.StatusCode, example);
             }
         }
 

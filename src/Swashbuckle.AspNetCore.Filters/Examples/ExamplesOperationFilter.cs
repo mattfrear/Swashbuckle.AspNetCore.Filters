@@ -1,3 +1,4 @@
+using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
@@ -26,11 +27,11 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            SetRequestModelExamples(operation, context.SchemaRegistry, context);
-            responseExample.SetResponseModelExamples(operation, context);
+            SetRequestModelExamples(operation, context);
+            SetResponseModelExamples(operation, context);
         }
 
-        private void SetRequestModelExamples(Operation operation, ISchemaRegistry schemaRegistry, OperationFilterContext context)
+        private void SetRequestModelExamples(Operation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
 
@@ -39,7 +40,20 @@ namespace Swashbuckle.AspNetCore.Filters
                 var examplesProvider = examplesProviderFactory.Create(attr.ExamplesProviderType);
                 object example = examplesProvider.GetExamples();
 
-                requestExample.SetRequestExampleForType(operation, schemaRegistry, attr.RequestType, example, attr.ContractResolver, attr.JsonConverter);
+                requestExample.SetRequestExampleForType(operation, context.SchemaRegistry, attr.RequestType, example, attr.ContractResolver, attr.JsonConverter);
+            }
+        }
+
+        private void SetResponseModelExamples(Operation operation, OperationFilterContext context)
+        {
+            var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>();
+
+            foreach (var attr in responseAttributes)
+            {
+                var examplesProvider = examplesProviderFactory.Create(attr.ExamplesProviderType);
+                object example = examplesProvider.GetExamples();
+
+                responseExample.SetResponseExampleForStatusCode(operation, attr.StatusCode, example, attr.ContractResolver, attr.JsonConverter);
             }
         }
     }

@@ -21,8 +21,19 @@ namespace Swashbuckle.AspNetCore.Filters
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
         }
 
-        public void SetRequestExampleForType(Operation operation, ISchemaRegistry schemaRegistry, Type requestType, object example, IContractResolver contractResolver = null, JsonConverter jsonConverter = null)
+        public void SetRequestExampleForType(
+            Operation operation,
+            ISchemaRegistry schemaRegistry,
+            Type requestType,
+            object example,
+            IContractResolver contractResolver = null,
+            JsonConverter jsonConverter = null)
         {
+            if (example == null)
+            {
+                return;
+            }
+
             var schema = schemaRegistry.GetOrRegister(requestType);
 
             var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
