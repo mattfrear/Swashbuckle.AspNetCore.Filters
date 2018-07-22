@@ -12,13 +12,24 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
     {
         [SwaggerResponse(200, type: typeof(PersonResponse))]
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
-        public IActionResult AnnotatedWithSwaggerResponseExampleAttributes()
+        public IActionResult AnnotatedWithSwaggerResponseExampleAttribute()
+        {
+            throw new NotImplementedException();
+        }
+
+        [SwaggerResponse(200, type: typeof(PersonResponse))]
+        public IActionResult AnnotatedWithSwaggerResponseAttribute()
         {
             throw new NotImplementedException();
         }
 
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
-        public IActionResult AnnotatedWithSwaggerRequestExampleAttributes(PersonRequest personRequest)
+        public IActionResult AnnotatedWithSwaggerRequestExampleAttribute(PersonRequest personRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActionResult PersonRequestUnannotated(PersonRequest personRequest)
         {
             throw new NotImplementedException();
         }
@@ -31,6 +42,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 
         [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample))]
         public IActionResult AnnotatedWithDictionarySwaggerRequestExampleAttribute(Dictionary<string, object> personRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActionResult DictionaryRequestAttribute(Dictionary<string, object> personRequest)
         {
             throw new NotImplementedException();
         }
@@ -82,6 +98,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 
         [AllowAnonymous]
         public IActionResult AllowAnonymous()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActionResult RequestTakesAnInt([FromBody]int blah)
         {
             throw new NotImplementedException();
         }
