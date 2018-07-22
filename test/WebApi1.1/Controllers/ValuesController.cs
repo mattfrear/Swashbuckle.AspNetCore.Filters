@@ -164,7 +164,8 @@ namespace WebApi.Controllers
 
         [HttpPatch]
         [Route("api/values/patchperson")]
-        [SwaggerRequestExample(typeof(Operation), typeof(JsonPatchPersonRequestExample))]
+        [SwaggerRequestExample(typeof(JsonPatchDocument<PersonRequest>), typeof(JsonPatchPersonRequestExample))] // ASP.NET Core 1.1
+        [SwaggerRequestExample(typeof(Operation), typeof(JsonPatchPersonRequestExample))] // ASP.NET Core 2.0
         public PersonResponse JsonPatchPerson([FromBody]JsonPatchDocument<PersonRequest> personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
