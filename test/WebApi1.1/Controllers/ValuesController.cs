@@ -37,15 +37,6 @@ namespace WebApi.Controllers
             return personResponse;
         }
 
-        [HttpGet]
-        [Route("api/values/person/auto/{personId}")]
-        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
-        public PersonResponse GetAutoExamples(int personId, string name)
-        {
-            var personResponse = new PersonResponse { Id = personId, FirstName = "Dave" };
-            return personResponse;
-        }
-
         /// <summary>
         /// Posts a person
         /// </summary>
@@ -66,6 +57,15 @@ namespace WebApi.Controllers
         public PersonResponse PostPerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+            return personResponse;
+        }
+
+        [HttpPost]
+        [Route("api/values/male/")]
+        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        public PersonResponse PostMale([FromBody]MaleRequest maleRequest)
+        {
+            var personResponse = new PersonResponse { Id = 7, FirstName = "Dave" };
             return personResponse;
         }
 

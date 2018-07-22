@@ -3,32 +3,46 @@ using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    public class ServiceProviderExamplesOperationFilter : IOperationFilter
+    internal class ServiceProviderExamplesOperationFilter : IOperationFilter
     {
         private readonly IServiceProvider serviceProvider;
+        private readonly RequestExample requestExample;
+        private readonly ResponseExample responseExample;
 
-        public ServiceProviderExamplesOperationFilter(IServiceProvider serviceProvider)
+        public ServiceProviderExamplesOperationFilter(
+            IServiceProvider serviceProvider,
+            RequestExample requestExample,
+            ResponseExample responseExample)
         {
             this.serviceProvider = serviceProvider;
+            this.requestExample = requestExample;
+            this.responseExample = responseExample;
         }
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            SetRequestExamples(context);
+            SetRequestExamples(operation, context);
             SetResponseExamples(context);
         }
 
-        private void SetRequestExamples(OperationFilterContext context)
+        private void SetRequestExamples(Operation operation, OperationFilterContext context)
         {
+            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
+            if (actionAttributes.Any())
+            {
+                return; // if [SwaggerRequestExample] is defined, then let ExamplesOperationFilter define the example
+            }
+
             foreach (var parameterDescription in context.ApiDescription.ParameterDescriptions)
             {
                 var example = GetExampleForTypeFromServiceProvider(parameterDescription.Type);
 
-                // todo, set the example on the schema
+                requestExample.SetRequestExampleForType(operation, context.SchemaRegistry, parameterDescription.Type, example);
             }
         }
 

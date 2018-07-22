@@ -23,12 +23,12 @@ namespace Swashbuckle.AspNetCore.Filters
             var jsonFormatter = new JsonFormatter();
             var exampleProviderFactory = new ExamplesProviderFactory(serviceProvider);
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
             var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
 
-            swaggerGenOptions.OperationFilter<ExamplesOperationFilter>(requestExample, responseExample);
+            swaggerGenOptions.OperationFilter<ExamplesOperationFilter>(requestExample, responseExample, exampleProviderFactory);
 
-            swaggerGenOptions.OperationFilter<ServiceProviderExamplesOperationFilter>(serviceProvider);
+            swaggerGenOptions.OperationFilter<ServiceProviderExamplesOperationFilter>(serviceProvider, requestExample, responseExample);
         }
     }
 }

@@ -21,6 +21,7 @@
     <Compile Include="..\WebApi1.1\Models\Examples\InternalServerResponseExample.cs" Link="Models\Examples\InternalServerResponseExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\JsonPatchPersonRequestExample.cs" Link="Models\Examples\JsonPatchPersonRequestExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\ListPeopleRequestExample.cs" Link="Models\Examples\ListPeopleRequestExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\MaleRequestExample.cs" Link="Models\Examples\MaleRequestExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\NotFoundResponseExample.cs" Link="Models\Examples\NotFoundResponseExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\PersonRequestExample.cs" Link="Models\Examples\PersonRequestExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\PersonRequestExample2.cs" Link="Models\Examples\PersonRequestExample2.cs" />
@@ -28,6 +29,7 @@
     <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseExample.cs" Link="Models\Examples\PersonResponseExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\WrappedPersonRequestExample.cs" Link="Models\Examples\WrappedPersonRequestExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\WrappedPersonResponseExample.cs" Link="Models\Examples\WrappedPersonResponseExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\MaleRequest.cs" Link="Models\MaleRequest.cs" />
     <Compile Include="..\WebApi1.1\Models\PeopleRequest.cs" Link="Models\PeopleRequest.cs" />
     <Compile Include="..\WebApi1.1\Models\PersonRequest.cs" Link="Models\PersonRequest.cs" />
     <Compile Include="..\WebApi1.1\Models\PersonResponse.cs" Link="Models\PersonResponse.cs" />
