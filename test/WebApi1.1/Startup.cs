@@ -45,8 +45,6 @@ namespace WebApi
 
                 options.AddSwaggerExamples(services.BuildServiceProvider());
 
-                options.OperationFilter<ServiceProviderExamplesOperationFilter>(services.BuildServiceProvider());
-
                 options.OperationFilter<DescriptionOperationFilter>();
 
                 options.OperationFilter<AddFileParamTypesOperationFilter>();

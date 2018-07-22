@@ -27,6 +27,8 @@ namespace Swashbuckle.AspNetCore.Filters
             var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
 
             swaggerGenOptions.OperationFilter<ExamplesOperationFilter>(requestExample, responseExample);
+
+            swaggerGenOptions.OperationFilter<ServiceProviderExamplesOperationFilter>(serviceProvider);
         }
     }
 }
