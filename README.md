@@ -105,9 +105,11 @@ public void ConfigureServices(IServiceCollection services)
         c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
         
         // [SwaggerRequestExample] & [SwaggerResponseExample]
-        // version < 3.0 does this: c.OperationFilter<ExamplesOperationFilter>(); 
-        c.AddSwaggerExamples(services.BuildServiceProvider()); // version 3.0 and above
-
+        // version < 3.0 like this: c.OperationFilter<ExamplesOperationFilter>(); 
+        // version 3.0 like this: c.AddSwaggerExamples(services.BuildServiceProvider());
+        // version 4.0 like this:
+	c.ExampleFilters(); // you also MUST also call services.AddSwaggerExamples() or services.AddSwaggerExamplesFromAssemblyOf<T>() below
+	
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on request or response properties
         
         c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
@@ -126,22 +128,55 @@ public void ConfigureServices(IServiceCollection services)
             Name = "Authorization",
             Type = "apiKey"
         });
-    });
+    })
+    .AddSwaggerExamplesFromAssemblyOf<MyExample>(); // this will register your examples with Service Provider. Or you can call .AddSwaggerExamples() if you don't want to register them.  
 }
 ```
 
 ## How to use
 ### How to use - Request examples
+#### Automatic annotation
+Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` as shown in the Installation instructions above.
 
-Decorate your controller methods with the included SwaggerRequestExample attribute:
+Let's say you have a controller action which takes some input from the body, in this case a `DeliveryOptionsSearchModel`:
+```csharp
+[HttpPost]
+public async Task<IHttpActionResult> DeliveryOptionsForAddress([FromBody]DeliveryOptionsSearchModel search)
+```
+Then all you need to do is implement `IExamplesProvider<DeliveryOptionsSearchModel>`:
+```csharp
+public class DeliveryOptionsSearchModelExample : IExamplesProvider<DeliveryOptionsSearchModel>
+{
+    public DeliveryOptionsSearchModel GetExamples()
+    {
+        return new DeliveryOptionsSearchModel
+        {
+            Lang = "en-GB",
+            Currency = "GBP",
+            Address = new AddressModel
+            {
+                Address1 = "1 Gwalior Road",
+                Locality = "London",
+                Country = "GB",
+                PostalCode = "SW15 1NP"
+            }
+        };
+    }
+```
+And that's it.
+
+#### Manual annotation
+Alternatively, if you want to be more explicit, you can use the `SwaggerRequestExample` attribute. This is how it was done in versions 1.0 - 3.0. Any manual annotations will override automatic annotations.
+
+Decorate your controller methods with the included `SwaggerRequestExample` attribute:
 
 ```csharp
+[HttpPost]
 [SwaggerRequestExample(typeof(DeliveryOptionsSearchModel), typeof(DeliveryOptionsSearchModelExample))]
-public async Task<IHttpActionResult> DeliveryOptionsForAddress(DeliveryOptionsSearchModel search)
+public async Task<IHttpActionResult> DeliveryOptionsForAddress([FromBody]DeliveryOptionsSearchModel search)
 ```
 
-Now implement it, in this case via a DeliveryOptionsSearchModelExample (which should implement IExamplesProvider), 
-which will generate the example data. It should return the type you specified when you specified the `[SwaggerRequestExample]`.
+Now implement a `IExamplesProvider`, in this case via a DeliveryOptionsSearchModelExample which will generate the example data. It should return the type you specified when you specified the `[SwaggerRequestExample]`.
 	
 ```csharp
 public class DeliveryOptionsSearchModelExample : IExamplesProvider
@@ -204,16 +239,43 @@ public class ListPeopleRequestExample : IExamplesProvider
 ```
 
 ### How to use - Response examples
+#### Automatic annotation
+Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` as shown in the Installation instructions above.
+
+Decorate your methods with either the `ProducesResponseType` or the `SwaggerResponse` attribute:
+```csharp
+[SwaggerResponse(200, "The list of countries", typeof(IEnumerable<Country>))]
+// or, like this [ProducesResponseType(typeof(IEnumerable<Country>), 200)]
+[SwaggerResponse(400, type: typeof(IEnumerable<ErrorResource>))]
+public async Task<HttpResponseMessage> Get(string lang)
+```
+Now you’ll need to add an Examples class, which will implement `IExamplesProvider<T>` to generate the example data for the Response:
+
+```csharp	
+public class CountryExamples : IExamplesProvider<IEnumerable<Country>>
+{
+    public IEnumerable<Country> GetExamples()
+    {
+        return new List<Country>
+        {
+            new Country { Code = "AA", Name = "Test Country" },
+            new Country { Code = "BB", Name = "And another" }
+        };
+    }
+}
+```
+#### Manual annotation
+Alternatively, if you want to be more explicit, you can use the `SwaggerResponseExample` attribute. This is how it was done in versions 1.0 - 3.0. Any manual annotations will override automatic annotations.
 
 Decorate your methods with the new SwaggerResponseExample attribute:
 ```csharp
-[SwaggerResponse(200, type: typeof(IEnumerable<Country>))]
+[SwaggerResponse(200, "The list of countries", typeof(IEnumerable<Country>))]
+// or, like this [ProducesResponseType(typeof(IEnumerable<Country>), 200)]
 [SwaggerResponseExample(200, typeof(CountryExamples))]
 [SwaggerResponse(400, type: typeof(IEnumerable<ErrorResource>))]
 public async Task<HttpResponseMessage> Get(string lang)
 ```
-
-Now you’ll need to add an Examples class, which will implement IExamplesProvider to generate the example data
+For manual annotation implement `IExamplesProvider` to generate the example data
 
 ```csharp	
 public class CountryExamples : IExamplesProvider
