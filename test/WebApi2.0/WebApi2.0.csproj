@@ -28,6 +28,7 @@
     <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseAutoExample.cs" Link="Models\Examples\PersonResponseAutoExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseDependencyInjectionExample.cs" Link="Models\Examples\PersonResponseDependencyInjectionExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseExample.cs" Link="Models\Examples\PersonResponseExample.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseExample2.cs" Link="Models\Examples\PersonResponseExample2.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\WrappedPersonRequestExample.cs" Link="Models\Examples\WrappedPersonRequestExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\WrappedPersonResponseExample.cs" Link="Models\Examples\WrappedPersonResponseExample.cs" />
     <Compile Include="..\WebApi1.1\Models\MaleRequest.cs" Link="Models\MaleRequest.cs" />

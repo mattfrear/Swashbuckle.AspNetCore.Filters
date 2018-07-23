@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
@@ -50,7 +51,7 @@ namespace Swashbuckle.AspNetCore.Filters
         private void SetResponseExamples(Operation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>();
-            var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseAttribute>(); // or ProducesResponseTypeAttribute (todo)
+            var responseAttributes = context.GetControllerAndActionAttributes<ProducesResponseTypeAttribute>();
 
             foreach (var response in responseAttributes)
             {

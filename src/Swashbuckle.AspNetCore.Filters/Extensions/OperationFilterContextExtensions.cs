@@ -12,9 +12,9 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
             var controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();
             var actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
 
-            var authorizeAttributes = new List<T>(controllerAttributes);
-            authorizeAttributes.AddRange(actionAttributes);
-            return authorizeAttributes;
+            var result = new List<T>(controllerAttributes);
+            result.AddRange(actionAttributes);
+            return result;
         }
     }
 }
