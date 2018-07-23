@@ -25,10 +25,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options);
 
             var jsonFormatter = new JsonFormatter();
-            var exampleProviderFactory = new ExamplesProviderFactory(null);
 
             var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());

@@ -8,7 +8,6 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             services.AddSingleton<SerializerSettingsDuplicator>();
             services.AddSingleton<JsonFormatter>();
-            services.AddSingleton<ExamplesProviderFactory>();
             services.AddSingleton<RequestExample>();
             services.AddSingleton<ResponseExample>();
             services.AddSingleton<ExamplesOperationFilter>();

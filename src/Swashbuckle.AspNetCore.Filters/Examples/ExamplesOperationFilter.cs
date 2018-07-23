@@ -1,6 +1,7 @@
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters
@@ -11,18 +12,18 @@ namespace Swashbuckle.AspNetCore.Filters
     /// </summary>
     internal class ExamplesOperationFilter : IOperationFilter
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly RequestExample requestExample;
         private readonly ResponseExample responseExample;
-        private readonly ExamplesProviderFactory examplesProviderFactory;
 
         public ExamplesOperationFilter(
+            IServiceProvider serviceProvider,
             RequestExample requestExample,
-            ResponseExample responseExample,
-            ExamplesProviderFactory examplesProviderFactory)
+            ResponseExample responseExample)
         {
+            this.serviceProvider = serviceProvider;
             this.requestExample = requestExample;
             this.responseExample = responseExample;
-            this.examplesProviderFactory = examplesProviderFactory;
         }
 
         public void Apply(Operation operation, OperationFilterContext context)
@@ -37,8 +38,10 @@ namespace Swashbuckle.AspNetCore.Filters
 
             foreach (var attr in actionAttributes)
             {
-                var examplesProvider = examplesProviderFactory.Create(attr.ExamplesProviderType);
-                object example = examplesProvider.GetExamples();
+                var examplesProvider = (IExamplesProvider)(serviceProvider.GetService(attr.ExamplesProviderType)
+                    ?? Activator.CreateInstance(attr.ExamplesProviderType));
+
+                object example = examplesProvider?.GetExamples();
 
                 requestExample.SetRequestExampleForType(operation, context.SchemaRegistry, attr.RequestType, example, attr.ContractResolver, attr.JsonConverter);
             }
@@ -50,8 +53,10 @@ namespace Swashbuckle.AspNetCore.Filters
 
             foreach (var attr in responseAttributes)
             {
-                var examplesProvider = examplesProviderFactory.Create(attr.ExamplesProviderType);
-                object example = examplesProvider.GetExamples();
+                var examplesProvider = (IExamplesProvider)(serviceProvider.GetService(attr.ExamplesProviderType)
+                    ?? Activator.CreateInstance(attr.ExamplesProviderType));
+
+                object example = examplesProvider?.GetExamples();
 
                 responseExample.SetResponseExampleForStatusCode(operation, attr.StatusCode, example, attr.ContractResolver, attr.JsonConverter);
             }

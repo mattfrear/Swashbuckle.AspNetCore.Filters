@@ -8,6 +8,8 @@ using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System;
+using NSubstitute;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -21,12 +23,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options);
 
             var jsonFormatter = new JsonFormatter();
-            var exampleProviderFactory = new ExamplesProviderFactory(null);
+
+            var serviceProvider = Substitute.For<IServiceProvider>();
 
             var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, exampleProviderFactory);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);
 
-            sut = new ExamplesOperationFilter(requestExample, responseExample, exampleProviderFactory);
+            sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
 
         [Fact]

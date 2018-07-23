@@ -1,9 +1,6 @@
 using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
-using Swashbuckle.AspNetCore.Filters.Extensions;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 
@@ -13,16 +10,13 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
-        private readonly ExamplesProviderFactory examplesProviderFactory;
 
         public ResponseExample(
             JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator,
-            ExamplesProviderFactory examplesProviderFactory)
+            SerializerSettingsDuplicator serializerSettingsDuplicator)
         {
             this.jsonFormatter = jsonFormatter;
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
-            this.examplesProviderFactory = examplesProviderFactory;
         }
 
         public void SetResponseExampleForStatusCode(
@@ -44,7 +38,6 @@ namespace Swashbuckle.AspNetCore.Filters
                 var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
                 response.Value.Examples = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: true);
             }
-
         }
     }
 }
