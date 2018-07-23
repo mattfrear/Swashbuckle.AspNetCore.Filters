@@ -129,14 +129,16 @@ public void ConfigureServices(IServiceCollection services)
             Type = "apiKey"
         });
     })
-    .AddSwaggerExamplesFromAssemblyOf<MyExample>(); // this will register your examples with Service Provider. Or you can call .AddSwaggerExamples() if you don't want to register them.  
+    .AddSwaggerExamplesFromAssemblyOf<MyExample>(); // this will register your examples with Service Provider, which is needed for Automatic annotation.
+    // Or you can call .AddSwaggerExamples() if you don't want to register them, say if you're doing Manual annotation.
+    // Don't forget to call c.ExampleFilters(); too!
 }
 ```
 
 ## How to use
 ### How to use - Request examples
 #### Automatic annotation
-Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` as shown in the Installation instructions above.
+Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` (and `c.ExampleFilters();`) as shown in the Installation instructions above.
 
 Let's say you have a controller action which takes some input from the body, in this case a `DeliveryOptionsSearchModel`:
 ```csharp
@@ -240,7 +242,7 @@ public class ListPeopleRequestExample : IExamplesProvider
 
 ### How to use - Response examples
 #### Automatic annotation
-Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` as shown in the Installation instructions above.
+Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` (and `c.ExampleFilters();`) as shown in the Installation instructions above.
 
 Decorate your methods with either the `ProducesResponseType` or the `SwaggerResponse` attribute:
 ```csharp
