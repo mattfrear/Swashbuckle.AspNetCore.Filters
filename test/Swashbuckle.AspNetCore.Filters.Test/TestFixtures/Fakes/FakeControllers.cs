@@ -54,5 +54,14 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
                 throw new NotImplementedException();
             }
         }
+
+        [SwaggerResponse(200, type: typeof(PersonResponse))]
+        public class SwaggerResponseController
+        {
+            public IActionResult None()
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

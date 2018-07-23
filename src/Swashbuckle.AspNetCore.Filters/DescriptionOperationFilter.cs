@@ -4,16 +4,16 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
     public class DescriptionOperationFilter : IOperationFilter
-    {    
+    {
         public void Apply(Operation operation, OperationFilterContext context)
         {
             SetResponseModelDescriptions(operation, context.SchemaRegistry, context);
@@ -22,7 +22,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private static void SetResponseModelDescriptions(Operation operation, ISchemaRegistry schemaRegistry, OperationFilterContext context)
         {
-            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseAttribute>().ToList();
+            var actionAttributes = context.MethodInfo.GetCustomAttributes<ProducesResponseTypeAttribute>().ToList();
 
             foreach (var attribute in actionAttributes)
             {

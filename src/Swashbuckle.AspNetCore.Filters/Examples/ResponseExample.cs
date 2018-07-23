@@ -1,9 +1,8 @@
 using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
-using Swashbuckle.AspNetCore.Filters.Extensions;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -11,36 +10,33 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
-        private readonly ExamplesProviderFactory examplesProviderFactory;
 
         public ResponseExample(
             JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator,
-            ExamplesProviderFactory examplesProviderFactory)
+            SerializerSettingsDuplicator serializerSettingsDuplicator)
         {
             this.jsonFormatter = jsonFormatter;
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
-            this.examplesProviderFactory = examplesProviderFactory;
         }
 
-        public void SetResponseModelExamples(Operation operation, OperationFilterContext context)
+        public void SetResponseExampleForStatusCode(
+            Operation operation,
+            int statusCode,
+            object example,
+            IContractResolver contractResolver = null,
+            JsonConverter jsonConverter = null)
         {
-            var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>();
-
-            foreach (var attr in responseAttributes)
+            if (example == null)
             {
-                var statusCode = attr.StatusCode.ToString();
+                return;
+            }
 
-                var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode);
+            var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode.ToString());
 
-                if (response.Equals(default(KeyValuePair<string, Response>)) == false && response.Value != null)
-                {
-                    var examplesProvider = examplesProviderFactory.Create(attr.ExamplesProviderType);
-
-                    var serializerSettings = serializerSettingsDuplicator.SerializerSettings(attr.ContractResolver, attr.JsonConverter);
-
-                    response.Value.Examples = jsonFormatter.FormatJson(examplesProvider.GetExamples(), serializerSettings, includeMediaType: true);
-                }
+            if (response.Equals(default(KeyValuePair<string, Response>)) == false && response.Value != null)
+            {
+                var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
+                response.Value.Examples = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: true);
             }
         }
     }

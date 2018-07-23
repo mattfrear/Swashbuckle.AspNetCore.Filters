@@ -26,7 +26,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributes));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute));
             SetSwaggerResponses(operation, filterContext);
             filterContext.SchemaRegistry.GetOrRegister(typeof(PersonResponse));
 
@@ -47,7 +47,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
             var filterContext = FilterContextFor(
                 typeof(FakeActions),
-                nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributes),
+                nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute),
                 new DefaultContractResolver());
 
             SetSwaggerResponses(operation, filterContext);
@@ -66,7 +66,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         {
             // Arrange
             var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributes));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute));
             SetSwaggerResponses(operation, filterContext);
 
             var fullName = RegisterFullNameInSchemaRegistry(filterContext.SchemaRegistry, typeof(PersonResponse));
@@ -91,7 +91,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
                 Responses = new Dictionary<string, Response>()
             };
 
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttributes));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute));
             SetSwaggerResponses(operation, filterContext);
             filterContext.SchemaRegistry.GetOrRegister(typeof(PersonRequest));
             filterContext.ApiDescription.ParameterDescriptions.Add(new ApiParameterDescription { Type = typeof(PersonRequest), Name = nameof(PersonRequest) });
@@ -114,7 +114,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
                 Responses = new Dictionary<string, Response>()
             };
 
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttributes));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute));
             SetSwaggerResponses(operation, filterContext);
             var fullName = RegisterFullNameInSchemaRegistry(filterContext.SchemaRegistry, typeof(PersonRequest));
             filterContext.ApiDescription.ParameterDescriptions.Add(new ApiParameterDescription { Type = typeof(PersonRequest), Name = nameof(PersonRequest) });

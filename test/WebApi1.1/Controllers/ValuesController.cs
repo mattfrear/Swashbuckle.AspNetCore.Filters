@@ -61,6 +61,16 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [Route("api/values/male/")]
+        // [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        [ProducesResponseType(typeof(PersonResponse), 200)]
+        public PersonResponse PostMale([FromBody]MaleRequest maleRequest)
+        {
+            var personResponse = new PersonResponse { Id = 7, FirstName = "Dave" };
+            return personResponse;
+        }
+
+        [HttpPost]
         [Route("api/values/genericperson")]
         [SwaggerResponse(200, type: typeof(ResponseWrapper<PersonResponse>), description: "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
@@ -137,6 +147,8 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("api/values/differentperson")]
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        [SwaggerResponseExample(200, typeof(PersonResponseExample2))]
         public PersonResponse PostDifferentPerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
