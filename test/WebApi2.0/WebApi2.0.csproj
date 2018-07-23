@@ -25,6 +25,7 @@
     <Compile Include="..\WebApi1.1\Models\Examples\NotFoundResponseExample.cs" Link="Models\Examples\NotFoundResponseExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\PersonRequestExample.cs" Link="Models\Examples\PersonRequestExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\PersonRequestExample2.cs" Link="Models\Examples\PersonRequestExample2.cs" />
+    <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseAutoExample.cs" Link="Models\Examples\PersonResponseAutoExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseDependencyInjectionExample.cs" Link="Models\Examples\PersonResponseDependencyInjectionExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\PersonResponseExample.cs" Link="Models\Examples\PersonResponseExample.cs" />
     <Compile Include="..\WebApi1.1\Models\Examples\WrappedPersonRequestExample.cs" Link="Models\Examples\WrappedPersonRequestExample.cs" />
