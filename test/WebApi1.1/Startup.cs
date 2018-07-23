@@ -39,7 +39,7 @@ namespace WebApi
             {
                 options.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 
-                options.AddSwaggerExamples();
+                options.ExampleFilters();
 
                 options.OperationFilter<DescriptionOperationFilter>();
 

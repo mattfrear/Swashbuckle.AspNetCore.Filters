@@ -4,7 +4,7 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     public static class SwaggerGenOptionsExtensions
     {
-        public static void AddSwaggerExamples(this SwaggerGenOptions swaggerGenOptions)
+        public static void ExampleFilters(this SwaggerGenOptions swaggerGenOptions)
         {
             swaggerGenOptions.OperationFilter<ExamplesOperationFilter>();
             swaggerGenOptions.OperationFilter<ServiceProviderExamplesOperationFilter>();
