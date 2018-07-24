@@ -436,9 +436,7 @@ By default `enum`s will output their integer values. If you want to output strin
 
 ## Advanced: Examples with Dependency injection
 
-If for some reason you need to have examples with DI (for example, read them from a database) you may:
-
-Provide required dependencies in example provider classes:
+If for some reason you need to have examples with DI (for example, to read them from a database), you can use constructor injection:
 
 ```csharp
 internal class PersonRequestExample : IExamplesProvider
@@ -455,19 +453,12 @@ internal class PersonRequestExample : IExamplesProvider
     }
 }
 ```
-
-Register your example provider as a service in Startup:
-
+Then, you should register the Swagger examples via the `FromAssemblyOf<T>` extension method.
 ```csharp
-services.AddTransient<PersonRequestExample>();
+services.AddSwaggerExamplesFromAssemblyOf<PersonRequestExample>();
 ```
-
-Pass service collection to ExamplesOperationFilter as a parameter:
-
+If you are using `services.AddSwaggerExamples()`, then you would have to manually register your `IExamplesProvider` class:
 ```csharp
-services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-    c.OperationFilter<ExamplesOperationFilter>(services.BuildServiceProvider());
-});
+services.AddSingleton<PersonRequestExample>();
 ```
+The `FromAssemblyOf<T>` extension method is the recommended approach.
