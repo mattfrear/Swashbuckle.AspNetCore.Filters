@@ -23,6 +23,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             throw new NotImplementedException();
         }
 
+        [SwaggerResponse(200, type: typeof(IEnumerable<string>))]
+        public IActionResult GenericAnnotatedWithSwaggerResponseAttribute()
+        {
+            throw new NotImplementedException();
+        }
+
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
         public IActionResult AnnotatedWithSwaggerRequestExampleAttribute(PersonRequest personRequest)
         {

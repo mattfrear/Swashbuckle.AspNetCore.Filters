@@ -92,6 +92,26 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
+        public void Apply_SetsResponseExamples_FromMethodAttributes_WithGenericType()
+        {
+            // Arrange
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.GenericAnnotatedWithSwaggerResponseAttribute));
+            SetSwaggerResponses(operation, filterContext);
+            serviceProvider.GetService(typeof(IExamplesProvider<IEnumerable<string>>)).Returns(new ListStringExample());
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var examples = (JObject)operation.Responses["200"].Examples;
+            var actualExample = examples["application/json"];
+
+            actualExample[0].ShouldBe("Hello");
+            actualExample[1].ShouldBe("there");
+        }
+
+        [Fact]
         public void Apply_SetsRequestExamples_FromMethodAttributes()
         {
             // Arrange

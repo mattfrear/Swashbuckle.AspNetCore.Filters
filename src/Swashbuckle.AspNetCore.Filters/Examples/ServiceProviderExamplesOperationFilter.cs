@@ -68,9 +68,14 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private object GetExampleForTypeFromServiceProvider(Type type)
         {
-            if (type == null || type == typeof(void) || !type.GetTypeInfo().IsClass)
+            if (type == null || type == typeof(void) || IsPrimitiveType())
             {
                 return null;
+            }
+
+            bool IsPrimitiveType()
+            {
+                return !type.GetTypeInfo().IsClass && !type.GetTypeInfo().IsGenericType;
             }
 
             var exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);
