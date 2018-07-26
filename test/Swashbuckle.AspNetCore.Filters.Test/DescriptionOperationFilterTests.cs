@@ -105,6 +105,32 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
+        public void Apply_SetsRequestDescriptions_WhenArray()
+        {
+            // Arrange
+            var operation = new Operation
+            {
+                OperationId = "foobar",
+                Responses = new Dictionary<string, Response>()
+            };
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute));
+            SetSwaggerResponses(operation, filterContext);
+            filterContext.SchemaRegistry.GetOrRegister(typeof(PersonRequest));
+            filterContext.ApiDescription.ParameterDescriptions.Add(new ApiParameterDescription { Type = typeof(PersonRequest), Name = nameof(PersonRequest) });
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var schema = filterContext.SchemaRegistry.Definitions["PersonRequest"];
+            schema.Properties["children"].Description.ShouldBe("The person's children");
+
+            schema = filterContext.SchemaRegistry.Definitions["Child"];
+            schema.Properties["name"].Description.ShouldBe("The child's full name");
+        }
+
+        [Fact]
         public void Apply_SetsRequestDescriptions_WhenUsingFullname()
         {
             // Arrange

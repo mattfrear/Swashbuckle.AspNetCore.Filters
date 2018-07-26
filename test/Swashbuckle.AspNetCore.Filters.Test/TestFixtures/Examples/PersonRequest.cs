@@ -12,5 +12,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
         public string FirstName { get; set; }
 
         public decimal? Income { get; set; }
+
+        [Description("The person's children")]
+        public Child[] Children { get; set; }
     }
 }

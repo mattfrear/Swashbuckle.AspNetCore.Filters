@@ -59,6 +59,12 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
+            if (type.GetTypeInfo().IsArray)
+            {
+                UpdateDescriptions(schemaRegistry, type.GetElementType(), true);
+                return;
+            }
+
             var schema = FindSchemaForType(schemaRegistry, type);
             if (schema == null)
             {
