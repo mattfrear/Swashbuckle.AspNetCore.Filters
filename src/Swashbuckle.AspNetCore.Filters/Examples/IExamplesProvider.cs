@@ -5,7 +5,7 @@ namespace Swashbuckle.AspNetCore.Filters
         object GetExamples();
     }
 
-    public interface IExamplesProvider<T> where T : class
+    public interface IExamplesProvider<T>
     {
         T GetExamples();
     }

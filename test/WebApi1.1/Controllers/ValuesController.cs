@@ -174,5 +174,10 @@ namespace WebApi.Controllers
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
         }
+
+        [HttpPost("api/values/title")]
+        public void NullableEnumTest([FromBody]Title? someEnum)
+        {
+        }
     }
 }

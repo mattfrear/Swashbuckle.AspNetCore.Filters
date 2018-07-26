@@ -172,6 +172,25 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
+        public void Apply_WhenRequestIsANullableEnum_ShouldNotThrowException()
+        {
+            // Arrange
+            serviceProvider.GetService(typeof(IExamplesProvider<Title?>)).Returns(new TitleExample());
+            var titleParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/Title" } };
+            var operation = new Operation { OperationId = "foobar", Parameters = new[] { titleParameter } };
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(Title?) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.RequestTakesANullableEnum), parameterDescriptions);
+            
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualParameterExample = Enum.Parse(typeof(Title), titleParameter.Schema.Example.ToString());
+            var expectedExample = new TitleExample().GetExamples().Value;
+            actualParameterExample.ShouldBe(expectedExample);
+        }
+
+        [Fact]
         public void Apply_WhenPassingDictionary_ShouldSetExampleOnRequestSchema()
         {
             // Arrange

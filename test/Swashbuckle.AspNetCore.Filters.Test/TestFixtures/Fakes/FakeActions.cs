@@ -113,6 +113,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             throw new NotImplementedException();
         }
 
+        public IActionResult RequestTakesANullableEnum([FromBody]Title? title)
+        {
+            throw new NotImplementedException();
+        }
+
         public IActionResult None()
         {
             throw new NotImplementedException();
