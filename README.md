@@ -90,8 +90,9 @@ along with any specified policies or roles.
 ![authorization](https://user-images.githubusercontent.com/169179/36599686-1d939bcc-18a8-11e8-8f81-d8706f1f0dc1.JPG)
 
 ## Installation
-Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/), then enable whichever filters 
-you need when you enable SwaggerGen:
+1. Install the [NuGet package](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/)
+
+2. In the _ConfigureServices_ method of _Startup.cs_, inside your `AddSwaggerGen` call, enable whichever filters you need
 
 ```csharp
 // This method gets called by the runtime. Use this method to add services to the container.
@@ -108,7 +109,7 @@ public void ConfigureServices(IServiceCollection services)
         // version < 3.0 like this: c.OperationFilter<ExamplesOperationFilter>(); 
         // version 3.0 like this: c.AddSwaggerExamples(services.BuildServiceProvider());
         // version 4.0 like this:
-	c.ExampleFilters(); // you also MUST also call services.AddSwaggerExamples() or services.AddSwaggerExamplesFromAssemblyOf<T>() below
+	c.ExampleFilters();
 	
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on request or response properties
         
@@ -128,12 +129,19 @@ public void ConfigureServices(IServiceCollection services)
             Name = "Authorization",
             Type = "apiKey"
         });
-    })
-    .AddSwaggerExamplesFromAssemblyOf<MyExample>(); // this will register your examples with Service Provider, which is needed for Automatic annotation.
-    // Or you can call .AddSwaggerExamples() if you don't want to register them, say if you're doing Manual annotation.
-    // Don't forget to call c.ExampleFilters(); too!
+    });
 }
 ```
+
+3. If you want to use the Request and Response example filters (and have called `c.ExampleFilters()` above), then you MUST also call either 
+```csharp
+    services.AddSwaggerExamplesFromAssemblyOf<MyExample>();
+```
+This will register your examples with ServiceProvider, which is needed for Automatic annotation. Or, if you don't want to register them, say if you're doing Manual annotation, then you should call
+```csharp
+    services.AddSwaggerExamples(); 
+```
+`AddSwaggerExamplesFromAssemblyOf<T>` is the recommended option.
 
 ## How to use
 ### How to use - Request examples
