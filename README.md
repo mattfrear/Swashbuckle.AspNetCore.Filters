@@ -1,5 +1,6 @@
 # Swashbuckle.AspNetCore.Filters
 [![Build status](https://ci.appveyor.com/api/projects/status/l6cowxsqp2n9e4sl?svg=true)](https://ci.appveyor.com/project/mattfrear/swashbuckle-aspnetcore-examples)
+[![NuGet](https://img.shields.io/nuget/v/Swashbuckle.AspNetCore.Filters.svg)](https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/)
 
 | :mega: Rename to Swashbuckle.AspNetCore.Filters |
 |--------------|
