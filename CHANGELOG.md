@@ -22,9 +22,27 @@ Nothing here yet
 ## [4.0.0] - 2018-07-23
 ### Added
 - Automatic annotation of request and response examples
+- Dependency on [Scrutor](https://github.com/khellang/Scrutor) 2.2.2
 ### Changed
 - How ExamplesOperationFilter is installed - see Installation section of the Readme
 
 ## [3.1.0] - 2018-07-21
 ### Added
 - SecurityRequirementsOperationFilter to correctly set bearer token stuff when using `[Authorize]`
+
+## [3.0.4] - 2018-07-18
+### Fixed
+- Fix bug with DescriptionOperationFilter where Description not set if using a DefaultContractResolver
+
+## [3.0.3] - 2018-07-17
+### Fixed
+- Fix where Examples doesn't work on ASP.NET Core 2.0
+
+## [3.0.2] - 2018-07-15
+### Fixed
+- Port of bug #36 from Swashbuckle.Examples
+
+## [3.0.1] - 2018-07-15
+### Change
+- Rename from Swashbuckle.AspNetCore.Examples
+- Dependency on [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) 3.0 instead of 1.0
