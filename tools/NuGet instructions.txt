@@ -1,4 +1,5 @@
 1. Update the VersionPrefix, PackageVersion and PackageReleaseNotes in the .csproj
-2. dotnet pack --configuration release
-3. cd src\Swashbuckle.AspNetCore.Filters\bin\Release
-4. nuget push Swashbuckle.AspNetCore.Filters.1.2.0.nupkg MySecretNuGetApiKeyHere -Source https://www.nuget.org/api/v2/package
+2. Update Changelog
+3. dotnet pack --configuration release
+4. cd src\Swashbuckle.AspNetCore.Filters\bin\Release
+5. nuget push Swashbuckle.AspNetCore.Filters.1.2.0.nupkg MySecretNuGetApiKeyHere -Source https://www.nuget.org/api/v2/package
