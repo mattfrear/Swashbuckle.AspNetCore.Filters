@@ -15,5 +15,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 
         [Description("The person's children")]
         public Child[] Children { get; set; }
+
+        public Job Job { get; set; }
     }
 }

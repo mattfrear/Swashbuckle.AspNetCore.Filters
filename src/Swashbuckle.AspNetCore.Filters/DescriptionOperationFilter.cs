@@ -32,7 +32,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 if (response.Equals(default(KeyValuePair<string, Response>)) == false && response.Value != null)
                 {
-                    UpdateDescriptions(schemaRegistry, attribute.Type, true);
+                    UpdateDescriptions(schemaRegistry, attribute.Type);
                 }
             }
         }
@@ -43,25 +43,25 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 if (parameterDescription.Type != null)
                 {
-                    UpdateDescriptions(schemaRegistry, parameterDescription.Type, true);
+                    UpdateDescriptions(schemaRegistry, parameterDescription.Type);
                 }
             }
         }
 
-        private static void UpdateDescriptions(ISchemaRegistry schemaRegistry, Type type, bool recursively = false)
+        private static void UpdateDescriptions(ISchemaRegistry schemaRegistry, Type type)
         {
             if (type.GetTypeInfo().IsGenericType)
             {
                 foreach (var genericArgumentType in type.GetGenericArguments())
                 {
-                    UpdateDescriptions(schemaRegistry, genericArgumentType, true);
+                    UpdateDescriptions(schemaRegistry, genericArgumentType);
                 }
                 return;
             }
 
             if (type.GetTypeInfo().IsArray)
             {
-                UpdateDescriptions(schemaRegistry, type.GetElementType(), true);
+                UpdateDescriptions(schemaRegistry, type.GetElementType());
                 return;
             }
 
@@ -80,10 +80,12 @@ namespace Swashbuckle.AspNetCore.Filters
             foreach (var propertyInfo in propertiesWithDescription)
             {
                 UpdatePropertyDescription(propertyInfo, schema);
-                if (recursively)
-                {
-                    UpdateDescriptions(schemaRegistry, propertyInfo.PropertyType, true);
-                }
+            }
+
+            var childProperties = type.GetProperties().ToList();
+            foreach (var child in childProperties)
+            {
+                UpdateDescriptions(schemaRegistry, child.PropertyType);
             }
         }
 

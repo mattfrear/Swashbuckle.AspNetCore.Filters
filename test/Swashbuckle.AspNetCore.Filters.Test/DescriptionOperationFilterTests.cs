@@ -153,6 +153,29 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             schema.Properties["firstName"].Description.ShouldBe("The first name of the person");
         }
 
+        [Fact]
+        public void Apply_SetsRequestDescriptions_OnChildren()
+        {
+            // Arrange
+            var operation = new Operation
+            {
+                OperationId = "foobar",
+                Responses = new Dictionary<string, Response>()
+            };
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute));
+            SetSwaggerResponses(operation, filterContext);
+            filterContext.SchemaRegistry.GetOrRegister(typeof(PersonRequest));
+            filterContext.ApiDescription.ParameterDescriptions.Add(new ApiParameterDescription { Type = typeof(PersonRequest), Name = nameof(PersonRequest) });
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var schema = filterContext.SchemaRegistry.Definitions["Job"];
+            schema.Properties["name"].Description.ShouldBe("The name of the job");
+        }
+
         private static string RegisterFullNameInSchemaRegistry(ISchemaRegistry schemaRegistry, Type type)
         {
             var shortName = type.FriendlyId(false);
