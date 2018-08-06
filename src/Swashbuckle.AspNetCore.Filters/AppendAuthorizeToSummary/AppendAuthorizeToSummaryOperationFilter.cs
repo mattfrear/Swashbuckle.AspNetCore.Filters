@@ -29,7 +29,7 @@ namespace Swashbuckle.AspNetCore.Filters
                         .Select(a => a.Roles)
             };
 
-            filter = new AppendAuthorizeToSummaryOperationFilter<AuthorizeAttribute>(policySelector, rolesSelector);
+            filter = new AppendAuthorizeToSummaryOperationFilter<AuthorizeAttribute>(new[] { policySelector, rolesSelector }.AsEnumerable());
         }
 
         public void Apply(Operation operation, OperationFilterContext context)

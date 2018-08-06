@@ -11,7 +11,6 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     public class AppendAuthorizeToSummaryOperationFilter<T> : IOperationFilter where T : Attribute
     {
-        private readonly Func<IEnumerable<T>, IEnumerable<string>> policySelector;
         private readonly IEnumerable<PolicySelectorWithLabel<T>> policySelectors;
 
         /// <summary>
@@ -19,7 +18,7 @@ namespace Swashbuckle.AspNetCore.Filters
         /// </summary>
         /// <param name="policySelectionCondition">Selects which attributes have policies. e.g. (a => !string.IsNullOrEmpty(a.Policy))</param>
         /// <param name="policySelector">Used to select the authorization policy from the attribute e.g. (a => a.Policy)</param>
-        public AppendAuthorizeToSummaryOperationFilter(params PolicySelectorWithLabel<T>[] policySelectors)
+        public AppendAuthorizeToSummaryOperationFilter(IEnumerable<PolicySelectorWithLabel<T>> policySelectors)
         {
             this.policySelectors = policySelectors;
         }
