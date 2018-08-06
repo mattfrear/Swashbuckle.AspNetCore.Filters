@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using Microsoft.AspNetCore.Authorization;
-using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -9,9 +7,7 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     public class SecurityRequirementsOperationFilter : IOperationFilter
     {
-        // modified from https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/test/WebSites/OAuth2Integration/ResourceServer/Swagger/SecurityRequirementsOperationFilter.cs
-
-        private readonly bool includeUnauthorizedAndForbiddenResponses;
+        private readonly SecurityRequirementsOperationFilter<AuthorizeAttribute> filter;
 
         /// <summary>
         /// Constructor for SecurityRequirementsOperationFilter
@@ -19,41 +15,14 @@ namespace Swashbuckle.AspNetCore.Filters
         /// <param name="includeUnauthorizedAndForbiddenResponses">If true (default), then 401 and 403 responses will be added to every operation</param>
         public SecurityRequirementsOperationFilter(bool includeUnauthorizedAndForbiddenResponses = true)
         {
-            this.includeUnauthorizedAndForbiddenResponses = includeUnauthorizedAndForbiddenResponses;
+            Func<AuthorizeAttribute, bool> condition = (a => !string.IsNullOrEmpty(a.Policy));
+            Func<AuthorizeAttribute, string> selector = (a => a.Policy);
+            filter = new SecurityRequirementsOperationFilter<AuthorizeAttribute>(condition, selector, includeUnauthorizedAndForbiddenResponses);
         }
 
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
-            {
-                return;
-            }
-
-            var actionAttributes = context.GetControllerAndActionAttributes<AuthorizeAttribute>();
-
-            if (!actionAttributes.Any())
-            {
-                return;
-            }
-
-            if (includeUnauthorizedAndForbiddenResponses)
-            {
-                operation.Responses.Add("401", new Response { Description = "Unauthorized" });
-                operation.Responses.Add("403", new Response { Description = "Forbidden" });
-            }
-
-            var policies = actionAttributes
-                .Where(a => !string.IsNullOrEmpty(a.Policy))
-                .Select(a => a.Policy)
-                ?? Enumerable.Empty<string>();
-
-            operation.Security = new List<IDictionary<string, IEnumerable<string>>>
-                {
-                    new Dictionary<string, IEnumerable<string>>
-                    {
-                        { "oauth2", policies }
-                    }
-                };
+            filter.Apply(operation, context);
         }
     }
 }

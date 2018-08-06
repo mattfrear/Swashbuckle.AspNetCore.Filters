@@ -50,6 +50,37 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
+        public void Apply_Adds401And403_ToResponses()
+        {
+            // Arrange
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.Authorize));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Responses["401"].Description.ShouldBe("Unauthorized");
+            operation.Responses["403"].Description.ShouldBe("Forbidden");
+        }
+
+        [Fact]
+        public void Apply_DoesNotAdds401And403_WhenConfiguredNotTo()
+        {
+            // Arrange
+            var sut = new SecurityRequirementsOperationFilter(false);
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.Authorize));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Responses.ShouldNotContainKey("401");
+            operation.Responses.ShouldNotContainKey("403");
+        }
+
+        [Fact]
         public void Apply_SetsAuthorize_WithOnePolicy()
         {
             // Arrange
