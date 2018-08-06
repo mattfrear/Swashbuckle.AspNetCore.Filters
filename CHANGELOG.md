@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 Nothing here yet
 
+## [4.1.0] - 2018-08-06
+### Added
+- Add generic version of SecurityRequirementsOperationFilter and AppendAuthorizeToSummaryOperationFilter so that
+they can be used with other attributes. Reason: a client had implemented their own `TypeFilterAttribute`
+which did Authorization but wasn't an `AuthorizeAttribute`
+
 ## [4.0.3] - 2018-08-03
 ### Fixed
 - Issue #54 where child objects weren't having their descriptions set if parent property was missing `[Description]`
