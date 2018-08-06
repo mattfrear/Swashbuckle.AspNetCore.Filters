@@ -110,19 +110,21 @@ public void ConfigureServices(IServiceCollection services)
         // version < 3.0 like this: c.OperationFilter<ExamplesOperationFilter>(); 
         // version 3.0 like this: c.AddSwaggerExamples(services.BuildServiceProvider());
         // version 4.0 like this:
-	c.ExampleFilters();
-	
+        c.ExampleFilters();
+
         c.OperationFilter<DescriptionOperationFilter>(); // [Description] on request or response properties
         
         c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
         c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
         c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
         c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
-	
-	// add Security information to each operation for OAuth2
-	c.OperationFilter<SecurityRequirementsOperationFilter>();
-	
-	// if you're using the SecurityRequirementsOperationFilter, you also need to tell Swashbuckle you're using OAuth2
+        // or use the generic method, e.g. c.OperationFilter<AppendAuthorizeToSummaryOperationFilter<MyCustomAttribute>>();
+
+        // add Security information to each operation for OAuth2
+        c.OperationFilter<SecurityRequirementsOperationFilter>();
+        // or use the generic method, e.g. c.OperationFilter<SecurityRequirementsOperationFilter<MyCustomAttribute>>();
+
+        // if you're using the SecurityRequirementsOperationFilter, you also need to tell Swashbuckle you're using OAuth2
         c.AddSecurityDefinition("oauth2", new ApiKeyScheme
         {
             Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
