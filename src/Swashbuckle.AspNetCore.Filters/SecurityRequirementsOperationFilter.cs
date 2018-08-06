@@ -15,9 +15,9 @@ namespace Swashbuckle.AspNetCore.Filters
         /// <param name="includeUnauthorizedAndForbiddenResponses">If true (default), then 401 and 403 responses will be added to every operation</param>
         public SecurityRequirementsOperationFilter(bool includeUnauthorizedAndForbiddenResponses = true)
         {
-            Func<AuthorizeAttribute, bool> condition = (a => !string.IsNullOrEmpty(a.Policy));
-            Func<AuthorizeAttribute, string> selector = (a => a.Policy);
-            filter = new SecurityRequirementsOperationFilter<AuthorizeAttribute>(condition, selector, includeUnauthorizedAndForbiddenResponses);
+            Func<AuthorizeAttribute, bool> policySelectionCondition = (a => !string.IsNullOrEmpty(a.Policy));
+            Func<AuthorizeAttribute, string> policySelector = (a => a.Policy);
+            filter = new SecurityRequirementsOperationFilter<AuthorizeAttribute>(policySelectionCondition, policySelector, includeUnauthorizedAndForbiddenResponses);
         }
 
         public void Apply(Operation operation, OperationFilterContext context)
