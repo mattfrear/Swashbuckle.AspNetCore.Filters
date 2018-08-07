@@ -4,7 +4,7 @@
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
     <PackageVersion>4.1.0</PackageVersion>
     <Authors>Matt Frear</Authors>
-    <Description>Add generic version of SecurityRequirementsOperationFilter and AppendAuthorizeToSummaryOperationFilter so that they can be used with other attributes</Description>
+    <Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
