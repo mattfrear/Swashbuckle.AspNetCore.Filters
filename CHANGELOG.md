@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 Nothing here yet
 
+## [4.2.0] - 2018-08-15
+### Changed
+- It is no longer necessary to specify a ProducesResponseType or SwaggerResponse attribute in order to get
+response examples, so long as it is obvious what Type your action method returns.
+
 ## [4.1.0] - 2018-08-06
 ### Added
 - Add generic version of SecurityRequirementsOperationFilter and AppendAuthorizeToSummaryOperationFilter so that

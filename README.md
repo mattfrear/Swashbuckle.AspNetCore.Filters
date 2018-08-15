@@ -253,9 +253,18 @@ public class ListPeopleRequestExample : IExamplesProvider
 
 ### How to use - Response examples
 #### Automatic annotation
-Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` (and `c.ExampleFilters();`) as shown in the Installation instructions above.
+Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>()` (and `c.ExampleFilters()`) as shown in the Installation instructions above.
+If it's obvious which type your action returns, then no `ProducesResponseType` or `SwaggerResponse` attributes need to be specified, e.g.
+```csharp
+public async Task<ActionResult<IEnumerable<Country>>> Get(string lang)
+or
+public ActionResult<IEnumerable<Country>> Get(string lang)
+or
+public IEnumerable<Country> Get(string lang)
 
-Decorate your methods with either the `ProducesResponseType` or the `SwaggerResponse` attribute:
+```
+
+Or, you can optionally decorate your methods (or controller) with either the `ProducesResponseType` or the `SwaggerResponse` attribute:
 ```csharp
 [SwaggerResponse(200, "The list of countries", typeof(IEnumerable<Country>))]
 // or, like this [ProducesResponseType(typeof(IEnumerable<Country>), 200)]
