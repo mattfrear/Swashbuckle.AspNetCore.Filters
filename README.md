@@ -257,10 +257,8 @@ Version 4.0 supports automatic annotation. To use this, you MUST call `services.
 If it's obvious which type your action returns, then no `ProducesResponseType` or `SwaggerResponse` attributes need to be specified, e.g.
 ```csharp
 public async Task<ActionResult<IEnumerable<Country>>> Get(string lang)
-or
-public ActionResult<IEnumerable<Country>> Get(string lang)
-or
-public IEnumerable<Country> Get(string lang)
+// or public ActionResult<IEnumerable<Country>> Get(string lang)
+// or public IEnumerable<Country> Get(string lang)
 
 ```
 
