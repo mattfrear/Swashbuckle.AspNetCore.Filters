@@ -122,5 +122,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         {
             throw new NotImplementedException();
         }
+
+        public PersonResponse PersonResponseNotAnnotated()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

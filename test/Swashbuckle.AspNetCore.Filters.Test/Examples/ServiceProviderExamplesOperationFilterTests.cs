@@ -56,6 +56,27 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
+        public void Apply_SetsResponseExamples_WhenMethodNotAnnotated()
+        {
+            // Arrange
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() { { "200", new Response() } } };
+            var supportedResponseTypes = new List<ApiResponseType> { new ApiResponseType { StatusCode = 200, Type = typeof(PersonResponse) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.PersonResponseNotAnnotated), supportedResponseTypes: supportedResponseTypes);
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var examples = (JObject)operation.Responses["200"].Examples;
+            var actualExample = examples["application/json"];
+
+            var expectedExample = (PersonResponse)new PersonResponseAutoExample().GetExamples();
+            actualExample["id"].ShouldBe(expectedExample.Id);
+            actualExample["first"].ShouldBe(expectedExample.FirstName);
+        }
+
+        [Fact]
         public void Apply_SetsResponseExamples_FromControllerAttributes()
         {
             // Arrange

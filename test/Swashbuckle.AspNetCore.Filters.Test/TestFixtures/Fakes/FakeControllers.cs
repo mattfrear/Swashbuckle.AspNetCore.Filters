@@ -9,10 +9,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
     public static class FakeControllers
     {
         public class NotAnnotated
-        {}
-
-        public class TestController
-        {}
+        {
+            public IActionResult None()
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         [Authorize]
         public class AuthController

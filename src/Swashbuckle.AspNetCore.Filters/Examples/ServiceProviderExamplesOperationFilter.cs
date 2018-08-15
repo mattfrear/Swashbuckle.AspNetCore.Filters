@@ -48,12 +48,28 @@ namespace Swashbuckle.AspNetCore.Filters
             }
         }
 
+        private class StatusCodeWithType
+        {
+            public StatusCodeWithType(int statusCode, Type type)
+            {
+                StatusCode = statusCode;
+                Type = type;
+            }
+
+            public int StatusCode { get; }
+            public Type Type { get; }
+        }
+
         private void SetResponseExamples(Operation operation, OperationFilterContext context)
         {
-            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>();
-            var responseAttributes = context.GetControllerAndActionAttributes<ProducesResponseTypeAttribute>();
 
-            foreach (var response in responseAttributes)
+            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>();
+            var responseAttributes = context.GetControllerAndActionAttributes<ProducesResponseTypeAttribute>().Select(a => new StatusCodeWithType(a.StatusCode, a.Type));
+            var autodetectedResponses = context.ApiDescription.SupportedResponseTypes.Select(r => new StatusCodeWithType(r.StatusCode, r.Type));
+
+            var responses = responseAttributes.Concat(autodetectedResponses);
+
+            foreach (var response in responses)
             {
                 if (actionAttributes.Any(a => a.StatusCode == response.StatusCode))
                 {

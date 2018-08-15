@@ -14,25 +14,30 @@ namespace Swashbuckle.AspNetCore.Filters.Test
 {
     public abstract class BaseOperationFilterTests
     {
-        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, List<ApiParameterDescription> parameterDescriptions = null)
+        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
         {
-            return FilterContextFor(controllerType, actionName, new CamelCasePropertyNamesContractResolver(), parameterDescriptions);
+            return FilterContextFor(controllerType, actionName, new CamelCasePropertyNamesContractResolver(), parameterDescriptions, supportedResponseTypes);
         }
 
-        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, IContractResolver contractResolver, List<ApiParameterDescription> parameterDescriptions = null)
+        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, IContractResolver contractResolver, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
         {
             var apiDescription = new ApiDescription
             {
                 ActionDescriptor = new ControllerActionDescriptor
                 {
                     ControllerTypeInfo = controllerType.GetTypeInfo(),
-                    MethodInfo = controllerType.GetMethod(actionName)
-                },
+                    MethodInfo = controllerType.GetMethod(actionName),
+                }
             };
 
             if (parameterDescriptions != null)
             {
                 apiDescription.With(api => api.ParameterDescriptions, parameterDescriptions);
+            }
+
+            if (supportedResponseTypes != null)
+            {
+                apiDescription.With(api => api.SupportedResponseTypes, supportedResponseTypes);
             }
 
             var jsonSerializerSettings = new JsonSerializerSettings
