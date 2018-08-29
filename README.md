@@ -16,6 +16,15 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 - Add any old response header to all responses
 - Add an indicator to each endpoint to show if it has an `[Authorize]` header (and for which policies and roles)
 
+# Table of Contents
+
+- [Where to get it](#where-to-get-it)
+- [What's included](#whats-included)
+  - [Request example](#request-example) 
+  - [Response example](#response-example)
+  - [Document request or response properties](#Document-request-or-response-properties)
+  - [Security requirements filter](#sec-req-filter)
+<a name="#where-to-get-it"></a>
 ## Where to get it
 From NuGet.
 
@@ -25,7 +34,9 @@ From NuGet.
 | Swashbuckle.AspNetCore version 1.0.0 - 2.5.0 | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/ |
 | Swashbuckle.AspNetCore version 3.0 and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ |
 
+<a name="#whats-included"></a>
 ## What's included
+<a name="#request-example"></a>
 ### Request example
 
 Populate swagger's `definitions.YourObject.example` with whatever object you like.
@@ -44,6 +55,7 @@ navigating to swagger/v1/swagger.json
 
 ![swagger.json](https://mattfrear.files.wordpress.com/2016/01/capture.jpg)
 
+<a name="#response-example"></a>
 ### Response example
 
 Allows you to add custom data to the example response shown in Swagger. So instead of seeing the default boring data like so:
@@ -54,11 +66,13 @@ You'll see some more realistic data (or whatever you want):
 
 ![response with awesome data](https://mattfrear.files.wordpress.com/2015/04/response-new.png?w=700&h=358)
 
+<a name="#req-resp-props"></a>
 ### Document request or response properties
 
 Lets you add a comment-like description to properties on your request or response, e.g.
 ![descriptions](https://mattfrear.files.wordpress.com/2017/09/descriptions.jpg)
 
+<a name="#sec-req-filter"></a>
 ### Security requirements filter
 
 Adds security information to each operation so that you can send an Authorization header to your API. Useful for API endpoints that have JWT token
