@@ -16,6 +16,37 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 - Add any old response header to all responses
 - Add an indicator to each endpoint to show if it has an `[Authorize]` header (and for which policies and roles)
 
+## Table of Contents
+
+- [Where to get it](#where-to-get-it)
+- [What's included](#whats-included)
+  - [Request example](#request-example) 
+  - [Response example](#response-example)
+  - [Document request or response properties](#document-request-or-response-properties)
+  - [Security requirements filter](#security-requirements-filter)
+  - [File upload button](#file-upload-button)
+  - [Add a request header](#add-a-request-header)
+  - [Add a response header](#add-a-response-header)
+  - [Add Authorization to Summary](#add-authorization-to-summary)
+- [Installation](#installation) 
+- [How to use](#how-to-use)
+  - [How to use - Request examples](#how-to-use---request-examples) 
+    - [Automatic annotation](#automatic-annotation)
+    - [Manual annotation](#manual-annotation)
+      [List Request examples](#list-request-examples)
+  - [How to use - Response examples](#how-to-use---response-examples)
+    - [Automatic annotation](#automatic-annotation-1)
+    - [Manual annotation](#manual-annotation)
+    - [Known issues](#known-issues)
+  - [How to use - Document request and response properties](#how-to-use---document-request-and-response-properties)
+  - [How to use - Security requirements filter](#how-to-use---security-requirements-filter)
+  - [How to use - File upload button](#how-to-use---file-upload-button)
+  - [How to use - Request Header](#how-to-use---request-header)
+  - [How to use - Authorization summary](#how-to-use---authorization-summary)
+- [Pascal case or Camel case?](#pascal-case-or-camel-case)
+- [Render Enums as strings](#render-enums-as-strings)
+- [Advanced: Examples with Dependency injection](#advanced-examples-with-dependency-injection)
+
 ## Where to get it
 From NuGet.
 
@@ -147,7 +178,9 @@ This will register your examples with ServiceProvider, which is needed for Autom
 `AddSwaggerExamplesFromAssemblyOf<T>` is the recommended option.
 
 ## How to use
+
 ### How to use - Request examples
+
 #### Automatic annotation
 Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` (and `c.ExampleFilters();`) as shown in the Installation instructions above.
 
@@ -431,6 +464,7 @@ Specify one or more `[SwaggerResponseHeader]` attributes on your controller acti
 public IHttpActionResult GetPerson(PersonRequest personRequest)
 {
 ```
+
 ### How to use - Authorization summary
 Specify `[Authorization]` headers on either a Controller:
 ```csharp
