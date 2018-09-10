@@ -7,7 +7,6 @@
     <Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>2018</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
