@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>net451;net461;netstandard1.6;netstandard2.0</TargetFrameworks>
     <PackageVersion>4.2.0</PackageVersion>
     <Authors>Matt Frear</Authors>
     <Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
@@ -25,7 +25,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
-    <PackageReference Include="Scrutor" Version="2.2.2" />
+    <PackageReference Include="Scrutor" Version="2.2.2" Condition="'$(TargetFramework)' == 'netstandard1.6' Or '$(TargetFramework)' == 'net451'" />
+    <PackageReference Include="Scrutor" Version="3.0.1" Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
   </ItemGroup>  
