@@ -12,6 +12,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
+    [Obsolete("Use <summary> tags on properties instead")]
     public class DescriptionOperationFilter : IOperationFilter
     {
         public void Apply(Operation operation, OperationFilterContext context)

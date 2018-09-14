@@ -22,7 +22,6 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 - [What's included](#whats-included)
   - [Request example](#request-example) 
   - [Response example](#response-example)
-  - [Document request or response properties](#document-request-or-response-properties)
   - [Security requirements filter](#security-requirements-filter)
   - [File upload button](#file-upload-button)
   - [Add a request header](#add-a-request-header)
@@ -38,7 +37,6 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
     - [Automatic annotation](#automatic-annotation-1)
     - [Manual annotation](#manual-annotation)
     - [Known issues](#known-issues)
-  - [How to use - Document request and response properties](#how-to-use---document-request-and-response-properties)
   - [How to use - Security requirements filter](#how-to-use---security-requirements-filter)
   - [How to use - File upload button](#how-to-use---file-upload-button)
   - [How to use - Request Header](#how-to-use---request-header)
@@ -84,11 +82,6 @@ Allows you to add custom data to the example response shown in Swagger. So inste
 You'll see some more realistic data (or whatever you want):
 
 ![response with awesome data](https://mattfrear.files.wordpress.com/2015/04/response-new.png?w=700&h=358)
-
-### Document request or response properties
-
-Lets you add a comment-like description to properties on your request or response, e.g.
-![descriptions](https://mattfrear.files.wordpress.com/2017/09/descriptions.jpg)
 
 ### Security requirements filter
 
@@ -142,8 +135,6 @@ public void ConfigureServices(IServiceCollection services)
         // version 3.0 like this: c.AddSwaggerExamples(services.BuildServiceProvider());
         // version 4.0 like this:
         c.ExampleFilters();
-
-        c.OperationFilter<DescriptionOperationFilter>(); // [Description] on request or response properties
         
         c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
         c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
@@ -381,30 +372,6 @@ public async Task<IHttpActionResult> Search(DeliveryOptionsSearchModel search)
 ```
 
 That DeliveryOptionsSearchModel object is only defined once in the entire Swagger document and it can only have one **request** example defined.
-
-### How to use - Document request and response properties
-Define the SwaggerResponse, as usual:
-```csharp
-[HttpPost]
-[Route("api/values/person")]
-[SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
-public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
-{
-```
-Now add `System.ComponentModel.Description` attributes to your request or response object:
-```csharp
-public class PersonResponse
-{
-	public int Id { get; set; }
-
-	[Description("The first name of the person")]
-	public string FirstName { get; set; }
-
-	public string LastName { get; set; }
-
-	[Description("His age, in years")]
-	public int Age { get; set; }
-```
 
 ### How to use - Security requirements filter
 

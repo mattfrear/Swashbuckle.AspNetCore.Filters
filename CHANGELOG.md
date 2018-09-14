@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 Nothing here yet
 
+## [4.3.0] - 2018-09-14
+### Changed
+- Fix Issue #60
+  - No longer support .NET Framework 4.5.1 because it doesn't work with Scrutor (because Scrutor is unsigned)
+  - Support .NET Framework 4.6.1
+  - Support .NET Standard 2.0 (still support 1.6 too)
+
+### Deprecated
+- Mark DescriptionOperationFilter as obsolete, because you can accomplish the same thing with summary tags
+
 ## [4.2.0] - 2018-08-15
 ### Changed
 - It is no longer necessary to specify a ProducesResponseType or SwaggerResponse attribute in order to get
@@ -54,6 +64,6 @@ which did Authorization but wasn't an `AuthorizeAttribute`
 - Port of bug #36 from Swashbuckle.Examples
 
 ## [3.0.1] - 2018-07-15
-### Change
+### Changed
 - Rename from Swashbuckle.AspNetCore.Examples
 - Dependency on [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) 3.0 instead of 1.0
