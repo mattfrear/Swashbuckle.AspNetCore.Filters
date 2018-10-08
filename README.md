@@ -137,7 +137,7 @@ public void ConfigureServices(IServiceCollection services)
         c.ExampleFilters();
         
         c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
-        c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request"); // adds any string you like to the request headers - in this case, a correlation id
+        c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request", false); // adds any string you like to the request headers - in this case, a correlation id
         c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
         c.OperationFilter<AppendAuthorizeToSummaryOperationFilter>(); // Adds "(Auth)" to the summary so that you can see which endpoints have Authorization
         // or use the generic method, e.g. c.OperationFilter<AppendAuthorizeToSummaryOperationFilter<MyCustomAttribute>>();
@@ -419,7 +419,8 @@ public IActionResult UploadFile(IFormFile file)
 ```
 
 ### How to use - Request Header
-When you enable the filter in your `Startup.cs`, as per the Installation section above, you can specify the name and description of the new header parameter.
+When you enable the filter in your `Startup.cs`, as per the Installation section above, you can specify the name (string)
+and description (string) of the new header parameter, as well as whether it is required or not (bool).
 This will add the input box to *every* controller action.
 
 ### How to use - Response headers

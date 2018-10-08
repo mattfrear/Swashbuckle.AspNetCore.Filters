@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 Nothing here yet
 
+## [4.3.1] - 2018-10-08
+### Added
+- Fix Issue #63
+  - Add an optional true/false value to the AddHeaderOperationFilter to determine whether the header
+    is required or not.
+
 ## [4.3.0] - 2018-09-14
 ### Changed
 - Fix Issue #60

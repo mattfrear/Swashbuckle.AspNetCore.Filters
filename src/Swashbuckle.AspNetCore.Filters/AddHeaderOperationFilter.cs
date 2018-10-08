@@ -8,11 +8,13 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly string parameterName;
         private readonly string description;
+        private readonly bool required;
 
-        public AddHeaderOperationFilter(string parameterName, string description)
+        public AddHeaderOperationFilter(string parameterName, string description, bool required = false)
         {
             this.parameterName = parameterName;
             this.description = description;
+            this.required = required;
         }
 
         public void Apply(Operation operation, OperationFilterContext context)
@@ -27,7 +29,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 Name = parameterName,
                 In = "header",
                 Description = description,
-                Required = false,
+                Required = required,
                 Type = "string"
             });
         }

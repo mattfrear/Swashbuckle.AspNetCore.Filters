@@ -45,7 +45,7 @@ namespace WebApi
 
                 options.OperationFilter<AddFileParamTypesOperationFilter>();
 
-                options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
+                options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request", false);
 
                 options.OperationFilter<AddResponseHeadersFilter>();
 
