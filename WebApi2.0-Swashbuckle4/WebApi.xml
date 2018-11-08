@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi2.0-Swashbuckle4</name>
+    </assembly>
+    <members>
+        <member name="M:WebApi.Controllers.ValuesController.GetPerson(System.Int32)">
+            <summary>
+            Gets a person
+            </summary>
+            <param name="personId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ValuesController.PostPerson(WebApi.Models.PersonRequest)">
+            <summary>
+            Posts a person
+            </summary>
+            <param name="personRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ValuesController.UploadFile(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Upload a file
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ValuesController.PostDictionary(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Gets dynamic data passing a Dictionary of string, object and returns a Dictionary
+            </summary>
+            <param name="dynamicDictionary"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ValuesController.GetData(WebApi.Models.DynamicData)">
+            <summary>
+            Gets dynamic data passing a DynamicData and returning a DynamicData
+            </summary>
+            <param name="personRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Models.DynamicData">
+            <summary>
+            This example of dynamic data and using of <see cref="T:Newtonsoft.Json.JsonExtensionDataAttribute"/>
+            </summary>
+            <remarks>
+            You can inherit this class to mix static and dynamic property:
+            <code>
+            public class MixedData : DynamicData
+            {
+                public string FixedProperty {get;set;}
+            }
+            </code>
+            In this case JSON property "FixedProperty" will be added to FixedProperty, all other to Payload
+            </remarks>
+        </member>
+    </members>
+</doc>
