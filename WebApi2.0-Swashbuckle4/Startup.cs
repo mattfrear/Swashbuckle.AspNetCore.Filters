@@ -41,10 +41,6 @@ namespace WebApi2._0_Swashbuckle4
 
                 options.ExampleFilters();
 
-                // options.OperationFilter<ExamplesOperationFilter>();
-                // options.OperationFilter<ServiceProviderExamplesOperationFilter>();
-
-
                 options.OperationFilter<DescriptionOperationFilter>();
 
                 options.OperationFilter<AddFileParamTypesOperationFilter>();

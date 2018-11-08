@@ -30,7 +30,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="Scrutor" Version="2.2.2" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
     <PackageReference Include="Scrutor" Version="3.0.1" Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" Condition="'$(TargetFramework)' == 'netstandard1.6' Or '$(TargetFramework)' == 'net461'" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" Condition="'$(TargetFramework)' == 'netstandard1.6' Or '$(TargetFramework)' == 'net461'" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.0.0" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.0.0" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
   </ItemGroup>  
 </Project>
