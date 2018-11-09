@@ -5,8 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-Nothing here yet
-
+- Fix Issue #67
+  - Dependency on [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) 4.0.1 instead of 3.0.0 (netstandard2.0 and net461 only, netstandard1.6 remains on 3.0.0)
+  
 ## [4.3.1] - 2018-10-08
 ### Added
 - Fix Issue #63
