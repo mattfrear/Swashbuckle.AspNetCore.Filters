@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 Nothing here yet
 
+## [4.5.0] - 2018-11-12
+### Changed
+- Fix Issue #67 again
+  - Support Swashbuckle.AspNetCore 4.0.0 for .NET Framework 4.6.1 projects
+
 ## [4.4.0] - 2018-11-08
 ### Changed
 - Fix Issue #67

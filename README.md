@@ -53,7 +53,7 @@ From NuGet.
 | Swashbuckle 1.0 - 5.5 | https://www.nuget.org/packages/Swashbuckle.Examples/ |
 | Swashbuckle.AspNetCore version 1.0.0 - 2.5.0 | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/ |
 | Swashbuckle.AspNetCore version 3.0.0  | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ |
-| Swashbuckle.AspNetCore version 4.0.0 and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ Version >= 4.4.0 |
+| Swashbuckle.AspNetCore version 4.0.0 and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ Version >= 4.5.0 |
 
 ## What's included
 ### Request example
