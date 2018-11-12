@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -47,7 +47,6 @@ namespace Swashbuckle.AspNetCore.Filters
             var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
 
             var formattedExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
-            bodyParameter.Schema.Example = formattedExample; // set example on the paths/parameters/schema/example property
 
             string name = SchemaDefinitionName(requestType, schema);
 
@@ -64,6 +63,10 @@ namespace Swashbuckle.AspNetCore.Filters
                 {
                     definitionToUpdate.Example = formattedExample;
                 }
+            }
+            else
+            {
+                bodyParameter.Schema.Example = formattedExample; // set example on the paths/parameters/schema/example property
             }
         }
 
