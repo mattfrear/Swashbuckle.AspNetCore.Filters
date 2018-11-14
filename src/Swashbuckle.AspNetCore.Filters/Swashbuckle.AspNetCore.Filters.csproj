@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net461;netstandard1.6;netstandard2.0</TargetFrameworks>
-    <PackageVersion>4.5.0</PackageVersion>
+    <PackageVersion>4.5.1</PackageVersion>
     <Authors>Matt Frear</Authors>
     <Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -11,14 +11,14 @@
     <Copyright>2018</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
     <PackageReleaseNotes>
-      Fix Issue #67 - support Swashbuckle.AspNetCore 4.0.0 on .NET Core 2.0 and .NET Framework 4.6.1
+      Fix Issue #67 - support Swashbuckle.AspNetCore 4.0.0 on .NET Core 2.0 and .NET Framework 4.6.1 (third attempt)
     </PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCoreFilters.git</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>4.5.0</VersionPrefix>
+    <VersionPrefix>4.5.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
@@ -29,8 +29,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="Scrutor" Version="2.2.2" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
     <PackageReference Include="Scrutor" Version="3.0.1" Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" Condition="'$(TargetFramework)' == 'netstandard1.6' Or '$(TargetFramework)' == 'net461'" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" Condition="'$(TargetFramework)' == 'netstandard1.6' Or '$(TargetFramework)' == 'net461'" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="3.0.0" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" Condition="'$(TargetFramework)' == 'netstandard1.6'" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.*" Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'"  />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.*" Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'" />
   </ItemGroup>  
