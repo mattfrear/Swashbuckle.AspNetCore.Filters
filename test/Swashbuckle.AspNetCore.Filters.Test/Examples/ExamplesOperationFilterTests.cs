@@ -1,4 +1,4 @@
-using Xunit;
+﻿using Xunit;
 using Swashbuckle.AspNetCore.Swagger;
 using Newtonsoft.Json.Linq;
 using Shouldly;
@@ -87,9 +87,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var actualSchemaExample = (JObject)filterContext.SchemaRegistry.Definitions["PersonRequest"].Example;
             var expectedExample = (PersonRequest)new PersonRequestExample().GetExamples();
             AssertPersonRequestExampleMatches(actualSchemaExample, expectedExample);
-
-            var actualParameterExample = (JObject)personRequestParameter.Schema.Example;
-            AssertPersonRequestExampleMatches(actualParameterExample, expectedExample);
         }
 
         private static void AssertPersonRequestExampleMatches(JObject actualSchemaExample, PersonRequest expectedExample)
