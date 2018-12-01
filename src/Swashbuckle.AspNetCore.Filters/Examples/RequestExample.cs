@@ -55,7 +55,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            // now that we have the name, additionally set the example on the object in the schema registry (this is what swagger-ui will display)
+            // set the example on the object in the schema registry (this is what swagger-ui will display)
             if (schemaRegistry.Definitions.ContainsKey(name))
             {
                 var definitionToUpdate = schemaRegistry.Definitions[name];
@@ -66,7 +66,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
             else
             {
-                bodyParameter.Schema.Example = formattedExample; // set example on the paths/parameters/schema/example property
+                bodyParameter.Schema.Example = formattedExample; // set example on the request paths/parameters/schema/example property
             }
         }
 

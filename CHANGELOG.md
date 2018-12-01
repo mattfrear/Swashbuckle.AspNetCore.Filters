@@ -5,7 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-Nothing here yet
+- Fix Issue #69
+  - Only set request examples on the schema registry object. The request parameter will only be set if 
+  a schema registry object is not found. This fix prevents a warning in Redoc. Thanks @Leon99 for the
+  pull request.
 
 ## [4.4.0] - 2018-11-08
 ### Changed
