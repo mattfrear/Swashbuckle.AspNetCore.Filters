@@ -5,35 +5,37 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Fix Issue #69
+### Fixed
+- Issue #69
   - Only set request examples on the schema registry object. The request parameter will only be set if 
   a schema registry object is not found. This fix prevents a warning in Redoc. Thanks @Leon99 for the
   pull request.
+- Issue #72 do not override SerializerSettings.NullValueHandling because underlying issue seems to have been fixed
 
 ## [4.5.1] - 2018-11-12
-### Changed
-- Fix Issue #67 3rd time
+### Fixed
+- Issue #67 3rd time
   - Support Swashbuckle.AspNetCore 4.0.0 for .NET Framework 4.6.1 projects
 
 ## [4.5.0] - 2018-11-12
-### Changed
-- Fix Issue #67 again
+### Fixed
+- Issue #67 again
   - Support Swashbuckle.AspNetCore 4.0.0 for .NET Framework 4.6.1 projects
 
 ## [4.4.0] - 2018-11-08
-### Changed
-- Fix Issue #67
+### Fixed
+- Issue #67
   - Support Swashbuckle.AspNetCore 4.0.0 for .NET Standard 2.0 projects
 
 ## [4.3.1] - 2018-10-08
 ### Added
-- Fix Issue #63
+- Fix issue #63
   - Add an optional true/false value to the AddHeaderOperationFilter to determine whether the header
     is required or not.
 
 ## [4.3.0] - 2018-09-14
 ### Changed
-- Fix Issue #60
+- Issue #60
   - No longer support .NET Framework 4.5.1 because it doesn't work with Scrutor (because Scrutor is unsigned)
   - Support .NET Framework 4.6.1
   - Support .NET Standard 2.0 (still support 1.6 too)
