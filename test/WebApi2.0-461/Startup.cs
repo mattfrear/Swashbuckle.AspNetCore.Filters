@@ -43,12 +43,12 @@ namespace WebApi451
 
                 options.OperationFilter<AddResponseHeadersFilter>();
 
-                options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
-
                 options.DescribeAllEnumsAsStrings();
 
                 var filePath = Path.Combine(AppContext.BaseDirectory, "WebApi.xml");
                 options.IncludeXmlComments(filePath);
+
+                options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
 
                 // c.CustomSchemaIds((type) => type.FullName);
 
