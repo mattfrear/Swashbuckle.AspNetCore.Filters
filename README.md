@@ -364,7 +364,7 @@ Example response for application/json mimetype of a Pet data type:
 Note that this differs from the Request example in that the mime type is a required property on the response example but not so on the request example.
 
 #### Known issues
-- Request examples are not shown for querystring parameters (i.e. HTTP GET requests), examples will only be shown in request body.
+- Request examples are not shown for querystring parameters (i.e. HTTP GET requests, or for querystring parameters for POST, PUT etc methods). Request examples will only be shown in request body. This is a limitation of the Swagger 2.0 spec https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject.
 - For requests, in the Swagger 2.0 spec there is only one schema for each request object defined across all the API endpoints. So if you are using the same request object in multiple API endpoints,
 i.e. on multiple controller actions like this:
 
