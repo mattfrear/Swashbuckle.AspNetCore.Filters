@@ -97,6 +97,7 @@ authentication. e.g.
 
 Adds a button for uploading a file via IFormFile
 ![file upload button](https://mattfrear.files.wordpress.com/2018/01/fileupload.jpg)
+N.B. Swashbuckle.AspNetCore 4.0 supports IFormFile directly, so this filter is no longer needed.
 
 ### Add a request header
 
@@ -415,6 +416,7 @@ If you don't want to do that you can pass false when you configure it:
 ```
 
 ### How to use - File upload button
+N.B. Swashbuckle.AspNetCore 4.0 supports IFormFile directly, so this filter is no longer needed.
 
 Add the `[AddSwaggerFileUploadButton]` attribute to any controller actions which takes an IFormFile, e.g.
 ```csharp

@@ -103,8 +103,7 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        [Authorize("Administrator")]
-        [Authorize("Customer")]
+        [AllowAnonymous]
         [AddSwaggerFileUploadButton]
         [HttpPost("upload")]
         public IActionResult UploadFile(IFormFile file)

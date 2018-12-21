@@ -3,9 +3,11 @@ using System.Linq;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
+using System;
 
 namespace Swashbuckle.AspNetCore.Filters
-{ 
+{
+    [Obsolete("Swashbuckle 4.0 supports IFormFile out of the box")]
     public class AddFileParamTypesOperationFilter : IOperationFilter
     {
         private static readonly string[] fileParameters = new[] { "ContentType", "ContentDisposition", "Headers", "Length", "Name", "FileName" };
