@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -26,13 +27,13 @@ namespace Swashbuckle.AspNetCore.Filters
             this.responseExample = responseExample;
         }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             SetRequestModelExamples(operation, context);
             SetResponseModelExamples(operation, context);
         }
 
-        private void SetRequestModelExamples(Operation operation, OperationFilterContext context)
+        private void SetRequestModelExamples(OpenApiOperation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
 
@@ -47,7 +48,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
         }
 
-        private void SetResponseModelExamples(Operation operation, OperationFilterContext context)
+        private void SetResponseModelExamples(OpenApiOperation operation, OperationFilterContext context)
         {
             var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>();
 

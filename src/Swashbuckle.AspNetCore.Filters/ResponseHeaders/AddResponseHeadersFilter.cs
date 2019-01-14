@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     public class AddResponseHeadersFilter : IOperationFilter
     {
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseHeaderAttribute>();
 
@@ -21,10 +22,10 @@ namespace Swashbuckle.AspNetCore.Filters
                 {
                     if (response.Headers == null)
                     {
-                        response.Headers = new Dictionary<string, Header>();
+                        response.Headers = new Dictionary<string, OpenApiHeader>();
                     }
 
-                    response.Headers.Add(attr.Name, new Header { Description = attr.Description, Type = attr.Type });
+                    response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, /* Type = attr.Type */ });
                 }
             }
         }

@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Swashbuckle.AspNetCore.Filters.Extensions;
-using System;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -23,7 +23,7 @@ namespace Swashbuckle.AspNetCore.Filters
             this.policySelectors = policySelectors;
         }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
             {

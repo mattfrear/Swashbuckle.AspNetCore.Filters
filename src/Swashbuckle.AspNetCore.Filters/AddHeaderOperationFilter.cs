@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
@@ -17,20 +18,20 @@ namespace Swashbuckle.AspNetCore.Filters
             this.required = required;
         }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             if (operation.Parameters == null)
             {
-                operation.Parameters = new List<IParameter>();
+                operation.Parameters = new List<OpenApiParameter>();
             }
 
-            operation.Parameters.Add(new NonBodyParameter
+            operation.Parameters.Add(new OpenApiParameter
             {
                 Name = parameterName,
-                In = "header",
+                In = ParameterLocation.Header,
                 Description = description,
                 Required = required,
-                Type = "string"
+                // Type = "string"
             });
         }
     }

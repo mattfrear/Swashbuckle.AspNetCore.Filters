@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -22,7 +23,7 @@ namespace Swashbuckle.AspNetCore.Filters
         }
 
         public void SetRequestExampleForType(
-            Operation operation,
+            OpenApiOperation operation,
             ISchemaRegistry schemaRegistry,
             Type requestType,
             object example,

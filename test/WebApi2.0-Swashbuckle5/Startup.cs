@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
@@ -37,13 +38,9 @@ namespace WebApi2._0_Swashbuckle4
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "My API", Version = "v2" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v2" });
 
                 options.ExampleFilters();
-
-                options.OperationFilter<DescriptionOperationFilter>();
-
-                options.OperationFilter<AddFileParamTypesOperationFilter>();
 
                 options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
 
@@ -58,12 +55,12 @@ namespace WebApi2._0_Swashbuckle4
 
                 // c.CustomSchemaIds((type) => type.FullName);
 
-                options.AddSecurityDefinition("oauth2", new ApiKeyScheme
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                    In = "header",
+                    In = ParameterLocation.Header,
                     Name = "Authorization",
-                    Type = "apiKey"
+                    Type = SecuritySchemeType.ApiKey
                 });
 
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
