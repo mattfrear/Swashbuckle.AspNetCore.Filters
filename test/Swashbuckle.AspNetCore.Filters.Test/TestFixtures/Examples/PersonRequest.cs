@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 {
-    public class PersonRequest
+    public class PersonRequest : IPersonRequest
     {
         public Title Title { get; set; }
 

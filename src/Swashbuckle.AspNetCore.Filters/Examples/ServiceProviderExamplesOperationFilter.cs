@@ -91,7 +91,9 @@ namespace Swashbuckle.AspNetCore.Filters
 
             bool IsPrimitiveType()
             {
-                return !type.GetTypeInfo().IsClass && !type.GetTypeInfo().IsGenericType;
+                return !type.GetTypeInfo().IsClass
+                    && !type.GetTypeInfo().IsGenericType
+                    && !type.GetTypeInfo().IsInterface;
             }
 
             var exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);

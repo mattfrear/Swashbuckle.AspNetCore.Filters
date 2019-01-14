@@ -40,6 +40,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             throw new NotImplementedException();
         }
 
+        public IActionResult IPersonRequestUnannotated(IPersonRequest personRequest)
+        {
+            throw new NotImplementedException();
+        }
+
         [SwaggerRequestExample(typeof(PersonResponse), typeof(PersonRequestExample))]
         public IActionResult AnnotatedWithIncorrectSwaggerRequestExampleAttribute(PersonRequest personRequest)
         {

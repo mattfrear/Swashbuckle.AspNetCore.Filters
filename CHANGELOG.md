@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Deprecated
 - Marked AddFileParamTypesOperationFilter as Obsolete, because Swashbuckle 4.0 supports IFormFile directly.
 
+## [4.5.3] - 2018-01-14
+### Fixed
+- Issue #80 - allow interfaces when resolving IExampleProvider<T>
+
 ## [4.5.2] - 2018-12-02
 ### Fixed
 - Issue #69

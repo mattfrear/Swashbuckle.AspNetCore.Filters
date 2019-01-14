@@ -170,6 +170,25 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             personRequestParameter.Schema.Example.ShouldBeNull();
         }
 
+        [Fact]
+        public void Apply_SetsRequestExamplesForInterface_FromMethodAttributes()
+        {
+            // Arrange
+            serviceProvider.GetService(typeof(IExamplesProvider<IPersonRequest>)).Returns(new IPersonRequestAutoExample());
+            var personRequestParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/IPersonRequest" } };
+            var operation = new Operation { OperationId = "foobar", Parameters = new[] { personRequestParameter } };
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(IPersonRequest) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.IPersonRequestUnannotated), parameterDescriptions);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualSchemaExample = (JObject)filterContext.SchemaRegistry.Definitions["IPersonRequest"].Example;
+            var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
+            AssertPersonRequestExampleMatches(actualSchemaExample, expectedExample);
+        }
+
         private static void AssertPersonRequestExampleMatches(JObject actualSchemaExample, PersonRequest expectedExample)
         {
             actualSchemaExample["firstName"].ShouldBe(expectedExample.FirstName);
