@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
@@ -25,13 +27,13 @@ namespace Swashbuckle.AspNetCore.Filters
             this.responseExample = responseExample;
         }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             SetRequestExamples(operation, context);
             SetResponseExamples(operation, context);
         }
 
-        private void SetRequestExamples(Operation operation, OperationFilterContext context)
+        private void SetRequestExamples(OpenApiOperation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
             
@@ -60,7 +62,7 @@ namespace Swashbuckle.AspNetCore.Filters
             public Type Type { get; }
         }
 
-        private void SetResponseExamples(Operation operation, OperationFilterContext context)
+        private void SetResponseExamples(OpenApiOperation operation, OperationFilterContext context)
         {
 
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>();

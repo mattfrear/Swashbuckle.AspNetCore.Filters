@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq;
+using Microsoft.OpenApi.Models;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -25,7 +26,7 @@ namespace Swashbuckle.AspNetCore.Filters
             filter = new SecurityRequirementsOperationFilter<AuthorizeAttribute>(policySelector, includeUnauthorizedAndForbiddenResponses);
         }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             filter.Apply(operation, context);
         }

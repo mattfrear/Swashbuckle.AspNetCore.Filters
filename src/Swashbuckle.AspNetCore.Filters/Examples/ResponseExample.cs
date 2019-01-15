@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Microsoft.OpenApi.Models;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -20,7 +21,7 @@ namespace Swashbuckle.AspNetCore.Filters
         }
 
         public void SetResponseExampleForStatusCode(
-            Operation operation,
+            OpenApiOperation operation,
             int statusCode,
             object example,
             IContractResolver contractResolver = null,

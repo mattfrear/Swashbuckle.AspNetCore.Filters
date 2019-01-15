@@ -1,6 +1,8 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -38,7 +40,7 @@ namespace Swashbuckle.AspNetCore.Filters
             var schema = schemaRegistry.GetOrRegister(requestType);
 
             var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
-            var bodyParameter = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Ref || p.Schema?.Items?.Ref == schema.Ref);
+            var bodyParameter = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Reference || p.Schema?.Items?.Reference == schema.Reference);
 
             if (bodyParameter == null)
             {
@@ -47,7 +49,8 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
 
-            var formattedExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
+            // var formattedExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
+            var formattedExample = example.ToOpenApiObject();
 
             string name = SchemaDefinitionName(requestType, schema);
 
@@ -57,9 +60,9 @@ namespace Swashbuckle.AspNetCore.Filters
             }
 
             // set the example on the object in the schema registry (this is what swagger-ui will display)
-            if (schemaRegistry.Definitions.ContainsKey(name))
+            if (schemaRegistry.Schemas.ContainsKey(name))
             {
-                var definitionToUpdate = schemaRegistry.Definitions[name];
+                var definitionToUpdate = schemaRegistry.Schemas[name];
                 if (definitionToUpdate.Example == null)
                 {
                     definitionToUpdate.Example = formattedExample;
@@ -71,7 +74,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
         }
 
-        private static string SchemaDefinitionName(Type requestType, Schema schema)
+        private static string SchemaDefinitionName(Type requestType, OpenApiSchema schema)
         {
             string name = null;
             // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split

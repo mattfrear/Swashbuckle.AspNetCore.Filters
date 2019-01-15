@@ -104,7 +104,6 @@ namespace WebApi.Controllers
         /// <param name="file"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [AddSwaggerFileUploadButton]
         [HttpPost("upload")]
         public IActionResult UploadFile(IFormFile file)
         {
