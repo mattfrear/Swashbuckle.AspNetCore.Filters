@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters.Extensions;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using Swashbuckle.AspNetCore.Filters.Extensions;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -26,7 +26,7 @@ namespace Swashbuckle.AspNetCore.Filters
             this.includeUnauthorizedAndForbiddenResponses = includeUnauthorizedAndForbiddenResponses;
         }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
             {
@@ -42,19 +42,19 @@ namespace Swashbuckle.AspNetCore.Filters
 
             if (includeUnauthorizedAndForbiddenResponses)
             {
-                operation.Responses.Add("401", new Response { Description = "Unauthorized" });
-                operation.Responses.Add("403", new Response { Description = "Forbidden" });
+                operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+                operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
             }
 
             var policies = policySelector(actionAttributes) ?? Enumerable.Empty<string>();
 
-            operation.Security = new List<IDictionary<string, IEnumerable<string>>>
+            operation.Security = new List<OpenApiSecurityRequirement>
+            {
+                new OpenApiSecurityRequirement
                 {
-                    new Dictionary<string, IEnumerable<string>>
-                    {
-                        { "oauth2", policies }
-                    }
-                };
+                    { new OpenApiSecurityScheme { Scheme = "oauth2" }, policies.ToList() }
+                }
+            };
         }
     }
 }

@@ -39,9 +39,9 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var schema = schemaRegistry.GetOrRegister(requestType);
 
-            var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
-            var bodyParameter = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Reference || p.Schema?.Items?.Reference == schema.Reference);
-
+            // var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
+            // var bodyParameter = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Reference || p.Schema?.Items?.Reference == schema.Reference);
+            string bodyParameter = null;
             if (bodyParameter == null)
             {
                 return; // The type in their [SwaggerRequestExample(typeof(requestType), ...] is not passed to their controller action method
@@ -70,7 +70,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
             else
             {
-                bodyParameter.Schema.Example = formattedExample; // set example on the request paths/parameters/schema/example property
+                // bodyParameter.Schema.Example = formattedExample; // set example on the request paths/parameters/schema/example property
             }
         }
 
@@ -78,7 +78,7 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             string name = null;
             // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
-            var parts = schema.Ref?.Split('/');
+            var parts = schema.Reference.ReferenceV2.Split('/');
 
             if (parts != null)
             {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -51,8 +51,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
                 (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
         }
 
-
-        protected void SetSwaggerResponses(Operation operation, OperationFilterContext filterContext)
+        protected void SetSwaggerResponses(OpenApiOperation operation, OperationFilterContext filterContext)
         {
             var swaggerResponseFilter = new AnnotationsOperationFilter();
             swaggerResponseFilter.Apply(operation, filterContext);
