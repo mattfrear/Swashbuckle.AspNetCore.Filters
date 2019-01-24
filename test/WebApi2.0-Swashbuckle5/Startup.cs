@@ -40,32 +40,33 @@ namespace WebApi2._0_Swashbuckle4
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v2" });
 
-                options.ExampleFilters();
+                // options.ExampleFilters();
 
                 options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
 
-                options.OperationFilter<AddResponseHeadersFilter>();
+                // options.OperationFilter<AddResponseHeadersFilter>();
 
-                options.DescribeAllEnumsAsStrings();
+                // options.DescribeAllEnumsAsStrings();
 
                 var filePath = Path.Combine(AppContext.BaseDirectory, "WebApi.xml");
-                options.IncludeXmlComments(filePath);
+                // options.IncludeXmlComments(filePath);
 
-                options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+                // options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
 
                 // c.CustomSchemaIds((type) => type.FullName);
 
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
+                //options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                //{
+                //    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                //    In = ParameterLocation.Header,
+                //    Name = "Authorization",
+                //    Type = SecuritySchemeType.ApiKey
+                //});
 
-                options.OperationFilter<SecurityRequirementsOperationFilter>();
-            })
-            .AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();
+                //options.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
+            
+            services.AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();
 
             services.AddAuthorization(options =>
             {

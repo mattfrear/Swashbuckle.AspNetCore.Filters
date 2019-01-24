@@ -1,5 +1,4 @@
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 
@@ -31,7 +30,10 @@ namespace Swashbuckle.AspNetCore.Filters
                 In = ParameterLocation.Header,
                 Description = description,
                 Required = required,
-                // Type = "string"
+                Schema = new OpenApiSchema
+                {
+                    Type = "string"
+                }
             });
         }
     }
