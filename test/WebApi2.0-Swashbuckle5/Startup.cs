@@ -46,24 +46,22 @@ namespace WebApi2._0_Swashbuckle4
 
                 options.OperationFilter<AddResponseHeadersFilter>();
 
-                // options.DescribeAllEnumsAsStrings();
+                options.DescribeAllEnumsAsStrings();
 
                 var filePath = Path.Combine(AppContext.BaseDirectory, "WebApi.xml");
-                // options.IncludeXmlComments(filePath);
+                options.IncludeXmlComments(filePath);
 
-                // options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+                options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
 
-                // c.CustomSchemaIds((type) => type.FullName);
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
 
-                //options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                //{
-                //    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                //    In = ParameterLocation.Header,
-                //    Name = "Authorization",
-                //    Type = SecuritySchemeType.ApiKey
-                //});
-
-                //options.OperationFilter<SecurityRequirementsOperationFilter>();
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
             
             services.AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();

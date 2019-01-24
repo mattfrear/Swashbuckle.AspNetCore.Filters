@@ -52,7 +52,7 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 new OpenApiSecurityRequirement
                 {
-                    { new OpenApiSecurityScheme { Scheme = "oauth2" }, policies.ToList() }
+                    { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" } }, policies.ToList() }
                 }
             };
         }
