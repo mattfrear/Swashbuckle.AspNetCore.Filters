@@ -34,10 +34,10 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode.ToString());
 
-            if (response.Equals(default(KeyValuePair<string, Response>)) == false && response.Value != null)
+            if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) == false && response.Value != null)
             {
                 var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
-                response.Value.Examples = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: true);
+                // response.Value.Example = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: true);
             }
         }
     }
