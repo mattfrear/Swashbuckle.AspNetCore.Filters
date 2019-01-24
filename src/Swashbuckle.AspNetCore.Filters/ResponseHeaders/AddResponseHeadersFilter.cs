@@ -1,5 +1,4 @@
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Globalization;
@@ -25,7 +24,7 @@ namespace Swashbuckle.AspNetCore.Filters
                         response.Headers = new Dictionary<string, OpenApiHeader>();
                     }
 
-                    response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, /* Type = attr.Type */ });
+                    response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, Schema = new OpenApiSchema { Type = attr.Type } });
                 }
             }
         }

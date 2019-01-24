@@ -44,7 +44,7 @@ namespace WebApi2._0_Swashbuckle4
 
                 options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
 
-                // options.OperationFilter<AddResponseHeadersFilter>();
+                options.OperationFilter<AddResponseHeadersFilter>();
 
                 // options.DescribeAllEnumsAsStrings();
 
