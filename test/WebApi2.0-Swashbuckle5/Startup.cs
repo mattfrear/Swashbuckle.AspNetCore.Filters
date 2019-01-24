@@ -40,7 +40,7 @@ namespace WebApi2._0_Swashbuckle4
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v2" });
 
-                // options.ExampleFilters();
+                options.ExampleFilters();
 
                 options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
 

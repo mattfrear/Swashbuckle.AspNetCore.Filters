@@ -39,17 +39,8 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var schema = schemaRegistry.GetOrRegister(requestType);
 
-            // var bodyParameters = operation.Parameters.Where(p => p.In == "body").Cast<BodyParameter>();
-            // var bodyParameter = bodyParameters.FirstOrDefault(p => p?.Schema.Ref == schema.Reference || p.Schema?.Items?.Reference == schema.Reference);
-            string bodyParameter = null;
-            if (bodyParameter == null)
-            {
-                return; // The type in their [SwaggerRequestExample(typeof(requestType), ...] is not passed to their controller action method
-            }
-
             var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
 
-            // var formattedExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
             var formattedExample = example.ToOpenApiObject();
 
             string name = SchemaDefinitionName(requestType, schema);
@@ -70,7 +61,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
             else
             {
-                // bodyParameter.Schema.Example = formattedExample; // set example on the request paths/parameters/schema/example property
+                operation.RequestBody.Content["application/json"].Example = formattedExample;
             }
         }
 
