@@ -14,7 +14,7 @@
       Fix Issue #84 - allow security schema to have a name other than "oauth2" via configuration
     </PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCoreFilters.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>
