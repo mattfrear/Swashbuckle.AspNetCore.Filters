@@ -3,3 +3,5 @@
 3. dotnet pack --configuration release
 4. cd src\Swashbuckle.AspNetCore.Filters\bin\Release
 5. nuget push Swashbuckle.AspNetCore.Filters.1.2.0.nupkg MySecretNuGetApiKeyHere -Source https://www.nuget.org/api/v2/package
+6. git tag -a 1.2.5 -m 'Published 1.2.5 to nuget.org'
+7. git push --follow-tags

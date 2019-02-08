@@ -5,8 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+Nothing
+
+## [4.5.4] - 2018-02-08
 ### Deprecated
 - Marked AddFileParamTypesOperationFilter as Obsolete, because Swashbuckle 4.0 supports IFormFile directly.
+### Changed
+- Issue #84 - allow security schema to have a name other than "oauth2" via configuration
 
 ## [4.5.3] - 2018-01-14
 ### Fixed
