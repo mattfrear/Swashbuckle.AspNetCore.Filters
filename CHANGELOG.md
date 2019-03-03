@@ -5,8 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- None
+
+
+### [4.5.5] - 2018-03-04
 ### Fixed
 - Repository URL in NuGet package
+- Issue #89 - use Json.NET SerializationBinder property when generating examples. Thanks @dmitry-baryshev for the PR.
 
 ## [4.5.4] - 2018-02-08
 ### Deprecated
