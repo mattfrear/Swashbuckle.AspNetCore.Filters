@@ -62,6 +62,9 @@ namespace Swashbuckle.AspNetCore.Filters
                 PreserveReferencesHandling = controllerSerializerSettings.PreserveReferencesHandling,
                 ReferenceLoopHandling = controllerSerializerSettings.ReferenceLoopHandling,
                 TypeNameHandling = controllerSerializerSettings.TypeNameHandling,
+#if !NETSTANDARD1_6
+                SerializationBinder = controllerSerializerSettings.SerializationBinder
+#endif
             };
         }
     }
