@@ -5,8 +5,10 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class JsonFormatter
     {
-        public object FormatJson(object examples, JsonSerializerSettings serializerSettings, bool includeMediaType)
+        public string FormatJson(object examples, JsonSerializerSettings serializerSettings, bool includeMediaType)
         {
+            serializerSettings.Formatting = Formatting.Indented;
+
             if (includeMediaType)
             {
                 var wrappedExamples = new Dictionary<string, object>
@@ -16,17 +18,10 @@ namespace Swashbuckle.AspNetCore.Filters
                     }
                 };
 
-                return SerializeDeserialize(wrappedExamples, serializerSettings);
+                return JsonConvert.SerializeObject(wrappedExamples, serializerSettings);
             }
 
-            return SerializeDeserialize(examples, serializerSettings);
-        }
-
-        private static object SerializeDeserialize(object examples, JsonSerializerSettings serializerSettings)
-        {
-            var jsonString = JsonConvert.SerializeObject(examples, serializerSettings);
-            var result = JsonConvert.DeserializeObject(jsonString);
-            return result;
+            return JsonConvert.SerializeObject(examples, serializerSettings);
         }
     }
 }

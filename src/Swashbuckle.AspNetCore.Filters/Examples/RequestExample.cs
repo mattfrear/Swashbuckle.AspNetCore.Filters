@@ -41,7 +41,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
 
-            var formattedExample = example.ToOpenApiObject();
+            var formattedExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
 
             string name = SchemaDefinitionName(requestType, schema);
 
@@ -56,12 +56,12 @@ namespace Swashbuckle.AspNetCore.Filters
                 var definitionToUpdate = schemaRegistry.Schemas[name];
                 if (definitionToUpdate.Example == null)
                 {
-                    definitionToUpdate.Example = formattedExample;
+                    definitionToUpdate.Example = new OpenApiString(formattedExample);
                 }
             }
             else
             {
-                operation.RequestBody.Content["application/json"].Example = formattedExample;
+                operation.RequestBody.Content["application/json"].Example = new OpenApiString(formattedExample);
             }
         }
 

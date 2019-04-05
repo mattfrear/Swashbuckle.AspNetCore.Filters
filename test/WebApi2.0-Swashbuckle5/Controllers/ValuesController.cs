@@ -98,32 +98,20 @@ namespace WebApi.Controllers
             return people;
         }
 
-        /// <summary>
-        /// Upload a file
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpPost("upload")]
-        public IActionResult UploadFile(IFormFile file)
-        {
-            return Ok();
-        }
-
-        /// <summary>
-        /// Gets dynamic data passing a Dictionary of string, object and returns a Dictionary
-        /// </summary>
-        /// <param name="dynamicDictionary"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("api/values/dictionary")]
-        [SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
-        [SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
-        [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
-        public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
-        {
-            return new Dictionary<string, object> { { "Some", 1 } };
-        }
+        ///// <summary>
+        ///// Gets dynamic data passing a Dictionary of string, object and returns a Dictionary
+        ///// </summary>
+        ///// <param name="dynamicDictionary"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //[Route("api/values/dictionary")]
+        //[SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
+        //[SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
+        //[SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        //public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
+        //{
+        //    return new Dictionary<string, object> { { "Some", 1 } };
+        //}
 
         /// <summary>
         /// Gets dynamic data passing a DynamicData and returning a DynamicData
@@ -173,9 +161,9 @@ namespace WebApi.Controllers
             return personResponse;
         }
 
-        [HttpPost("api/values/title")]
-        public void NullableEnumTest([FromBody]Title? someEnum)
-        {
-        }
+        //[HttpPost("api/values/title")]
+        //public void NullableEnumTest([FromBody]Title? someEnum)
+        //{
+        //}
     }
 }

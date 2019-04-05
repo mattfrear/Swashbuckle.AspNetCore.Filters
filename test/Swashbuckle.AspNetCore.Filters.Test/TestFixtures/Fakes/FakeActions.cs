@@ -29,7 +29,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             throw new NotImplementedException();
         }
 
-        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter), renderNulls: false)]
         public IActionResult AnnotatedWithSwaggerRequestExampleAttribute(PersonRequest personRequest)
         {
             throw new NotImplementedException();
