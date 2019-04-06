@@ -59,7 +59,12 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 object example = examplesProvider?.GetExamples();
 
-                responseExample.SetResponseExampleForStatusCode(operation, attr.StatusCode, example, attr.ContractResolver, attr.JsonConverter);
+                responseExample.SetResponseExampleForStatusCode(
+                    operation,
+                    attr.StatusCode,
+                    example,
+                    attr.ContractResolver,
+                    attr.JsonConverter);
             }
         }
     }

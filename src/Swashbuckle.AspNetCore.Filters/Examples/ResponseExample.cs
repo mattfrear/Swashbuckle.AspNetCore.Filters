@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Any;
 using Swashbuckle.AspNetCore.Filters.Extensions;
+using System;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -44,9 +45,8 @@ namespace Swashbuckle.AspNetCore.Filters
                 {
                     if (content.Key.Contains("xml"))
                     {
-                        // todo, figure this out
-                        //var xml = example.XmlSerialize();
-                        //content.Value.Example = new OpenApiString(xml);
+                        var xml = example.XmlSerialize();
+                        content.Value.Example = new OpenApiString(xml);
                     }
                     else
                     {

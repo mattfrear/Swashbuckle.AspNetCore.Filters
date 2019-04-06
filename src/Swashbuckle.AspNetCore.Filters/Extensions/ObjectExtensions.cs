@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Swashbuckle.AspNetCore.Filters.Extensions
@@ -13,12 +15,15 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
                 return string.Empty;
             }
 
-            var xmlserializer = new XmlSerializer(typeof(T));
+            var xmlserializer = new XmlSerializer(value.GetType());
             var stringWriter = new StringWriter();
             using (var writer = XmlWriter.Create(stringWriter))
             {
                 xmlserializer.Serialize(writer, value);
-                return stringWriter.ToString();
+                var uglyXml = stringWriter.ToString();
+
+                var doc = XDocument.Parse(uglyXml);
+                return doc.ToString();
             }
         }
     }
