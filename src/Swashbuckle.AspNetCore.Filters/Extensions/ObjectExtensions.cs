@@ -1,18 +1,25 @@
-﻿using Microsoft.OpenApi.Any;
+﻿using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Swashbuckle.AspNetCore.Filters.Extensions
 {
     public static class ObjectExtensions
     {
-        public static OpenApiObject ToOpenApiObject(this object value)
+        public static string XmlSerialize<T>(this T value)
         {
-            var result = new OpenApiObject();
-            foreach (var property in value.GetType().GetProperties())
+            if (value == null)
             {
-                result.Add(property.Name, new OpenApiString(property.GetValue(value).ToString()));
+                return string.Empty;
             }
 
-            return result;
+            var xmlserializer = new XmlSerializer(typeof(T));
+            var stringWriter = new StringWriter();
+            using (var writer = XmlWriter.Create(stringWriter))
+            {
+                xmlserializer.Serialize(writer, value);
+                return stringWriter.ToString();
+            }
         }
     }
 }

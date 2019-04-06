@@ -4,6 +4,8 @@ using System.Linq;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Any;
+using Swashbuckle.AspNetCore.Filters.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -37,7 +39,20 @@ namespace Swashbuckle.AspNetCore.Filters
             if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) == false && response.Value != null)
             {
                 var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
-                // response.Value.Example = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: true);
+                var jsonExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: true);
+                foreach (var content in response.Value.Content)
+                {
+                    if (content.Key.Contains("xml"))
+                    {
+                        // todo, figure this out
+                        //var xml = example.XmlSerialize();
+                        //content.Value.Example = new OpenApiString(xml);
+                    }
+                    else
+                    {
+                        content.Value.Example = new OpenApiString(jsonExample);
+                    }
+                }
             }
         }
     }
