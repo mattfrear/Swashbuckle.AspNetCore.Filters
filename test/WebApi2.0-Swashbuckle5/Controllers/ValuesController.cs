@@ -98,20 +98,20 @@ namespace WebApi.Controllers
             return people;
         }
 
-        ///// <summary>
-        ///// Gets dynamic data passing a Dictionary of string, object and returns a Dictionary
-        ///// </summary>
-        ///// <param name="dynamicDictionary"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //[Route("api/values/dictionary")]
-        //[SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
-        //[SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
-        //[SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
-        //public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
-        //{
-        //    return new Dictionary<string, object> { { "Some", 1 } };
-        //}
+        /// <summary>
+        /// Gets dynamic data passing a Dictionary of string, object and returns a Dictionary
+        /// </summary>
+        /// <param name="dynamicDictionary"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/values/dictionary")]
+        [SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
+        [SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
+        [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
+        {
+            return new Dictionary<string, object> { { "Some", 1 } };
+        }
 
         /// <summary>
         /// Gets dynamic data passing a DynamicData and returning a DynamicData
@@ -144,7 +144,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("api/values/dependencyinjectionperson")]
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
-        [SwaggerResponseExample(200, typeof(PersonResponseDependencyInjectionExample))]
+        [SwaggerResponseExample(200, typeof(PersonRequestDependencyInjectionExample))]
         public PersonResponse PostDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
@@ -161,9 +161,9 @@ namespace WebApi.Controllers
             return personResponse;
         }
 
-        //[HttpPost("api/values/title")]
-        //public void NullableEnumTest([FromBody]Title? someEnum)
-        //{
-        //}
+        [HttpPost("api/values/title")]
+        public void NullableEnumTest([FromBody]Title? someEnum)
+        {
+        }
     }
 }

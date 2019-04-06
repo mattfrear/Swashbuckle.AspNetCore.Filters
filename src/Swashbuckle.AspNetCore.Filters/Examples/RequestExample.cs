@@ -24,10 +24,8 @@ namespace Swashbuckle.AspNetCore.Filters
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
         }
 
-        public void SetRequestExampleForType(
+        public void SetRequestExampleForOperation(
             OpenApiOperation operation,
-            ISchemaRegistry schemaRegistry,
-            Type requestType,
             object example,
             IContractResolver contractResolver = null,
             JsonConverter jsonConverter = null)
@@ -37,31 +35,13 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            var schema = schemaRegistry.GetOrRegister(requestType);
-
             var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
 
-            var formattedExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
+            var jsonExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
 
-            string name = SchemaDefinitionName(requestType, schema);
-
-            if (string.IsNullOrEmpty(name))
+            foreach (var content in operation.RequestBody.Content.Where(c => c.Key.Contains("json")))
             {
-                return;
-            }
-
-            // set the example on the object in the schema registry (this is what swagger-ui will display)
-            if (schemaRegistry.Schemas.ContainsKey(name))
-            {
-                var definitionToUpdate = schemaRegistry.Schemas[name];
-                if (definitionToUpdate.Example == null)
-                {
-                    definitionToUpdate.Example = new OpenApiString(formattedExample);
-                }
-            }
-            else
-            {
-                operation.RequestBody.Content["application/json"].Example = new OpenApiString(formattedExample);
+                content.Value.Example = new OpenApiString(jsonExample);
             }
         }
 

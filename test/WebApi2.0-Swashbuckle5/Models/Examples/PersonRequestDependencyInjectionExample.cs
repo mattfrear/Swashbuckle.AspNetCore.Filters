@@ -3,11 +3,11 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace WebApi.Models.Examples
 {
-    internal class PersonResponseDependencyInjectionExample : IExamplesProvider
+    internal class PersonRequestDependencyInjectionExample : IExamplesProvider
     {
         private readonly IHostingEnvironment hostingEnvironment;
 
-        public PersonResponseDependencyInjectionExample(IHostingEnvironment hostingEnvironment)
+        public PersonRequestDependencyInjectionExample(IHostingEnvironment hostingEnvironment)
         {
             this.hostingEnvironment = hostingEnvironment;
         }

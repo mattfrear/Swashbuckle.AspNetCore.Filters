@@ -44,7 +44,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 object example = examplesProvider?.GetExamples();
 
-                requestExample.SetRequestExampleForType(operation, context.SchemaRegistry, attr.RequestType, example, attr.ContractResolver, attr.JsonConverter);
+                requestExample.SetRequestExampleForOperation(operation, example, attr.ContractResolver, attr.JsonConverter);
             }
         }
 
