@@ -32,6 +32,7 @@ namespace WebApi2._0_Swashbuckle4
         {
             services
             .AddMvc(options => {
+                options.InputFormatters.Add(new XmlSerializerInputFormatter());
                 options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
             })
             .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()));

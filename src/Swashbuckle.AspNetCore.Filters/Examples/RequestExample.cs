@@ -39,9 +39,17 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var jsonExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
 
-            foreach (var content in operation.RequestBody.Content.Where(c => c.Key.Contains("json")))
+            foreach (var content in operation.RequestBody.Content)
             {
-                content.Value.Example = new OpenApiString(jsonExample);
+                if (content.Key.Contains("xml"))
+                {
+                    var xml = example.XmlSerialize();
+                    content.Value.Example = new OpenApiString(xml);
+                }
+                else
+                {
+                    content.Value.Example = new OpenApiString(jsonExample);
+                }
             }
         }
 
