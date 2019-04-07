@@ -19,23 +19,23 @@ namespace WebApi.Controllers
     [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
     public class ValuesController : Controller
     {
-        /// <summary>
-        /// Gets a person
-        /// </summary>
-        /// <param name="personId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("api/values/person/{personId}")]
-        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
-        [SwaggerResponseExample(200, typeof(PersonResponseExample))]
-        [SwaggerResponse(500, type: null, description: "There was an unexpected error")]
-        [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
-        [Authorize("Customer")]
-        public PersonResponse GetPerson(int personId)
-        {
-            var personResponse = new PersonResponse { Id = personId, FirstName = "Dave" };
-            return personResponse;
-        }
+        ///// <summary>
+        ///// Gets a person
+        ///// </summary>
+        ///// <param name="personId"></param>
+        ///// <returns></returns>
+        //[HttpGet]
+        //[Route("api/values/person/{personId}")]
+        //[SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        //[SwaggerResponseExample(200, typeof(PersonResponseExample))]
+        //[SwaggerResponse(500, type: null, description: "There was an unexpected error")]
+        //[SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
+        //[Authorize("Customer")]
+        //public PersonResponse GetPerson(int personId)
+        //{
+        //    var personResponse = new PersonResponse { Id = personId, FirstName = "Dave" };
+        //    return personResponse;
+        //}
 
         /// <summary>
         /// Posts a person
@@ -60,15 +60,15 @@ namespace WebApi.Controllers
             return personResponse;
         }
 
-        [HttpPost]
-        [Route("api/values/male/")]
-        // [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
-        [ProducesResponseType(typeof(PersonResponse), 200)]
-        public PersonResponse PostMale([FromBody]MaleRequest maleRequest)
-        {
-            var personResponse = new PersonResponse { Id = 7, FirstName = "Dave" };
-            return personResponse;
-        }
+        //[HttpPost]
+        //[Route("api/values/male/")]
+        //// [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        //[ProducesResponseType(typeof(PersonResponse), 200)]
+        //public PersonResponse PostMale([FromBody]MaleRequest maleRequest)
+        //{
+        //    var personResponse = new PersonResponse { Id = 7, FirstName = "Dave" };
+        //    return personResponse;
+        //}
 
         [HttpPost]
         [Route("api/values/genericperson")]
@@ -87,83 +87,83 @@ namespace WebApi.Controllers
             return personResponse;
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("api/values/listperson")]
-        [SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>), description: "Successfully found the people")]
-        [SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample), jsonConverter: typeof(StringEnumConverter))]
-        public IEnumerable<PersonResponse> PostPersonList([FromBody]List<PeopleRequest> peopleRequest)
-        {
-            var people = new[] { new PersonResponse { Id = 1, FirstName = "Sally" } };
-            return people;
-        }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[Route("api/values/listperson")]
+        //[SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>), description: "Successfully found the people")]
+        //[SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        //public IEnumerable<PersonResponse> PostPersonList([FromBody]List<PeopleRequest> peopleRequest)
+        //{
+        //    var people = new[] { new PersonResponse { Id = 1, FirstName = "Sally" } };
+        //    return people;
+        //}
 
-        /// <summary>
-        /// Gets dynamic data passing a Dictionary of string, object and returns a Dictionary
-        /// </summary>
-        /// <param name="dynamicDictionary"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("api/values/dictionary")]
-        [SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
-        [SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
-        [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
-        public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
-        {
-            return new Dictionary<string, object> { { "Some", 1 } };
-        }
+        ///// <summary>
+        ///// Gets dynamic data passing a Dictionary of string, object and returns a Dictionary
+        ///// </summary>
+        ///// <param name="dynamicDictionary"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //[Route("api/values/dictionary")]
+        //[SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
+        //[SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
+        //[SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        //public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
+        //{
+        //    return new Dictionary<string, object> { { "Some", 1 } };
+        //}
 
-        /// <summary>
-        /// Gets dynamic data passing a DynamicData and returning a DynamicData
-        /// </summary>
-        /// <param name="personRequest"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("api/values/data")]
-        [SwaggerResponse(200, type: typeof(DynamicData), description: "Successfully found the data")]
-        [SwaggerResponseExample(200, typeof(DynamicDataResponseExample))]
-        [SwaggerRequestExample(typeof(DynamicData), typeof(DynamicDataRequestExample), jsonConverter: typeof(StringEnumConverter))]
-        public DynamicData GetData([FromBody]DynamicData personRequest)
-        {
-            var personResponse = new DynamicData();
-            personResponse.Payload.Add("Property", "val");
-            return personResponse;
-        }
+        ///// <summary>
+        ///// Gets dynamic data passing a DynamicData and returning a DynamicData
+        ///// </summary>
+        ///// <param name="personRequest"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //[Route("api/values/data")]
+        //[SwaggerResponse(200, type: typeof(DynamicData), description: "Successfully found the data")]
+        //[SwaggerResponseExample(200, typeof(DynamicDataResponseExample))]
+        //[SwaggerRequestExample(typeof(DynamicData), typeof(DynamicDataRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        //public DynamicData GetData([FromBody]DynamicData personRequest)
+        //{
+        //    var personResponse = new DynamicData();
+        //    personResponse.Payload.Add("Property", "val");
+        //    return personResponse;
+        //}
 
-        [HttpPost]
-        [Route("api/values/differentperson")]
-        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2), jsonConverter: typeof(StringEnumConverter))]
-        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
-        [SwaggerResponseExample(200, typeof(PersonResponseExample2))]
-        public PersonResponse PostDifferentPerson([FromBody]PersonRequest personRequest)
-        {
-            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
-            return personResponse;
-        }
+        //[HttpPost]
+        //[Route("api/values/differentperson")]
+        //[SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2), jsonConverter: typeof(StringEnumConverter))]
+        //[SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        //[SwaggerResponseExample(200, typeof(PersonResponseExample2))]
+        //public PersonResponse PostDifferentPerson([FromBody]PersonRequest personRequest)
+        //{
+        //    var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+        //    return personResponse;
+        //}
 
-        [HttpPost]
-        [Route("api/values/dependencyinjectionperson")]
-        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
-        [SwaggerResponseExample(200, typeof(PersonRequestDependencyInjectionExample))]
-        public PersonResponse PostDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
-        {
-            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
-            return personResponse;
-        }
+        //[HttpPost]
+        //[Route("api/values/dependencyinjectionperson")]
+        //[SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
+        //[SwaggerResponseExample(200, typeof(PersonRequestDependencyInjectionExample))]
+        //public PersonResponse PostDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
+        //{
+        //    var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+        //    return personResponse;
+        //}
 
-        [HttpPatch]
-        [Route("api/values/patchperson")]
-        [SwaggerRequestExample(typeof(JsonPatchDocument<PersonRequest>), typeof(JsonPatchPersonRequestExample))] // ASP.NET Core 1.1
-        [SwaggerRequestExample(typeof(Operation), typeof(JsonPatchPersonRequestExample))] // ASP.NET Core 2.0
-        public PersonResponse JsonPatchPerson([FromBody]JsonPatchDocument<PersonRequest> personRequest)
-        {
-            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
-            return personResponse;
-        }
+        //[HttpPatch]
+        //[Route("api/values/patchperson")]
+        //[SwaggerRequestExample(typeof(JsonPatchDocument<PersonRequest>), typeof(JsonPatchPersonRequestExample))] // ASP.NET Core 1.1
+        //[SwaggerRequestExample(typeof(Operation), typeof(JsonPatchPersonRequestExample))] // ASP.NET Core 2.0
+        //public PersonResponse JsonPatchPerson([FromBody]JsonPatchDocument<PersonRequest> personRequest)
+        //{
+        //    var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
+        //    return personResponse;
+        //}
 
-        [HttpPost("api/values/title")]
-        public void NullableEnumTest([FromBody]Title? someEnum)
-        {
-        }
+        //[HttpPost("api/values/title")]
+        //public void NullableEnumTest([FromBody]Title? someEnum)
+        //{
+        //}
     }
 }

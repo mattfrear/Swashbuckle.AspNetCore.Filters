@@ -35,51 +35,24 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
+            if (operation.RequestBody == null || operation.RequestBody.Content == null)
+            {
+                return;
+            }
 
-            var jsonExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false);
+            var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
+            var jsonExample = new OpenApiString(jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false));
+
+            OpenApiString xmlExample = null;
+            if (operation.RequestBody.Content.Keys.Any(k => k.Contains("xml")))
+            {
+                xmlExample = new OpenApiString(example.XmlSerialize());
+            }
 
             foreach (var content in operation.RequestBody.Content)
             {
-                if (content.Key.Contains("xml"))
-                {
-                    var xml = example.XmlSerialize();
-                    content.Value.Example = new OpenApiString(xml);
-                }
-                else
-                {
-                    content.Value.Example = new OpenApiString(jsonExample);
-                }
+                content.Value.Example = content.Key.Contains("xml") ? xmlExample : jsonExample;
             }
-        }
-
-        private static string SchemaDefinitionName(Type requestType, OpenApiSchema schema)
-        {
-            string name = null;
-            // var name = attr.RequestType.Name; // this doesn't work for generic types, so need to to schema.ref split
-            var parts = schema.Reference.ReferenceV2.Split('/');
-
-            if (parts != null)
-            {
-                name = parts.Last();
-            }
-            else
-            {
-                // schema.Ref can be null for some types, so we have to try get it by attr.RequestType.Name
-                if (requestType.GetTypeInfo().IsGenericType)
-                {
-                    // remove `# from the generic type name
-                    var friendlyName = requestType.Name.Remove(requestType.Name.IndexOf('`'));
-                    // for generic, Schema will be TypeName[GenericTypeName]
-                    name = $"{friendlyName}[{string.Join(",", requestType.GetGenericArguments().Select(a => a.Name).ToList())}]";
-                }
-                else
-                {
-                    name = requestType.Name;
-                }
-            }
-
-            return name;
         }
     }
 }

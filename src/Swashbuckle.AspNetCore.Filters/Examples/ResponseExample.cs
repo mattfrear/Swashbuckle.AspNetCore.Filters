@@ -40,18 +40,17 @@ namespace Swashbuckle.AspNetCore.Filters
             if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) == false && response.Value != null)
             {
                 var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
-                var jsonExample = jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: true);
+                var jsonExample = new OpenApiString(jsonFormatter.FormatJson(example, serializerSettings, includeMediaType: false));
+
+                OpenApiString xmlExample = null;
+                if (response.Value.Content.Keys.Any(k => k.Contains("xml")))
+                {
+                    xmlExample = new OpenApiString(example.XmlSerialize());
+                }
+
                 foreach (var content in response.Value.Content)
                 {
-                    if (content.Key.Contains("xml"))
-                    {
-                        var xml = example.XmlSerialize();
-                        content.Value.Example = new OpenApiString(xml);
-                    }
-                    else
-                    {
-                        content.Value.Example = new OpenApiString(jsonExample);
-                    }
+                    content.Value.Example = content.Key.Contains("xml") ? xmlExample : jsonExample;
                 }
             }
         }
