@@ -11,10 +11,10 @@
     <Copyright>2019</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
     <PackageReleaseNotes>
-      Fix Issue #80 - allow interfaces when resolving generic IExampleProvider
+      Fix Issue #89 - use Json.NET SerializationBinder property when generating examples
     </PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCoreFilters.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>

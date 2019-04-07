@@ -41,7 +41,11 @@ namespace Swashbuckle.AspNetCore.Filters
 
             return new JsonSerializerSettings
             {
-                // Binder = controllerSerializerSettings.Binder, // Obsolete in Json.NET 10.0 - experiment
+#if NETSTANDARD1_6
+                Binder = controllerSerializerSettings.Binder,
+#else
+                SerializationBinder = controllerSerializerSettings.SerializationBinder,
+#endif
                 Converters = new List<JsonConverter>(controllerSerializerSettings.Converters),
                 CheckAdditionalContent = controllerSerializerSettings.CheckAdditionalContent,
                 ConstructorHandling = controllerSerializerSettings.ConstructorHandling,
@@ -61,7 +65,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 ObjectCreationHandling = controllerSerializerSettings.ObjectCreationHandling,
                 PreserveReferencesHandling = controllerSerializerSettings.PreserveReferencesHandling,
                 ReferenceLoopHandling = controllerSerializerSettings.ReferenceLoopHandling,
-                TypeNameHandling = controllerSerializerSettings.TypeNameHandling,
+                TypeNameHandling = controllerSerializerSettings.TypeNameHandling
             };
         }
     }

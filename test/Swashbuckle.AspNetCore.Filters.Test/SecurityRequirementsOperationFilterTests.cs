@@ -36,6 +36,25 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
+        public void Apply_SetsAuthorize_WithNoPolicy_WhenCustomSecuritySchemaIsSet()
+        {
+            // Arrange
+            const string securitySchemaName = "customSchema";
+            var sut = new SecurityRequirementsOperationFilter(true, securitySchemaName);
+            var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string, Response>() };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.Authorize));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Security.Count.ShouldBe(1);
+            var security = operation.Security[0];
+            security.ShouldContainKey(securitySchemaName);
+            security[securitySchemaName].Count().ShouldBe(0);
+        }
+
+        [Fact]
         public void Apply_DoesNotSetSecurity_WhenNoAuthorize()
         {
             // Arrange

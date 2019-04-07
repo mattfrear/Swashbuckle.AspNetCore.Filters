@@ -13,6 +13,7 @@ namespace Swashbuckle.AspNetCore.Filters
         // inspired by https://github.com/domaindrivendev/Swashbuckle.AspNetCore/blob/master/test/WebSites/OAuth2Integration/ResourceServer/Swagger/SecurityRequirementsOperationFilter.cs
 
         private readonly bool includeUnauthorizedAndForbiddenResponses;
+        private readonly string securitySchemaName;
         private readonly Func<IEnumerable<T>, IEnumerable<string>> policySelector;
 
         /// <summary>
@@ -20,10 +21,15 @@ namespace Swashbuckle.AspNetCore.Filters
         /// </summary>
         /// <param name="policySelector">Used to select the authorization policy from the attribute e.g. (a => a.Policy)</param>
         /// <param name="includeUnauthorizedAndForbiddenResponses">If true (default), then 401 and 403 responses will be added to every operation</param>
-        public SecurityRequirementsOperationFilter(Func<IEnumerable<T>, IEnumerable<string>> policySelector, bool includeUnauthorizedAndForbiddenResponses = true)
+        /// <param name="securitySchemaName">Name of the security schema. Default value is <c>"oauth2"</c></param>
+        public SecurityRequirementsOperationFilter(
+            Func<IEnumerable<T>, IEnumerable<string>> policySelector, 
+            bool includeUnauthorizedAndForbiddenResponses = true, 
+            string securitySchemaName = "oauth2")
         {
             this.policySelector = policySelector;
             this.includeUnauthorizedAndForbiddenResponses = includeUnauthorizedAndForbiddenResponses;
+            this.securitySchemaName = securitySchemaName;
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -52,7 +58,7 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 new OpenApiSecurityRequirement
                 {
-                    { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" } }, policies.ToList() }
+                    { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = securitySchemaName } }, policies.ToList() }
                 }
             };
         }

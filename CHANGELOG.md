@@ -5,8 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Restore Json.NET Binder property for .NET Standard 1.6
+
+### [4.5.5] - 2018-03-04
+### Fixed
+- Repository URL in NuGet package
+- Issue #89 - use Json.NET SerializationBinder property when generating examples. Thanks @dmitry-baryshev for the PR.
+
+## [4.5.4] - 2018-02-08
 ### Deprecated
 - Marked AddFileParamTypesOperationFilter as Obsolete, because Swashbuckle 4.0 supports IFormFile directly.
+### Changed
+- Issue #84 - allow security schema to have a name other than "oauth2" via configuration
 
 ## [4.5.3] - 2018-01-14
 ### Fixed
