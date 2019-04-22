@@ -140,118 +140,155 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample[1].ShouldBe("there");
         }
 
-        //        [Fact]
-        //        public void Apply_SetsRequestExamples_FromMethodAttributes()
-        //        {
-        //            // Arrange
-        //            serviceProvider.GetService(typeof(IExamplesProvider<PersonRequest>)).Returns(new PersonRequestAutoExample());
-        //            var personRequestParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } };
-        //            var operation = new Operation { OperationId = "foobar", Parameters = new[] { personRequestParameter } };
-        //            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(PersonRequest) } };
-        //            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.PersonRequestUnannotated), parameterDescriptions);
+        [Fact]
+        public void Apply_SetsRequestExamples_FromMethodAttributes()
+        {
+            // Arrange
+            serviceProvider.GetService(typeof(IExamplesProvider<PersonRequest>)).Returns(new PersonRequestAutoExample());
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(PersonRequest) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.PersonRequestUnannotated), parameterDescriptions);
 
-        //            // Act
-        //            sut.Apply(operation, filterContext);
+            // Act
+            sut.Apply(operation, filterContext);
 
-        //            // Assert
-        //            var actualSchemaExample = (JObject)filterContext.SchemaRegistry.Definitions["PersonRequest"].Example;
-        //            var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
-        //            AssertPersonRequestExampleMatches(actualSchemaExample, expectedExample);
-        //        }
+            // Assert
+            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
+            var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
+            AssertPersonRequestExampleMatches(actualExample, expectedExample);
+        }
 
-        //        [Fact]
-        //        public void Apply_DoesNotSetRequestExamples_FromMethodAttributes_WhenSwaggerRequestExampleAttributePresent()
-        //        {
-        //            // Arrange
-        //            serviceProvider.GetService(typeof(IExamplesProvider<PersonRequest>)).Returns(new PersonRequestAutoExample());
-        //            var personRequestParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } };
-        //            var operation = new Operation { OperationId = "foobar", Parameters = new[] { personRequestParameter } };
-        //            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(PersonRequest) } };
-        //            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute), parameterDescriptions);
+        [Fact]
+        public void Apply_DoesNotSetRequestExamples_FromMethodAttributes_WhenSwaggerRequestExampleAttributePresent()
+        {
+            // Arrange
+            serviceProvider.GetService(typeof(IExamplesProvider<PersonRequest>)).Returns(new PersonRequestAutoExample());
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(PersonRequest) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute), parameterDescriptions);
 
-        //            // Act
-        //            sut.Apply(operation, filterContext);
+            // Act
+            sut.Apply(operation, filterContext);
 
-        //            // Assert
-        //            filterContext.SchemaRegistry.Definitions.ShouldNotContainKey("PersonRequest");
+            // Assert
+            requestBody.Content["application/json"].Example.ShouldBeNull();
+        }
 
-        //            personRequestParameter.Schema.Example.ShouldBeNull();
-        //        }
+        [Fact]
+        public void Apply_SetsRequestExamplesForInterface_FromMethodAttributes()
+        {
+            // Arrange
+            serviceProvider.GetService(typeof(IExamplesProvider<IPersonRequest>)).Returns(new IPersonRequestAutoExample());
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(IPersonRequest) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.IPersonRequestUnannotated), parameterDescriptions);
 
-        //        [Fact]
-        //        public void Apply_SetsRequestExamplesForInterface_FromMethodAttributes()
-        //        {
-        //            // Arrange
-        //            serviceProvider.GetService(typeof(IExamplesProvider<IPersonRequest>)).Returns(new IPersonRequestAutoExample());
-        //            var personRequestParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/IPersonRequest" } };
-        //            var operation = new Operation { OperationId = "foobar", Parameters = new[] { personRequestParameter } };
-        //            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(IPersonRequest) } };
-        //            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.IPersonRequestUnannotated), parameterDescriptions);
+            // Act
+            sut.Apply(operation, filterContext);
 
-        //            // Act
-        //            sut.Apply(operation, filterContext);
+            // Assert
+            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
+            var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
+            AssertPersonRequestExampleMatches(actualExample, expectedExample);
+        }
 
-        //            // Assert
-        //            var actualSchemaExample = (JObject)filterContext.SchemaRegistry.Definitions["IPersonRequest"].Example;
-        //            var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
-        //            AssertPersonRequestExampleMatches(actualSchemaExample, expectedExample);
-        //        }
+        private static void AssertPersonRequestExampleMatches(PersonRequest actualExample, PersonRequest expectedExample)
+        {
+            actualExample.Title.ShouldBe(expectedExample.Title);
+            actualExample.FirstName.ShouldBe(expectedExample.FirstName);
+            actualExample.Age.ShouldBe(expectedExample.Age);
+        }
 
-        //        private static void AssertPersonRequestExampleMatches(JObject actualSchemaExample, PersonRequest expectedExample)
-        //        {
-        //            actualSchemaExample["firstName"].ShouldBe(expectedExample.FirstName);
-        //            actualSchemaExample["age"].ShouldBe(expectedExample.Age);
-        //        }
+        [Fact]
+        public void Apply_WhenRequestIsAntInt_ShouldNotThrowException()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(int) } };
 
-        //        [Fact]
-        //        public void Apply_WhenRequestIsAntInt_ShouldNotThrowException()
-        //        {
-        //            // Arrange
-        //            var operation = new Operation { OperationId = "foobar", Parameters = new[] { new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/PersonRequest" } } } };
-        //            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(int) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.RequestTakesAnInt), parameterDescriptions);
 
-        //            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.RequestTakesAnInt), parameterDescriptions);
+            // Act
+            sut.Apply(operation, filterContext);
+        }
 
-        //            // Act
-        //            sut.Apply(operation, filterContext);
-        //        }
+        [Fact]
+        public void Apply_WhenRequestIsANullableEnum_ShouldNotThrowException()
+        {
+            // Arrange
+            serviceProvider.GetService(typeof(IExamplesProvider<Title?>)).Returns(new TitleExample());
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() { Schema = new OpenApiSchema { Reference = new OpenApiReference { Id = "definitions/Title" } } } }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
 
-        //        [Fact]
-        //        public void Apply_WhenRequestIsANullableEnum_ShouldNotThrowException()
-        //        {
-        //            // Arrange
-        //            serviceProvider.GetService(typeof(IExamplesProvider<Title?>)).Returns(new TitleExample());
-        //            var titleParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/Title" } };
-        //            var operation = new Operation { OperationId = "foobar", Parameters = new[] { titleParameter } };
-        //            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(Title?) } };
-        //            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.RequestTakesANullableEnum), parameterDescriptions);
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(Title?) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.RequestTakesANullableEnum), parameterDescriptions);
 
-        //            // Act
-        //            sut.Apply(operation, filterContext);
+            // Act
+            sut.Apply(operation, filterContext);
 
-        //            // Assert
-        //            var actualParameterExample = Enum.Parse(typeof(Title), titleParameter.Schema.Example.ToString());
-        //            var expectedExample = new TitleExample().GetExamples().Value;
-        //            actualParameterExample.ShouldBe(expectedExample);
-        //        }
+            // Assert
+            var actualParameterExample = Enum.Parse(typeof(Title), ((OpenApiString)requestBody.Content["application/json"].Example).Value);
+            var expectedExample = new TitleExample().GetExamples().Value;
+            actualParameterExample.ShouldBe(expectedExample);
+        }
 
-        //        [Fact]
-        //        public void Apply_WhenPassingDictionary_ShouldSetExampleOnRequestSchema()
-        //        {
-        //            // Arrange
-        //            serviceProvider.GetService(typeof(IExamplesProvider<Dictionary<string, object>>)).Returns(new DictionaryAutoRequestExample());
-        //            var bodyParameter = new BodyParameter { In = "body", Schema = new Schema { Ref = "#/definitions/object" } };
-        //            var operation = new Operation { OperationId = "foobar", Parameters = new[] { bodyParameter } };
-        //            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(Dictionary<string, object>) } };
-        //            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.DictionaryRequestAttribute), parameterDescriptions);
+        [Fact]
+        public void Apply_WhenPassingDictionary_ShouldSetExampleOnRequestSchema()
+        {
+            // Arrange
+            serviceProvider.GetService(typeof(IExamplesProvider<Dictionary<string, object>>)).Returns(new DictionaryAutoRequestExample());
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() { Schema = new OpenApiSchema { Reference = new OpenApiReference { Id = "definitions/object" } } } }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(Dictionary<string, object>) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.DictionaryRequestAttribute), parameterDescriptions);
 
-        //            // Act
-        //            sut.Apply(operation, filterContext);
+            // Act
+            sut.Apply(operation, filterContext);
 
-        //            // Assert
-        //            var actualExample = (JObject)bodyParameter.Schema.Example;
-        //            actualExample["PropertyInt"].ShouldBe(1);
-        //            actualExample["PropertyString"].ShouldBe("Some string");
-        //        }
+            // Assert
+            var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
+            actualExample["PropertyInt"].ShouldBe(1);
+            actualExample["PropertyString"].ShouldBe("Some string");
+        }
     }
 }
