@@ -35,25 +35,29 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
 
-        //[Fact]
-        //public void Apply_SetsResponseExamples_FromMethodAttributes()
-        //{
-        //    // Arrange
-        //    var operation = new Operation { OperationId = "foobar", Responses = new Dictionary<string,Response>() };
-        //    var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute));
-        //    SetSwaggerResponses(operation, filterContext);
+        [Fact]
+        public void Apply_SetsResponseExamples_FromMethodAttributes()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response );
 
-        //    // Act
-        //    sut.Apply(operation, filterContext);
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute));
+            SetSwaggerResponses(operation, filterContext);
 
-        //    // Assert
-        //    var examples = (JObject)operation.Responses["200"].Examples;
-        //    var actualExample = examples["application/json"];
+            // Act
+            sut.Apply(operation, filterContext);
 
-        //    var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
-        //    actualExample["id"].ShouldBe(expectedExample.Id);
-        //    actualExample["first"].ShouldBe(expectedExample.FirstName);
-        //}
+            // Assert
+            var examples = operation.Responses["200"].Content;
+            var value = (OpenApiString)examples["application/json"].Example;
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(value.Value);
+
+            var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
+            actualExample.Id.ShouldBe(expectedExample.Id);
+            actualExample.FirstName.ShouldBe(expectedExample.FirstName);
+        }
 
         //[Fact]
         //public void Apply_SetsResponseExamples_FromControllerAttributes()
