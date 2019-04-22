@@ -1,18 +1,16 @@
-﻿using Xunit;
-using Swashbuckle.AspNetCore.Swagger;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using NSubstitute;
 using Shouldly;
-using System.Collections.Generic;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using NSubstitute;
-using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Any;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -41,7 +39,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Arrange
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
-            operation.Responses.Add("200", response );
+            operation.Responses.Add("200", response);
 
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute));
             SetSwaggerResponses(operation, filterContext);
@@ -50,34 +48,34 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var examples = operation.Responses["200"].Content;
-            var value = (OpenApiString)examples["application/json"].Example;
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(value.Value);
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiString)response.Content["application/json"].Example).Value);
 
             var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
         }
 
-        //[Fact]
-        //public void Apply_SetsResponseExamples_FromControllerAttributes()
-        //{
-        //    // Arrange
-        //    var operation = new Operation { Summary = "Test summary", Responses = new Dictionary<string, Response>() };
-        //    var filterContext = FilterContextFor(typeof(FakeControllers.SwaggerResponseExampleController), nameof(FakeControllers.SwaggerResponseExampleController.None));
-        //    SetSwaggerResponses(operation, filterContext);
+        [Fact]
+        public void Apply_SetsResponseExamples_FromControllerAttributes()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
 
-        //    // Act
-        //    sut.Apply(operation, filterContext);
+            var filterContext = FilterContextFor(typeof(FakeControllers.SwaggerResponseExampleController), nameof(FakeControllers.SwaggerResponseExampleController.None));
+            SetSwaggerResponses(operation, filterContext);
 
-        //    // Assert
-        //    var examples = (JObject)operation.Responses["200"].Examples;
-        //    var actualExample = examples["application/json"];
+            // Act
+            sut.Apply(operation, filterContext);
 
-        //    var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
-        //    actualExample["id"].ShouldBe(expectedExample.Id);
-        //    actualExample["first"].ShouldBe(expectedExample.FirstName);
-        //}
+            // Assert
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiString)response.Content["application/json"].Example).Value);
+
+            var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
+            actualExample.Id.ShouldBe(expectedExample.Id);
+            actualExample.FirstName.ShouldBe(expectedExample.FirstName);
+        }
 
         [Fact]
         public void Apply_SetsRequestExamples_FromMethodAttributes()
