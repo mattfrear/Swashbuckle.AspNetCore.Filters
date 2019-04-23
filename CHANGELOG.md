@@ -4,8 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-- Restore Json.NET Binder property for .NET Standard 1.6
+## [5.0.0-beta]
+### Changed
+- Use Swashbuckle.AspNetCore 5.0.0-beta
+- Drop support for .NET Standard 1.6 and .NET Framework, since Swashbuckle.AspNetCore doesn't support them any more
+- Only set request example on the operation, no longer set it on the type. This means you can have different
+ request examples for different operations which use the same request type, which is an often requested feature.
+### Added
+- XML examples
+### Deprecated
+- Removed AuthorizationInputOperationFilter
+- Removed DescriptionOperationFilter
+- Removed AddFileParamTypesOperationFilter
 
 ### [4.5.5] - 2018-03-04
 ### Fixed
