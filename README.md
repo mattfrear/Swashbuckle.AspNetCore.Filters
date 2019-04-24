@@ -9,9 +9,7 @@
 This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
 - Add example requests https://mattfrear.com/2016/01/25/generating-swagger-example-requests-with-swashbuckle/
 - Add example responses https://mattfrear.com/2015/04/21/generating-swagger-example-responses-with-swashbuckle/
-- Add comments for request and response properties
 - Add security info to each operation that has an `[Authorize]` endpoint, allowing you to send OAuth2 bearer tokens via Swagger-UI https://mattfrear.com/2018/07/21/add-an-authorization-header-to-your-swagger-ui-with-swashbuckle-revisited/
-- Add a file upload button https://mattfrear.com/2018/01/02/add-an-upload-button-to-your-swagger-page/
 - Add any old request header to all requests
 - Add any old response header to all responses
 - Add an indicator to each endpoint to show if it has an `[Authorize]` header (and for which policies and roles)
@@ -23,7 +21,6 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
   - [Request example](#request-example) 
   - [Response example](#response-example)
   - [Security requirements filter](#security-requirements-filter)
-  - [File upload button](#file-upload-button)
   - [Add a request header](#add-a-request-header)
   - [Add a response header](#add-a-response-header)
   - [Add Authorization to Summary](#add-authorization-to-summary)
@@ -38,7 +35,6 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
     - [Manual annotation](#manual-annotation)
     - [Known issues](#known-issues)
   - [How to use - Security requirements filter](#how-to-use---security-requirements-filter)
-  - [How to use - File upload button](#how-to-use---file-upload-button)
   - [How to use - Request Header](#how-to-use---request-header)
   - [How to use - Authorization summary](#how-to-use---authorization-summary)
 - [Pascal case or Camel case?](#pascal-case-or-camel-case)
@@ -54,6 +50,7 @@ From NuGet.
 | Swashbuckle.AspNetCore version 1.0.0 - 2.5.0 | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/ |
 | Swashbuckle.AspNetCore version 3.0.0  | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ |
 | Swashbuckle.AspNetCore version 4.0.0 and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ Version >= 4.5.1 |
+| Swashbuckle.AspNetCore version 5.0.0-beta and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ Version >= 5.0.0-beta |
 
 ## What's included
 ### Request example
@@ -74,6 +71,8 @@ navigating to swagger/v1/swagger.json
 
 ![swagger.json](https://mattfrear.files.wordpress.com/2016/01/capture.jpg)
 
+As of version 5.0.0-beta, XML examples are also supported.
+
 ### Response example
 
 Allows you to add custom data to the example response shown in Swagger. So instead of seeing the default boring data like so:
@@ -84,6 +83,8 @@ You'll see some more realistic data (or whatever you want):
 
 ![response with awesome data](https://mattfrear.files.wordpress.com/2015/04/response-new.png?w=700&h=358)
 
+As of version 5.0.0-beta, XML examples are also supported.
+
 ### Security requirements filter
 
 Adds security information to each operation so that you can send an Authorization header to your API. Useful for API endpoints that have JWT token
@@ -92,12 +93,6 @@ authentication. e.g.
 ![authorization button](https://mattfrear.files.wordpress.com/2018/07/authbutton.jpg)
 
 ![bearer token](https://mattfrear.files.wordpress.com/2018/07/authbuttonclicked.jpg)
-
-### File upload button
-
-Adds a button for uploading a file via IFormFile
-![file upload button](https://mattfrear.files.wordpress.com/2018/01/fileupload.jpg)
-N.B. Swashbuckle.AspNetCore 4.0 supports IFormFile directly, so this filter is no longer needed.
 
 ### Add a request header
 
@@ -138,7 +133,6 @@ public void ConfigureServices(IServiceCollection services)
         // version 4.0 like this:
         c.ExampleFilters();
         
-        c.OperationFilter<AddFileParamTypesOperationFilter>(); // Adds an Upload button to endpoints which have [AddSwaggerFileUploadButton]
         c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request", false); // adds any string you like to the request headers - in this case, a correlation id
         c.OperationFilter<AddResponseHeadersFilter>(); // [SwaggerResponseHeader]
 
@@ -179,7 +173,7 @@ This will register your examples with ServiceProvider, which is needed for Autom
 ### How to use - Request examples
 
 #### Automatic annotation
-Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` (and `c.ExampleFilters();`) as shown in the Installation instructions above.
+Version 4.0 and above supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` (and `c.ExampleFilters();`) as shown in the Installation instructions above.
 
 Let's say you have a controller action which takes some input from the body, in this case a `DeliveryOptionsSearchModel`:
 ```csharp
@@ -252,12 +246,13 @@ public class DeliveryOptionsSearchModelExample : IExamplesProvider
     }
 ```
 
-In the Swagger document, this will populate the request's schema object [example property](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schemaExample).
-The spec for this says:
+In the Swagger document, this will populate the operation's requestBody content type example property. https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#mediaTypeObject
+
+Here's what the OpenApi 3.0 spec says about it:
 
 Field Name | Type | Description
 ---|:---:|---
-example | Any | A free-form property to include an example of an instance for this schema.
+example | Any | Example of the media type.  The example object SHOULD be in the correct format as specified by the media type.  The `example` object is mutually exclusive of the `examples` object.  Furthermore, if referencing a `schema` which contains an example, the `example` value SHALL _override_ the example provided by the schema.
 
 #### List Request examples
 As of version 2.4, `List<T>` request examples are supported. For any `List<T>` in the request, you may define a SwaggerRequestExample for `T`. 
@@ -341,44 +336,32 @@ public class CountryExamples : IExamplesProvider
 }
 ```
 
-In the Swagger document, this will populate the response's [example object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#exampleObject).
+In the Swagger document, this will populate the operation's responses content [example object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#responseObject).
 The spec for this says:
 
 Field Pattern | Type | Description
 ---|:---:|---
-{mime type} | Any | The name of the property MUST be one of the Operation produces values (either implicit or inherited). The value SHOULD be an example of what such a response would look like.
+example | Any | Example of the media type.  The example object SHOULD be in the correct format as specified by the media type.  The `example` object is mutually exclusive of the `examples` object.  Furthermore, if referencing a `schema` which contains an example, the `example` value SHALL _override_ the example provided by the schema.
 
 Example response for application/json mimetype of a Pet data type:
 
 ```js
-{
-  "application/json": {
-    "name": "Puma",
-    "type": "Dog",
-    "color": "Black",
-    "gender": "Female",
-    "breed": "Mixed"
-  }
-}
+ "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                },
+                "example": "{\r\n  \"name\": \"Lassie\",\r\n  \"type\": \"Dog\",\r\n  \"color\": \"Black\",\r\n  \"gender\": \"Femail\",\r\n  \"breed\": \"Collie\" \r\n}"
+              },
 ```
 
-Note that this differs from the Request example in that the mime type is a required property on the response example but not so on the request example.
 
 #### Known issues
-- Request examples are not shown for querystring parameters (i.e. HTTP GET requests, or for querystring parameters for POST, PUT etc methods). Request examples will only be shown in request body. This is a limitation of the Swagger 2.0 spec https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject.
-- For requests, in the Swagger 2.0 spec there is only one schema for each request object defined across all the API endpoints. So if you are using the same request object in multiple API endpoints,
-i.e. on multiple controller actions like this:
-
-```csharp
-DeliveryOptions.cs
-public async Task<IHttpActionResult> DeliveryOptionsForAddress(DeliveryOptionsSearchModel search)
-...
-
-// maybe in some other controller, e.g. Search.cs
-public async Task<IHttpActionResult> Search(DeliveryOptionsSearchModel search)
-```
-
-That DeliveryOptionsSearchModel object is only defined once in the entire Swagger document and it can only have one **request** example defined.
+- Request examples are not shown for querystring parameters (i.e. HTTP GET requests, or for querystring parameters for POST, PUT etc methods). Request examples will only be shown in request body.
+This is as per the OpenApi 3.0 spec.
 
 ### How to use - Security requirements filter
 
@@ -413,17 +396,6 @@ If you don't want to do that you can pass false when you configure it:
 
 ```csharp
 	c.OperationFilter<SecurityRequirementsOperationFilter>(false);
-```
-
-### How to use - File upload button
-N.B. Swashbuckle.AspNetCore 4.0 supports IFormFile directly, so this filter is no longer needed.
-
-Add the `[AddSwaggerFileUploadButton]` attribute to any controller actions which takes an IFormFile, e.g.
-```csharp
-[AddSwaggerFileUploadButton]
-[HttpPost("upload")]
-public IActionResult UploadFile(IFormFile file)
-{
 ```
 
 ### How to use - Request Header
