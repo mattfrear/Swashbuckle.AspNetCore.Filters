@@ -19,7 +19,7 @@ namespace Swashbuckle.AspNetCore.Filters.PreSerializeFilters
         /// Usage:
         /// app.UseSwagger(x => {
         ///     ...;
-        ///     x.PreSerializeFilters.Add(SwaggerPreSerializeFilters.SwaggerDocument);
+        ///     x.PreSerializeFilters.Add((doc, req) => SwaggerPreSerializeFilters.OperationTagFilterByQueryParam(doc, req, "tags", ","));
         /// }
         /// </remarks>
         public static void OperationTagFilterByQueryParam(SwaggerDocument doc, HttpRequest req, string queryParamName, char separator)
