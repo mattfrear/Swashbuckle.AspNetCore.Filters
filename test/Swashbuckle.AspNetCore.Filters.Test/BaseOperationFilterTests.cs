@@ -47,7 +47,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test
 
             return new OperationFilterContext(
                 apiDescription,
-                new SchemaRegistry(jsonSerializerSettings),
+                new SchemaGenerator(new SchemaGeneratorOptions(), new JsonSerializerSettings()),
+                new SchemaRepository(),
                 (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
         }
 
