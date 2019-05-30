@@ -10,11 +10,17 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly JsonSerializerSettings jsonSerializerSettings;
 
+#if NETCOREAPP3_0
+        public SerializerSettingsDuplicator(IOptions<MvcNewtonsoftJsonOptions> mvcJsonOptions)
+        {
+            this.jsonSerializerSettings = mvcJsonOptions.Value.SerializerSettings;
+        }
+#else
         public SerializerSettingsDuplicator(IOptions<MvcJsonOptions> mvcJsonOptions)
         {
             this.jsonSerializerSettings = mvcJsonOptions.Value.SerializerSettings;
         }
-
+#endif
         public JsonSerializerSettings SerializerSettings(IContractResolver attributeContractResolver, JsonConverter attributeJsonConverter)
         {
             var serializerSettings = DuplicateSerializerSettings(jsonSerializerSettings);
