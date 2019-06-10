@@ -6,9 +6,9 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace WebApi.Models.Examples
 {
-    public class DynamicDataResponseExample : IExamplesProvider
+    public class DynamicDataResponseExample : IExamplesProvider<DynamicData>
     {
-        public object GetExamples()
+        public DynamicData GetExamples()
         {
             var ret = new DynamicData();
             ret.Payload.Add("DynamicProp", 12);

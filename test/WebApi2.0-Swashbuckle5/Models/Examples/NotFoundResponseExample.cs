@@ -2,9 +2,9 @@
 
 namespace WebApi.Models.Examples
 {
-    internal class NotFoundResponseExample : IExamplesProvider
+    internal class NotFoundResponseExample : IExamplesProvider<ErrorResponse>
     {
-        public object GetExamples()
+        public ErrorResponse GetExamples()
         {
             return new ErrorResponse { ErrorCode = 404, Message = "The entity was not found" };
         }

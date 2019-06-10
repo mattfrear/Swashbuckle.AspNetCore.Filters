@@ -2,9 +2,9 @@
 
 namespace WebApi.Models.Examples
 {
-    internal class WrappedPersonRequestExample : IExamplesProvider
+    internal class WrappedPersonRequestExample : IExamplesProvider<RequestWrapper<PersonRequest>>
     {
-        public object GetExamples()
+        public RequestWrapper<PersonRequest> GetExamples()
         {
             return new RequestWrapper<PersonRequest>
             {

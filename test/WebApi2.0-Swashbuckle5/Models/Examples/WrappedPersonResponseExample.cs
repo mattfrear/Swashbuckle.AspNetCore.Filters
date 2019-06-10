@@ -3,9 +3,9 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace WebApi.Models.Examples
 {
-    internal class WrappedPersonResponseExample : IExamplesProvider
+    internal class WrappedPersonResponseExample : IExamplesProvider<ResponseWrapper<PersonResponse>>
     {
-        public object GetExamples()
+        public ResponseWrapper<PersonResponse> GetExamples()
         {
             return new ResponseWrapper<PersonResponse>
             {

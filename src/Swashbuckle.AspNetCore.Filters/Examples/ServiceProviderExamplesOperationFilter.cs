@@ -44,7 +44,7 @@ namespace Swashbuckle.AspNetCore.Filters
                     continue; // if [SwaggerRequestExample] is defined, then let ExamplesOperationFilter define the example
                 }
 
-                var example = GetExampleForTypeFromServiceProvider(parameterDescription.Type);
+                var example = serviceProvider.GetExampleForType(parameterDescription.Type);
 
                 requestExample.SetRequestExampleForOperation(operation, example);
             }
@@ -78,37 +78,11 @@ namespace Swashbuckle.AspNetCore.Filters
                     continue; // if [SwaggerResponseExample] is defined, then let ExamplesOperationFilter define the example
                 }
 
-                var example = GetExampleForTypeFromServiceProvider(response.Type);
+                var example = serviceProvider.GetExampleForType(response.Type);
 
                 responseExample.SetResponseExampleForStatusCode(operation, response.StatusCode, example);
             }
         }
 
-        private object GetExampleForTypeFromServiceProvider(Type type)
-        {
-            if (type == null || type == typeof(void) || IsPrimitiveType())
-            {
-                return null;
-            }
-
-            bool IsPrimitiveType()
-            {
-                return !type.GetTypeInfo().IsClass
-                    && !type.GetTypeInfo().IsGenericType
-                    && !type.GetTypeInfo().IsInterface;
-            }
-
-            var exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);
-            object exampleProviderObject = serviceProvider.GetService(exampleProviderType);
-
-            if (exampleProviderObject == null)
-            {
-                return null;
-            }
-
-            var methodInfo = exampleProviderType.GetMethod("GetExamples");
-            var example = methodInfo.Invoke(exampleProviderObject, null); // yay, we've got the example! Now just need to set it.
-            return example;
-        }
     }
 }

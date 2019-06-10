@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace WebApi.Models.Examples
 {
-    public class DictionaryResponseExample : IExamplesProvider
+    public class DictionaryResponseExample : IExamplesProvider<Dictionary<string, object>>
     {
-        public object GetExamples()
+        public Dictionary<string, object> GetExamples()
         {
             return new Dictionary<string, object>()
             {

@@ -2,9 +2,9 @@
 
 namespace WebApi.Models.Examples
 {
-    internal class PersonResponseExample2 : IExamplesProvider
+    internal class PersonResponseExample2 : IExamplesProvider<PersonResponse>
     {
-        public object GetExamples()
+        public PersonResponse GetExamples()
         {
             return new PersonResponse { Id = 123, Title = Title.Dr, FirstName = "Hank", LastName = "Thomas", Age = 27, Income = null };
         }

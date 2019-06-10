@@ -2,9 +2,9 @@
 
 namespace WebApi.Models.Examples
 {
-    internal class InternalServerResponseExample : IExamplesProvider
+    internal class InternalServerResponseExample : IExamplesProvider<ErrorResponse>
     {
-        public object GetExamples()
+        public ErrorResponse GetExamples()
         {
             return new ErrorResponse { ErrorCode = 500 };
         }

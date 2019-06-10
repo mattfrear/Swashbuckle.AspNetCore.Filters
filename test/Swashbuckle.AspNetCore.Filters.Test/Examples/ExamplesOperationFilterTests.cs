@@ -16,7 +16,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
     public class ExamplesOperationFilterTests : BaseOperationFilterTests
     {
-        private readonly IOperationFilter sut;
+        private readonly ExamplesOperationFilter sut;
 
         public ExamplesOperationFilterTests()
         {
@@ -26,6 +26,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var jsonFormatter = new JsonFormatter();
 
             var serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.GetService(typeof(PersonResponseExample)).Returns(new PersonResponseExample());
+            serviceProvider.GetService(typeof(PersonRequestExample)).Returns(new PersonRequestExample());
+            serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
             var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
             var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);

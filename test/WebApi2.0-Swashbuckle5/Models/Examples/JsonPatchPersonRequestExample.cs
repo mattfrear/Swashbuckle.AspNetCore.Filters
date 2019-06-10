@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.JsonPatch.Operations;
 using Swashbuckle.AspNetCore.Filters;
+using System.Collections.Generic;
 
 namespace WebApi.Models.Examples
 {
-    public class JsonPatchPersonRequestExample : IExamplesProvider
+    public class JsonPatchPersonRequestExample : IExamplesProvider<IEnumerable<Operation>>
     {
-        public object GetExamples()
+        public IEnumerable<Operation> GetExamples()
         {
             return new[]
             {

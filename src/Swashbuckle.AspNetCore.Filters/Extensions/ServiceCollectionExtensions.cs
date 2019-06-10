@@ -24,9 +24,6 @@ namespace Swashbuckle.AspNetCore.Filters
                 .FromAssemblyOf<T>()
                     .AddClasses(classes => classes.AssignableTo(typeof(IExamplesProvider<>)))
                     .AsImplementedInterfaces()
-                    .WithSingletonLifetime()
-
-                    .AddClasses(classes => classes.AssignableTo(typeof(IExamplesProvider)))
                     .AsSelf()
                     .WithSingletonLifetime()
             );

@@ -39,11 +39,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
             foreach (var attr in actionAttributes)
             {
-                var examplesProvider = (IExamplesProvider)(serviceProvider.GetService(attr.ExamplesProviderType)
-                    ?? Activator.CreateInstance(attr.ExamplesProviderType));
-
-                object example = examplesProvider?.GetExamples();
-
+                object example = serviceProvider.GetExampleWithExamplesProviderType(attr.ExamplesProviderType);
                 requestExample.SetRequestExampleForOperation(operation, example, attr.ContractResolver, attr.JsonConverter);
             }
         }
@@ -54,10 +50,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
             foreach (var attr in responseAttributes)
             {
-                var examplesProvider = (IExamplesProvider)(serviceProvider.GetService(attr.ExamplesProviderType)
-                    ?? Activator.CreateInstance(attr.ExamplesProviderType));
-
-                object example = examplesProvider?.GetExamples();
+                object example = serviceProvider.GetExampleWithExamplesProviderType(attr.ExamplesProviderType);
 
                 responseExample.SetResponseExampleForStatusCode(
                     operation,

@@ -6,7 +6,7 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
 
 namespace WebApi.Models.Examples
 {
-    internal class PersonRequestDependencyInjectionExample : IExamplesProvider
+    internal class PersonRequestDependencyInjectionExample : IExamplesProvider<PersonRequest>
     {
         private readonly IHostingEnvironment hostingEnvironment;
 
@@ -15,7 +15,7 @@ namespace WebApi.Models.Examples
             this.hostingEnvironment = hostingEnvironment;
         }
 
-        public object GetExamples()
+        public PersonRequest GetExamples()
         {
             return new PersonRequest { Title = Title.Mr, Age = 24, FirstName = $"Dave ({hostingEnvironment.EnvironmentName})", Income = null };
         }
