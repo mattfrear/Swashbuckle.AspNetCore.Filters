@@ -130,7 +130,7 @@ public void ConfigureServices(IServiceCollection services)
         // [SwaggerRequestExample] & [SwaggerResponseExample]
         // version < 3.0 like this: c.OperationFilter<ExamplesOperationFilter>(); 
         // version 3.0 like this: c.AddSwaggerExamples(services.BuildServiceProvider());
-        // version 4.0 like this:
+        // version > 4.0 like this:
         c.ExampleFilters();
         
         c.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request", false); // adds any string you like to the request headers - in this case, a correlation id
@@ -162,18 +162,14 @@ public void ConfigureServices(IServiceCollection services)
 ```csharp
     services.AddSwaggerExamplesFromAssemblyOf<MyExample>();
 ```
-This will register your examples with ServiceProvider, which is needed for Automatic annotation. Or, if you don't want to register them, say if you're doing Manual annotation, then you should call
-```csharp
-    services.AddSwaggerExamples(); 
-```
-`AddSwaggerExamplesFromAssemblyOf<T>` is the recommended option.
+This will register your examples with the ServiceProvider.
 
 ## How to use
 
 ### How to use - Request examples
 
 #### Automatic annotation
-Version 4.0 and above supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>();` (and `c.ExampleFilters();`) as shown in the Installation instructions above.
+Version 4.0 and above supports automatic annotation.
 
 Let's say you have a controller action which takes some input from the body, in this case a `DeliveryOptionsSearchModel`:
 ```csharp
@@ -213,12 +209,12 @@ Decorate your controller methods with the included `SwaggerRequestExample` attri
 public async Task<IHttpActionResult> DeliveryOptionsForAddress([FromBody]DeliveryOptionsSearchModel search)
 ```
 
-Now implement a `IExamplesProvider`, in this case via a DeliveryOptionsSearchModelExample which will generate the example data. It should return the type you specified when you specified the `[SwaggerRequestExample]`.
+Now implement a `IExamplesProvider<T>`, in this case via a DeliveryOptionsSearchModelExample which will generate the example data. It should return the type you specified when you specified the `[SwaggerRequestExample]`.
 	
 ```csharp
-public class DeliveryOptionsSearchModelExample : IExamplesProvider
+public class DeliveryOptionsSearchModelExample : IExamplesProvider<DeliveryOptionsSearchModel>
 {
-    public object GetExamples()
+    public DeliveryOptionsSearchModel GetExamples()
     {
         return new DeliveryOptionsSearchModel
         {
@@ -266,9 +262,9 @@ public IEnumerable<PersonResponse> GetPersonList([FromBody]List<PeopleRequest> p
 
 // and then:
 
-public class ListPeopleRequestExample : IExamplesProvider
+public class ListPeopleRequestExample : IExamplesProvider<PeopleRequest>
 {
-    public object GetExamples()
+    public PeopleRequest GetExamples()
     {
         return new PeopleRequest { Title = Title.Mr, Age = 24, FirstName = "Dave in a list", Income = null };
     }
@@ -278,7 +274,7 @@ public class ListPeopleRequestExample : IExamplesProvider
 
 ### How to use - Response examples
 #### Automatic annotation
-Version 4.0 supports automatic annotation. To use this, you MUST call `services.AddSwaggerExamplesFromAssemblyOf<MyExample>()` (and `c.ExampleFilters()`) as shown in the Installation instructions above.
+Version 4.0 supports automatic annotation.
 If it's obvious which type your action returns, then no `ProducesResponseType` or `SwaggerResponse` attributes need to be specified, e.g.
 ```csharp
 public async Task<ActionResult<IEnumerable<Country>>> Get(string lang)
@@ -320,12 +316,12 @@ Decorate your methods with the new SwaggerResponseExample attribute:
 [SwaggerResponse(400, type: typeof(IEnumerable<ErrorResource>))]
 public async Task<HttpResponseMessage> Get(string lang)
 ```
-For manual annotation implement `IExamplesProvider` to generate the example data
+For manual annotation implement `IExamplesProvider<T>` to generate the example data
 
 ```csharp	
-public class CountryExamples : IExamplesProvider
+public class CountryExamples : IExamplesProvider<List<Country>>
 {
-    public object GetExamples()
+    public List<Country> GetExamples()
     {
         return new List<Country>
         {

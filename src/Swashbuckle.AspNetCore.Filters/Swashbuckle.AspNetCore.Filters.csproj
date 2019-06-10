@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
-    <PackageVersion>5.0.0-rc2</PackageVersion>
+    <PackageVersion>5.0.0-rc3</PackageVersion>
     <Authors>Matt Frear</Authors>
     <Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -11,14 +11,14 @@
     <Copyright>2019</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
     <PackageReleaseNotes>
-      Support Swashbuckle.AspNetCore 5.0.0-rc2 and .NET Core 3.0 preview 5
+      Remove IExamplesProvider interface. Only support IExamplesProvider&lt;T&gt;
     </PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>5.0.0-rc2</VersionPrefix>
+    <VersionPrefix>5.0.0-rc3</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
