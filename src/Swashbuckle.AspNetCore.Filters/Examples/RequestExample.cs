@@ -41,17 +41,20 @@ namespace Swashbuckle.AspNetCore.Filters
             }
 
             var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
-            var jsonExample = new OpenApiString(jsonFormatter.FormatJson(example, serializerSettings));
+            var jsonExample = new OpenApiRawString(jsonFormatter.FormatJson(example, serializerSettings));
 
-            OpenApiString xmlExample = null;
+            OpenApiRawString xmlExample = null;
             if (operation.RequestBody.Content.Keys.Any(k => k.Contains("xml")))
             {
-                xmlExample = new OpenApiString(example.XmlSerialize());
+                xmlExample = new OpenApiRawString(example.XmlSerialize());
             }
 
             foreach (var content in operation.RequestBody.Content)
             {
-                content.Value.Example = content.Key.Contains("xml") ? xmlExample : jsonExample;
+                if (content.Key.Contains("xml"))
+                    content.Value.Example = xmlExample;
+                else
+                    content.Value.Example = jsonExample;
             }
         }
     }

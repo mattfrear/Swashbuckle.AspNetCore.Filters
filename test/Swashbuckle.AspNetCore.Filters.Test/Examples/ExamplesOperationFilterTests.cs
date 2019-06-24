@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using NSubstitute;
@@ -51,7 +50,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiString)response.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
 
             var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
@@ -73,7 +72,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiString)response.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
 
             var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
@@ -98,7 +97,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             var expectedExample = (PersonRequest)new PersonRequestExample().GetExamples();
             AssertPersonRequestExampleMatches(actualExample, expectedExample);
         }
@@ -146,7 +145,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             actualExample["PropertyInt"].ShouldBe(1);
             actualExample["PropertyString"].ShouldBe("Some string");
         }
