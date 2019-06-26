@@ -51,9 +51,13 @@ namespace Swashbuckle.AspNetCore.Filters
                 foreach (var content in response.Value.Content)
                 {
                     if (content.Key.Contains("xml"))
+                    {
                         content.Value.Example = xmlExample;
+                    }
                     else
+                    {
                         content.Value.Example = jsonExample;
+                    }
                 }
             }
         }
