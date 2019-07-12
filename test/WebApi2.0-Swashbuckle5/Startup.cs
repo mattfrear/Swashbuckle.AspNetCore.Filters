@@ -63,6 +63,7 @@ namespace WebApi2._0_Swashbuckle4
                 });
 
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
+                // options.IgnoreObsoleteProperties();
             });
             
             services.AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();
