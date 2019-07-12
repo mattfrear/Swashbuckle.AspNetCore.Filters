@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Writers;
 using Newtonsoft.Json;
 using NSubstitute;
 using Shouldly;
@@ -148,6 +150,50 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             actualExample["PropertyInt"].ShouldBe(1);
             actualExample["PropertyString"].ShouldBe("Some string");
+        }
+
+        [Fact]
+        public void Apply_SetsResponseExamples_CorrectlyFormatsJsonExample()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var example = response.Content["application/json"].Example;
+
+            var formatedExample = RenderOpenApiObject(example);
+            formatedExample.EndsWith('"').ShouldBeFalse();
+            formatedExample.StartsWith('"').ShouldBeFalse();
+        }
+
+        [Fact]
+        public void Apply_SetsResponseExamples_CorrectlyFormatsXmlExample()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var example = response.Content["application/xml"].Example;
+
+            var formatedExample = RenderOpenApiObject(example);
+            formatedExample.EndsWith('"').ShouldBeTrue();
+            formatedExample.StartsWith('"').ShouldBeTrue();
         }
     }
 }

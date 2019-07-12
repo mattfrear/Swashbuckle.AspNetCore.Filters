@@ -43,10 +43,10 @@ namespace Swashbuckle.AspNetCore.Filters
             var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
             var jsonExample = new OpenApiRawString(jsonFormatter.FormatJson(example, serializerSettings));
 
-            OpenApiRawString xmlExample = null;
+            OpenApiString xmlExample = null;
             if (operation.RequestBody.Content.Keys.Any(k => k.Contains("xml")))
             {
-                xmlExample = new OpenApiRawString(example.XmlSerialize());
+                xmlExample = new OpenApiString(example.XmlSerialize());
             }
 
             foreach (var content in operation.RequestBody.Content)

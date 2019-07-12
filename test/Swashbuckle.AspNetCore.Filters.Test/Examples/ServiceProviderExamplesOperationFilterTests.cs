@@ -289,5 +289,47 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample["PropertyInt"].ShouldBe(1);
             actualExample["PropertyString"].ShouldBe("Some string");
         }
+
+        [Fact]
+        public void Apply_SetsResponseExamples_CorrectlyFormatsJsonExample()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var example = response.Content["application/json"].Example;
+
+            var formatedExample = RenderOpenApiObject(example);
+            formatedExample.EndsWith('"').ShouldBeFalse();
+            formatedExample.StartsWith('"').ShouldBeFalse();
+        }
+
+        [Fact]
+        public void Apply_SetsResponseExamples_CorrectlyFormatsXmlExample()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var example = response.Content["application/xml"].Example;
+
+            var formatedExample = RenderOpenApiObject(example);
+            formatedExample.EndsWith('"').ShouldBeTrue();
+            formatedExample.StartsWith('"').ShouldBeTrue();
+        }
     }
 }
