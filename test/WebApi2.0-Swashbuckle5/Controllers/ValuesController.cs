@@ -30,6 +30,7 @@ namespace WebApi.Controllers
         [SwaggerResponse(500, type: null, description: "There was an unexpected error")]
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
         [Authorize("Customer")]
+        [ProducesResponseType(401)]
         public PersonResponse GetPerson(int personId)
         {
             var personResponse = new PersonResponse { Id = personId, FirstName = "Dave" };
@@ -41,6 +42,7 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="personRequest"></param>
         /// <returns></returns>
+        /// <response code="401">You are not authorized to access this endpoint</response>
         [HttpPost]
         [Route("api/values/person")]
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]

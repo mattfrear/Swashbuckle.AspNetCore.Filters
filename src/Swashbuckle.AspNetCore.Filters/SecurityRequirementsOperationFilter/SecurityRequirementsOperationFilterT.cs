@@ -48,8 +48,15 @@ namespace Swashbuckle.AspNetCore.Filters
 
             if (includeUnauthorizedAndForbiddenResponses)
             {
-                operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-                operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+                if (!operation.Responses.ContainsKey("401"))
+                {
+                    operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+                }
+
+                if (!operation.Responses.ContainsKey("403"))
+                {
+                    operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+                }
             }
 
             var policies = policySelector(actionAttributes) ?? Enumerable.Empty<string>();
