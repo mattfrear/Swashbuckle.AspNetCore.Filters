@@ -85,7 +85,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_DoesNotAdds401And403_WhenConfiguredNotTo()
+        public void Apply_DoesNotAdd401And403_WhenConfiguredNotTo()
         {
             // Arrange
             var sut = new SecurityRequirementsOperationFilter(false);
@@ -98,6 +98,42 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             // Assert
             operation.Responses.ShouldNotContainKey("401");
             operation.Responses.ShouldNotContainKey("403");
+        }
+
+        [Fact]
+        public void Apply_DoesNotCrash_When403AlreadyPresent()
+        {
+            // Arrange
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+
+            var filterContext = FilterContextFor(typeof(AuthController), nameof(AuthController.Customer));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Responses.ShouldContainKey("401");
+            operation.Responses.ShouldContainKey("403");
+            operation.Responses.Count.ShouldBe(2);
+        }
+
+        [Fact]
+        public void Apply_DoesNotCrash_When401AlreadyPresent()
+        {
+            // Arrange
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+
+            var filterContext = FilterContextFor(typeof(AuthController), nameof(AuthController.Customer));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Responses.ShouldContainKey("401");
+            operation.Responses.ShouldContainKey("403");
+            operation.Responses.Count.ShouldBe(2);
         }
 
         [Fact]
@@ -199,38 +235,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test
 
             // Assert
             operation.Security.Count.ShouldBe(0);
-        }
-
-        [Fact]
-        public void Appy_Authorize_Forbidden_Operation_Already_Added()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
-            operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
-
-            var filterContext = FilterContextFor(typeof(AuthController), nameof(AuthController.Customer));
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            Assert.Equal(2, operation.Responses.Count);
-        }
-
-        [Fact]
-        public void Appy_Authorize_Unauthorized_Operation_Already_Added()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
-            operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-
-            var filterContext = FilterContextFor(typeof(AuthController), nameof(AuthController.Customer));
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            Assert.Equal(2, operation.Responses.Count);
         }
     }
 }
