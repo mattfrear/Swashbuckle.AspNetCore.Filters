@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
-    <PackageVersion>5.0.0-rc4</PackageVersion>
+    <PackageVersion>5.0.0-rc5</PackageVersion>
     <Authors>Matt Frear</Authors>
     <Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -11,14 +11,14 @@
     <Copyright>2019</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
     <PackageReleaseNotes>
-      Fix #99 - JSON examples should not be encoded JSON
+      Fix #101 - Exception with SecurityRequirementsOperationFilter when you have already added a 401 or a 403
     </PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>5.0.0-rc4</VersionPrefix>
+    <VersionPrefix>5.0.0-rc5</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-rc5] 2019-07-24
+### Fixed
+- Issue #101, Exception with SecurityRequirementsOperationFilter when you have already added a 401 or a 403
+
 ## [5.0.0-rc4] 2019-07-13
 ### Fixed
 - Issue #99, JSON examples were encoded JSON
