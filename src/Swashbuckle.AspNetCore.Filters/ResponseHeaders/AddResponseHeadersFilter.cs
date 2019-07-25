@@ -15,16 +15,19 @@ namespace Swashbuckle.AspNetCore.Filters
 
             foreach (var attr in actionAttributes)
             {
-                var response = operation.Responses.FirstOrDefault(x => x.Key == ((int)attr.StatusCode).ToString(CultureInfo.InvariantCulture)).Value;
-
-                if (response != null)
+                foreach (var statusCode in attr.StatusCodes)
                 {
-                    if (response.Headers == null)
-                    {
-                        response.Headers = new Dictionary<string, OpenApiHeader>();
-                    }
+                    var response = operation.Responses.FirstOrDefault(x => x.Key == (statusCode).ToString(CultureInfo.InvariantCulture)).Value;
 
-                    response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, Schema = new OpenApiSchema { Type = attr.Type } });
+                    if (response != null)
+                    {
+                        if (response.Headers == null)
+                        {
+                            response.Headers = new Dictionary<string, OpenApiHeader>();
+                        }
+
+                        response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, Schema = new OpenApiSchema { Type = attr.Type } });
+                    }
                 }
             }
         }

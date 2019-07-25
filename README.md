@@ -403,8 +403,9 @@ This will add the input box to *every* controller action.
 
 Specify one or more `[SwaggerResponseHeader]` attributes on your controller action, like so:
 ```csharp
-[SwaggerResponseHeader(HttpStatusCode.OK, "Location", "string", "Location of the newly created resource")]
-[SwaggerResponseHeader(HttpStatusCode.OK, "ETag", "string", "An ETag of the resource")]
+[SwaggerResponseHeader((int)HttpStatusCode.OK, "Location", "string", "Location of the newly created resource")]
+[SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
+[SwaggerResponseHeader(new int[] { 200, 401, 403, 404 }, "CustomHeader", "string", "A custom header")]
 public IHttpActionResult GetPerson(PersonRequest personRequest)
 {
 ```

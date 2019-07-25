@@ -7,13 +7,21 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         public SwaggerResponseHeaderAttribute(int statusCode, string name, string type, string description)
         {
-            StatusCode = statusCode;
+            StatusCodes = new int[] { statusCode };
             Name = name;
             Type = type;
             Description = description;
         }
 
-        public int StatusCode { get; }
+        public SwaggerResponseHeaderAttribute(int[] statusCode, string name, string type, string description)
+        {
+            StatusCodes = statusCode;
+            Name = name;
+            Type = type;
+            Description = description;
+        }
+
+        public int[] StatusCodes { get; }
 
         public string Name { get; }
 
