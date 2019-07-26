@@ -401,10 +401,13 @@ This will add the input box to *every* controller action.
 
 ### How to use - Response headers
 
-Specify one or more `[SwaggerResponseHeader]` attributes on your controller action, like so:
+Specify one or more `[SwaggerResponseHeader]` attributes on your controller action. 
+You can specify the status code (int), header name (string), type (string), description (string) and format (string). 
+See the OpenAPI Specification spec for information on DataTypes: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#dataTypes
 ```csharp
 [SwaggerResponseHeader(StatusCodes.Status200OK, "Location", "string", "Location of the newly created resource")]
 [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
+[SwaggerResponseHeader(429, "Retry-After", "integer", "Indicates how long to wait before making a new request.", "int32")]
 [SwaggerResponseHeader(new int[] { 200, 401, 403, 404 }, "CustomHeader", "string", "A custom header")]
 public IHttpActionResult GetPerson(PersonRequest personRequest)
 {
