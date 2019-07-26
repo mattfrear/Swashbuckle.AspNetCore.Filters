@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +53,7 @@ namespace WebApi.Controllers
 
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
 
-        [SwaggerResponseHeader((int)HttpStatusCode.OK, "Location", "string", "Location of the newly created resource")]
+        [SwaggerResponseHeader(StatusCodes.Status200OK, "Location", "string", "Location of the newly created resource")]
         [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
         [SwaggerResponseHeader(new int[] { 200, 401, 403, 404 }, "CustomHeader", "string", "A custom header")]
         [Authorize("Customer")]
