@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace WebApi.Models
 {
@@ -11,6 +12,7 @@ namespace WebApi.Models
         [Description("The first name of the person")]
         public string FirstName { get; set; }
 
+        [Obsolete]
         public decimal? Income { get; set; }
     }
 }

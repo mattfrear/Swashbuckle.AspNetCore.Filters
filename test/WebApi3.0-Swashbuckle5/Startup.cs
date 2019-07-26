@@ -53,6 +53,8 @@ namespace WebApi3._0_Swashbuckle5
                 });
 
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+                options.IgnoreObsoleteProperties();
             });
 
             services.AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();

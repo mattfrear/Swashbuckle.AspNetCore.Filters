@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
@@ -23,6 +24,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 
         [DataMember]
         [Description("His age, in years")]
+        [Obsolete]
         public int Age { get; set; }
 
         [DataMember]

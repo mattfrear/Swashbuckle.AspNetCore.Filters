@@ -20,11 +20,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
     {
         private readonly IOperationFilter sut;
         private readonly IServiceProvider serviceProvider;
+        private SchemaGeneratorOptions schemaGeneratorOptions;
 
         public ServiceProviderExamplesOperationFilterTests()
         {
-            var options = Options.Create(new MvcJsonOptions());
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(options);
+            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
+            schemaGeneratorOptions = new SchemaGeneratorOptions();
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
             var jsonFormatter = new JsonFormatter();
 
@@ -56,6 +58,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var expectedExample = (PersonResponse)new PersonResponseAutoExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
+            actualExample.Age.ShouldBe(27);
         }
 
         [Fact]
@@ -330,6 +333,29 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var formatedExample = RenderOpenApiObject(example);
             formatedExample.EndsWith('"').ShouldBeTrue();
             formatedExample.StartsWith('"').ShouldBeTrue();
+        }
+
+        [Fact]
+        public void Apply_ShouldNotEmitObsoleteProperties()
+        {
+            // Arrange
+            schemaGeneratorOptions.IgnoreObsoleteProperties = true;
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
+
+            var expectedExample = (PersonResponse)new PersonResponseAutoExample().GetExamples();
+            actualExample.Id.ShouldBe(expectedExample.Id);
+            actualExample.FirstName.ShouldBe(expectedExample.FirstName);
+            actualExample.Age.ShouldBe(0);
         }
     }
 }

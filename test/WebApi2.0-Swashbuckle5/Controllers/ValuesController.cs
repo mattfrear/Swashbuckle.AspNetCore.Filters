@@ -63,9 +63,13 @@ namespace WebApi.Controllers
             return personResponse;
         }
 
+        /// <summary>
+        /// No [SwaggerRequestExample] or [SwaggerResponseExample] attributes on this one
+        /// </summary>
+        /// <param name="maleRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/values/male/")]
-        // [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
         [ProducesResponseType(typeof(PersonResponse), 200)]
         public PersonResponse PostMale([FromBody]MaleRequest maleRequest)
         {
@@ -147,7 +151,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("api/values/dependencyinjectionperson")]
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
-        [SwaggerResponseExample(200, typeof(PersonRequestDependencyInjectionExample))]
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestDependencyInjectionExample))]
         public PersonResponse PostDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };

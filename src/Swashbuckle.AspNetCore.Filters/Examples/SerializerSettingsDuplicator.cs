@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 
 namespace Swashbuckle.AspNetCore.Filters
@@ -9,16 +10,19 @@ namespace Swashbuckle.AspNetCore.Filters
     internal class SerializerSettingsDuplicator
     {
         private readonly JsonSerializerSettings jsonSerializerSettings;
+        private readonly SchemaGeneratorOptions schemaGeneratorOptions;
 
 #if NETCOREAPP3_0
-        public SerializerSettingsDuplicator(IOptions<MvcNewtonsoftJsonOptions> mvcJsonOptions)
+        public SerializerSettingsDuplicator(IOptions<MvcNewtonsoftJsonOptions> mvcJsonOptions, IOptions<SchemaGeneratorOptions> schemaGeneratorOptions)
         {
             this.jsonSerializerSettings = mvcJsonOptions.Value.SerializerSettings;
+            this.schemaGeneratorOptions = schemaGeneratorOptions.Value;
         }
 #else
-        public SerializerSettingsDuplicator(IOptions<MvcJsonOptions> mvcJsonOptions)
+        public SerializerSettingsDuplicator(IOptions<MvcJsonOptions> mvcJsonOptions, IOptions<SchemaGeneratorOptions> schemaGeneratorOptions)
         {
             this.jsonSerializerSettings = mvcJsonOptions.Value.SerializerSettings;
+            this.schemaGeneratorOptions = schemaGeneratorOptions.Value;
         }
 #endif
         public JsonSerializerSettings SerializerSettings(IContractResolver attributeContractResolver, JsonConverter attributeJsonConverter)
@@ -27,6 +31,10 @@ namespace Swashbuckle.AspNetCore.Filters
             if (attributeContractResolver != null)
             {
                 serializerSettings.ContractResolver = attributeContractResolver;
+            }
+            else if (schemaGeneratorOptions.IgnoreObsoleteProperties)
+            {
+                serializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver();
             }
 
             if (attributeJsonConverter != null)
