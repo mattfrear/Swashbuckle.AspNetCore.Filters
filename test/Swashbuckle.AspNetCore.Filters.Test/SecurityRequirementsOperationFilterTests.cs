@@ -54,6 +54,31 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             securityScheme.Value.ShouldNotBeNull();
             securityScheme.Value.Count().ShouldBe(0);
         }
+        [Fact]
+        public void Apply_SetsAuthorize_WithMultipleSecuritySchemas()
+        {
+            // Arrange
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.Authorize));
+
+            const string securitySchemaName = "customSchema";
+            var sut = new SecurityRequirementsOperationFilter();
+            var sut2 = new SecurityRequirementsOperationFilter(true, securitySchemaName);
+
+            // Act
+            sut.Apply(operation, filterContext);
+            sut2.Apply(operation, filterContext);
+
+            // Assert
+            operation.Security.Count.ShouldBe(2);
+            var securityScheme = operation.Security[0].SingleOrDefault(ss => ss.Key.Reference.Id == "oauth2");
+            securityScheme.Value.ShouldNotBeNull();
+            securityScheme.Value.Count().ShouldBe(0);
+
+            var securityScheme2 = operation.Security[1].SingleOrDefault(ss => ss.Key.Reference.Id == securitySchemaName);
+            securityScheme2.Value.ShouldNotBeNull();
+            securityScheme2.Value.Count().ShouldBe(0);
+        }
 
         [Fact]
         public void Apply_DoesNotSetSecurity_WhenNoAuthorize()
