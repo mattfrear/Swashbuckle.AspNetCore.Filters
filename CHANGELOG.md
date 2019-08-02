@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+## Added 
+- PR #104 add optional format parameter to the SwaggerResponseHeaderAttribute
+
 ## [5.0.0-rc7] 2019-07-26
 ### Fixed
 - Issue #98 check schemaGeneratorOptions.IgnoreObsoleteProperties when generating json examples
