@@ -26,7 +26,7 @@ namespace Swashbuckle.AspNetCore.Filters
                             response.Headers = new Dictionary<string, OpenApiHeader>();
                         }
 
-                        response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, Schema = new OpenApiSchema { Type = attr.Type } });
+                        response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, Schema = new OpenApiSchema { Description = attr.Description, Type = attr.Type, Format = attr.Format } });
                     }
                 }
             }
