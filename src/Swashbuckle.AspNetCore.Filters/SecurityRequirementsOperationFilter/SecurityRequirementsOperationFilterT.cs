@@ -61,13 +61,10 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var policies = policySelector(actionAttributes) ?? Enumerable.Empty<string>();
 
-            operation.Security = new List<OpenApiSecurityRequirement>
+            operation.Security.Add(new OpenApiSecurityRequirement
             {
-                new OpenApiSecurityRequirement
-                {
-                    { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = securitySchemaName } }, policies.ToList() }
-                }
-            };
+                { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = securitySchemaName } }, policies.ToList() }
+            });
         }
     }
 }
