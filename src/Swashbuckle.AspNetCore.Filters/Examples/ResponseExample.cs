@@ -1,4 +1,3 @@
-using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Serialization;
@@ -36,27 +35,61 @@ namespace Swashbuckle.AspNetCore.Filters
             }
 
             var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode.ToString());
-
-            if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) == false && response.Value != null)
+            if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) != false || response.Value == null)
             {
-                var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
-                var jsonExample = new OpenApiRawString(jsonFormatter.FormatJson(example, serializerSettings));
+                return;
+            }
 
-                OpenApiString xmlExample = null;
-                if (response.Value.Content.Keys.Any(k => k.Contains("xml")))
-                {
-                    xmlExample = new OpenApiString(example.XmlSerialize());
-                }
+            var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
+            var multiple = example as IEnumerable<ISwaggerExample<object>>;
+            if (multiple == null)
+            {
+                var jsonExample = new Lazy<IOpenApiAny>(() => new OpenApiRawString(jsonFormatter.FormatJson(example, serializerSettings)));
+                var xmlExample = new Lazy<IOpenApiAny>(() => new OpenApiString(example.XmlSerialize()));
 
                 foreach (var content in response.Value.Content)
                 {
                     if (content.Key.Contains("xml"))
                     {
-                        content.Value.Example = xmlExample;
+                        content.Value.Example = xmlExample.Value;
                     }
                     else
                     {
-                        content.Value.Example = jsonExample;
+                        content.Value.Example = jsonExample.Value;
+                    }
+                }
+            }
+            else
+            {
+                var jsonExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
+                    multiple.ToDictionary(
+                        ex => ex.Name,
+                        ex => new OpenApiExample {
+                            Summary = ex.Summary,
+                            Value = new OpenApiRawString(jsonFormatter.FormatJson(ex.Value, serializerSettings)),
+                        }
+                    )
+                );
+
+                var xmlExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
+                    multiple.ToDictionary(
+                        ex => ex.Name,
+                        ex => new OpenApiExample {
+                            Summary = ex.Summary,
+                            Value = new OpenApiString(ex.XmlSerialize()),
+                        }
+                    )
+                );
+
+                foreach (var content in response.Value.Content)
+                {
+                    if (content.Key.Contains("xml"))
+                    {
+                        content.Value.Examples = xmlExamples.Value;
+                    }
+                    else
+                    {
+                        content.Value.Examples = jsonExamples.Value;
                     }
                 }
             }

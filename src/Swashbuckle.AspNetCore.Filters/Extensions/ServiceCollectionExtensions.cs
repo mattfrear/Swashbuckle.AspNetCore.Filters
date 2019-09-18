@@ -20,6 +20,13 @@ namespace Swashbuckle.AspNetCore.Filters
                     .AsSelf()
                     .WithSingletonLifetime()
             );
+            services.Scan(scan => scan
+                .FromAssemblyOf<T>()
+                    .AddClasses(classes => classes.AssignableTo(typeof(IMultipleExamplesProvider<>)))
+                    .AsImplementedInterfaces()
+                    .AsSelf()
+                    .WithSingletonLifetime()
+            );
 
             return services;
         }
