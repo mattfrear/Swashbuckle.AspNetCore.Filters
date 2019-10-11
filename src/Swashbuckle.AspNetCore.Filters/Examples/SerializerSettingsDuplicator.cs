@@ -32,9 +32,10 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 serializerSettings.ContractResolver = attributeContractResolver;
             }
-            else if (schemaGeneratorOptions.IgnoreObsoleteProperties)
+
+            if (schemaGeneratorOptions.IgnoreObsoleteProperties)
             {
-                serializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver();
+                serializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver(serializerSettings.ContractResolver);
             }
 
             if (attributeJsonConverter != null)

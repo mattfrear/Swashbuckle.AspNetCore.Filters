@@ -11,6 +11,16 @@ namespace Swashbuckle.AspNetCore.Filters
     /// </summary>
     public class ExcludeObsoletePropertiesResolver : DefaultContractResolver
     {
+        public ExcludeObsoletePropertiesResolver(IContractResolver existingContractResolver)
+        {
+            // Preserve the naming strategy, which is usually camel case
+            var namingStrategy = (existingContractResolver as DefaultContractResolver)?.NamingStrategy;
+            if (namingStrategy != null)
+            {
+                NamingStrategy = namingStrategy;
+            }
+        }
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             JsonProperty prop = base.CreateProperty(member, memberSerialization);
