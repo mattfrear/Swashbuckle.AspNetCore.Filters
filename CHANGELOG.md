@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased
 ### Fixed
 - PR #110, where using IgnoreObsoleteProperties option causes PascalCase to be emitted instead of camelCase.
+### Changed
+- Use Swashbuckle.AspNetCore 5.0.0-rc4
 
 ## [5.0.0-rc8] 2019-08-02
 ### Fixed

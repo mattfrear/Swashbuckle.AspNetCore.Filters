@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
+using Swashbuckle.AspNetCore.Newtonsoft;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -47,10 +48,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             {
                 ContractResolver = contractResolver
             };
+            
+            var schemaOptions = new SchemaGeneratorOptions();
 
             return new OperationFilterContext(
                 apiDescription,
-                new SchemaGenerator(new SchemaGeneratorOptions(), new JsonSerializerSettings()),
+                new SchemaGenerator(new NewtonsoftApiModelResolver(new JsonSerializerSettings(), schemaOptions), schemaOptions),
                 new SchemaRepository(),
                 (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
         }
