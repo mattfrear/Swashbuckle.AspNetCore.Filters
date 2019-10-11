@@ -215,10 +215,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
-
-            var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
-            actualExample.Age.ShouldBe(0);
+            string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
+            var expectedExample = new PersonResponseExample().GetExamples();
+            jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}", Case.Sensitive);
+            jsonExample.ShouldContain($"\"id\": {expectedExample.Id}", Case.Sensitive);
         }
     }
 }
