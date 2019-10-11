@@ -34,7 +34,16 @@ namespace Swashbuckle.AspNetCore.Filters
             }
             else if (schemaGeneratorOptions.IgnoreObsoleteProperties)
             {
-                serializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver();
+                var resolver = new ExcludeObsoletePropertiesResolver();
+
+                // Preserve the naming strategy, which might be camel case
+                var namingStrategy = (serializerSettings.ContractResolver as DefaultContractResolver)?.NamingStrategy;
+                if (namingStrategy != null)
+                {
+                    resolver.NamingStrategy = namingStrategy;
+                }
+                
+                serializerSettings.ContractResolver = resolver;
             }
 
             if (attributeJsonConverter != null)
