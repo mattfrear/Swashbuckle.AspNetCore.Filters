@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 
@@ -13,6 +14,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         [SwaggerResponse(200, type: typeof(PersonResponse))]
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
         public IActionResult AnnotatedWithSwaggerResponseExampleAttribute()
+        {
+            throw new NotImplementedException();
+        }
+
+        [SwaggerResponse(200, type: typeof(PersonResponse))]
+        [SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]
+        public IActionResult AnnotatedWithSwaggerResponseExampleAttributePascalCase()
         {
             throw new NotImplementedException();
         }

@@ -85,6 +85,26 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
+        public void Apply_SetsResponseExamples_FromMethodAttributesPascalCase()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributePascalCase));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
+            var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
+            jsonExample.ShouldContain($"\"Id\": {expectedExample.Id}", Case.Sensitive);
+        }
+
+        [Fact]
         public void Apply_SetsRequestExamples_FromMethodAttributes()
         {
             // Arrange
