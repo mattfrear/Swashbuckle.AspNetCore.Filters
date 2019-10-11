@@ -158,7 +158,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-3. If you want to use the Request and Response example filters (and have called `c.ExampleFilters()` above), then you MUST also call either 
+3. If you want to use the Request and Response example filters (and have called `c.ExampleFilters()` above), then you MUST also call
 ```csharp
     services.AddSwaggerExamplesFromAssemblyOf<MyExample>();
 ```
