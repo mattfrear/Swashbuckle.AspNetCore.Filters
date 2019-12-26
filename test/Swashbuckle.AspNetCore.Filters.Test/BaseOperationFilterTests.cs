@@ -53,7 +53,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
 
             return new OperationFilterContext(
                 apiDescription,
-                new SchemaGenerator(new NewtonsoftApiModelResolver(new JsonSerializerSettings(), schemaOptions), schemaOptions),
+                new NewtonsoftSchemaGenerator(schemaOptions, jsonSerializerSettings),
                 new SchemaRepository(),
                 (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
         }
