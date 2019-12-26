@@ -25,9 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C0D0AB6-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Filters.Test", "test\Swashbuckle.AspNetCore.Filters.Test\Swashbuckle.AspNetCore.Filters.Test.csproj", "{8D343046-925C-4D1E-829E-BF7A03E2426D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi2.0-Swashbuckle5", "test\WebApi2.0-Swashbuckle5\WebApi2.0-Swashbuckle5.csproj", "{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi2.1-Swashbuckle5", "test\WebApi2.1-Swashbuckle5\WebApi2.1-Swashbuckle5.csproj", "{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi3.0-Swashbuckle5", "test\WebApi3.0-Swashbuckle5\WebApi3.0-Swashbuckle5.csproj", "{635832B3-0B2B-456C-BF55-E4179E7996E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi3.0-Swashbuckle5", "test\WebApi3.0-Swashbuckle5\WebApi3.0-Swashbuckle5.csproj", "{635832B3-0B2B-456C-BF55-E4179E7996E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
