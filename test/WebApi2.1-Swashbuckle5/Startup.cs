@@ -94,7 +94,7 @@ namespace WebApi2._0_Swashbuckle4
 
             app.UseMvc();
 
-            app.UseSwagger();
+            app.UseSwagger(c => c.SerializeAsV2 = false);
 
             app.UseSwaggerUI(c =>
             {
