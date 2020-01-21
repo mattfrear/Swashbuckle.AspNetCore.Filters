@@ -11,7 +11,7 @@
     <Copyright>2019</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
     <PackageReleaseNotes>
-      PR #110 and upgrade to Swashbuckle.AspNetCore rc5
+      Upgrade to Swashbuckle.AspNetCore 5.0.0
     </PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
