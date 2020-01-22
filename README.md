@@ -50,7 +50,7 @@ From NuGet.
 | Swashbuckle.AspNetCore version 1.0.0 - 2.5.0 | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Examples/ |
 | Swashbuckle.AspNetCore version 3.0.0  | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ |
 | Swashbuckle.AspNetCore version 4.0.0 and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ Version >= 4.5.1 |
-| Swashbuckle.AspNetCore version 5.0.0 and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ Version >= 5.0.0 |
+| Swashbuckle.AspNetCore version 5.0.0-beta and above | https://www.nuget.org/packages/Swashbuckle.AspNetCore.Filters/ Version >= 5.0.0-beta |
 
 ## What's included
 ### Request example
@@ -71,7 +71,7 @@ navigating to swagger/v1/swagger.json
 
 ![swagger.json](https://mattfrear.files.wordpress.com/2016/01/capture.jpg)
 
-As of version 5.0.0, XML examples are also supported.
+As of version 5.0.0-beta, XML examples are also supported.
 
 ### Response example
 
@@ -83,7 +83,7 @@ You'll see some more realistic data (or whatever you want):
 
 ![response with awesome data](https://mattfrear.files.wordpress.com/2015/04/response-new.png?w=700&h=358)
 
-As of version 5.0.0, XML examples are also supported.
+As of version 5.0.0-beta, XML examples are also supported.
 
 ### Security requirements filter
 
