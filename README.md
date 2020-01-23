@@ -125,7 +125,7 @@ public void ConfigureServices(IServiceCollection services)
 
     services.AddSwaggerGen(c =>
     {
-        c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
         
         // [SwaggerRequestExample] & [SwaggerResponseExample]
         // version < 3.0 like this: c.OperationFilter<ExamplesOperationFilter>(); 
@@ -147,12 +147,12 @@ public void ConfigureServices(IServiceCollection services)
         // or use the generic method, e.g. c.OperationFilter<SecurityRequirementsOperationFilter<MyCustomAttribute>>();
 
         // if you're using the SecurityRequirementsOperationFilter, you also need to tell Swashbuckle you're using OAuth2
-        c.AddSecurityDefinition("oauth2", new ApiKeyScheme
+        c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-            In = "header",
+            In = ParameterLocation.Header,
             Name = "Authorization",
-            Type = "apiKey"
+            Type = SecuritySchemeType.ApiKey
         });
     });
 }
@@ -367,12 +367,12 @@ Then you need to tell Swagger that you're using OAuth2, as shown in the Installa
 ```csharp
     services.AddSwaggerGen(c =>
     {
-        c.AddSecurityDefinition("oauth2", new ApiKeyScheme
+        c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-            In = "header",
+            In = ParameterLocation.Header,
             Name = "Authorization",
-            Type = "apiKey"
+            Type = SecuritySchemeType.ApiKey
         });
 ```
 This adds a securityDefinition to the bottom of the Swagger document, which Swagger-UI renders as an "Authorize" button, which when clicked brings up the Authorize dialog box shown above.
