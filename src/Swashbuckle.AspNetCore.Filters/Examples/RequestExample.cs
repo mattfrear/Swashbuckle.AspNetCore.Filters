@@ -3,11 +3,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters.Extensions;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Linq;
-using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters
 {

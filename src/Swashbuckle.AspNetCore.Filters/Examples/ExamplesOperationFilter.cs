@@ -1,9 +1,13 @@
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters.Extensions;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Reflection;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Filters.Extensions;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -53,11 +57,15 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>();
 
+            var mvcOptions = serviceProvider.GetService<IOptions<MvcOptions>>();
+            var outputFormatterSelector = mvcOptions != null ? new DefaultOutputFormatterSelector(mvcOptions, serviceProvider.GetService<ILoggerFactory>()) : null;
+
             foreach (var attr in responseAttributes)
             {
                 var example = serviceProvider.GetExampleWithExamplesProviderType(attr.ExamplesProviderType);
 
                 responseExample.SetResponseExampleForStatusCode(
+                    outputFormatterSelector,
                     operation,
                     attr.StatusCode,
                     example,
