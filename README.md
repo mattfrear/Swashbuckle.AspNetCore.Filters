@@ -162,6 +162,14 @@ public void ConfigureServices(IServiceCollection services)
 ```csharp
     services.AddSwaggerExamplesFromAssemblyOf<MyExample>();
 ```
+or
+```csharp
+    services.AddSwaggerExamplesFromAssemblyOf(typeof(MyExample));
+```
+or
+```csharp
+    services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
+```
 This will register your examples with the ServiceProvider.
 
 ## How to use
@@ -453,9 +461,17 @@ internal class PersonRequestExample : IExamplesProvider
     }
 }
 ```
-Then, you should register the Swagger examples via the `FromAssemblyOf<T>` extension method.
+Then, you should register the Swagger examples via the extension methods:
 ```csharp
 services.AddSwaggerExamplesFromAssemblyOf<PersonRequestExample>();
+```
+or
+```csharp
+services.AddSwaggerExamplesFromAssemblyOf(typeof(PersonRequestExample));
+```
+or
+```csharp
+services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
 ```
 If you are using `services.AddSwaggerExamples()`, then you would have to manually register your `IExamplesProvider` class:
 ```csharp
