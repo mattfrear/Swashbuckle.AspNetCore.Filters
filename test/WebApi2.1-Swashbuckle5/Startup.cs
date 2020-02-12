@@ -35,7 +35,8 @@ namespace WebApi2._0_Swashbuckle4
                 options.InputFormatters.Add(new XmlSerializerInputFormatter());
                 options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
             })
-            .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()));
+            .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()))
+            .AddXmlDataContractSerializerFormatters();
 
             services.AddSwaggerGen(options =>
             {

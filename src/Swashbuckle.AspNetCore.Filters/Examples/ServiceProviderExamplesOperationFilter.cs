@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +16,7 @@ namespace Swashbuckle.AspNetCore.Filters
         private readonly IServiceProvider serviceProvider;
         private readonly RequestExample requestExample;
         private readonly ResponseExample responseExample;
+        private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public ServiceProviderExamplesOperationFilter(
             IServiceProvider serviceProvider,
@@ -26,6 +26,8 @@ namespace Swashbuckle.AspNetCore.Filters
             this.serviceProvider = serviceProvider;
             this.requestExample = requestExample;
             this.responseExample = responseExample;
+
+            this.mvcOutputFormatter = new MvcOutputFormatter(serviceProvider.GetService<IOptions<MvcOptions>>(), serviceProvider.GetService<ILoggerFactory>());
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -47,7 +49,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 var example = serviceProvider.GetExampleForType(parameterDescription.Type);
 
-                requestExample.SetRequestExampleForOperation(operation, example);
+                requestExample.SetRequestExampleForOperation(mvcOutputFormatter, operation, example);
             }
         }
 
@@ -70,8 +72,6 @@ namespace Swashbuckle.AspNetCore.Filters
             var autodetectedResponses = context.ApiDescription.SupportedResponseTypes.Select(r => new StatusCodeWithType(r.StatusCode, r.Type));
 
             var responses = responseAttributes.Concat(autodetectedResponses);
-            var mvcOptions = serviceProvider.GetService<IOptions<MvcOptions>>();
-            var outputFormatterSelector = mvcOptions != null ? new DefaultOutputFormatterSelector(mvcOptions, serviceProvider.GetService<ILoggerFactory>()) : null;
 
             foreach (var response in responses)
             {
@@ -82,7 +82,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 var example = serviceProvider.GetExampleForType(response.Type);
 
-                responseExample.SetResponseExampleForStatusCode(outputFormatterSelector, operation, response.StatusCode, example);
+                responseExample.SetResponseExampleForStatusCode(mvcOutputFormatter, operation, response.StatusCode, example);
             }
         }
 

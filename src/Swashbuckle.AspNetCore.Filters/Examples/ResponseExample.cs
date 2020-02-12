@@ -4,7 +4,6 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Any;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters
@@ -23,7 +22,7 @@ namespace Swashbuckle.AspNetCore.Filters
         }
 
         public void SetResponseExampleForStatusCode(
-            OutputFormatterSelector outputFormatterSelector,
+            MvcOutputFormatter mvcOutputFormatter,
             OpenApiOperation operation,
             int statusCode,
             object example,
@@ -45,7 +44,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 OpenApiString xmlExample = null;
                 if (response.Value.Content.Keys.Any(k => k.Contains("xml")))
                 {
-                    xmlExample = new OpenApiString(example.XmlSerialize(outputFormatterSelector));
+                    xmlExample = new OpenApiString(example.XmlSerialize(mvcOutputFormatter));
                 }
 
                 foreach (var content in response.Value.Content)

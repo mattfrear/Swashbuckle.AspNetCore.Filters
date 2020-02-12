@@ -2,7 +2,6 @@ using System;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -20,6 +19,7 @@ namespace Swashbuckle.AspNetCore.Filters
         private readonly IServiceProvider serviceProvider;
         private readonly RequestExample requestExample;
         private readonly ResponseExample responseExample;
+        private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public ExamplesOperationFilter(
             IServiceProvider serviceProvider,
@@ -29,6 +29,8 @@ namespace Swashbuckle.AspNetCore.Filters
             this.serviceProvider = serviceProvider;
             this.requestExample = requestExample;
             this.responseExample = responseExample;
+
+            this.mvcOutputFormatter = new MvcOutputFormatter(serviceProvider.GetService<IOptions<MvcOptions>>(), serviceProvider.GetService<ILoggerFactory>());
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -46,6 +48,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 var example = serviceProvider.GetExampleWithExamplesProviderType(attr.ExamplesProviderType);
 
                 requestExample.SetRequestExampleForOperation(
+                    mvcOutputFormatter,
                     operation,
                     example,
                     attr.ContractResolver,
@@ -57,15 +60,12 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>();
 
-            var mvcOptions = serviceProvider.GetService<IOptions<MvcOptions>>();
-            var outputFormatterSelector = mvcOptions != null ? new DefaultOutputFormatterSelector(mvcOptions, serviceProvider.GetService<ILoggerFactory>()) : null;
-
             foreach (var attr in responseAttributes)
             {
                 var example = serviceProvider.GetExampleWithExamplesProviderType(attr.ExamplesProviderType);
 
                 responseExample.SetResponseExampleForStatusCode(
-                    outputFormatterSelector,
+                    mvcOutputFormatter,
                     operation,
                     attr.StatusCode,
                     example,

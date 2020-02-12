@@ -21,6 +21,7 @@ namespace Swashbuckle.AspNetCore.Filters
         }
 
         public void SetRequestExampleForOperation(
+            MvcOutputFormatter mvcOutputFormatter,
             OpenApiOperation operation,
             object example,
             IContractResolver contractResolver = null,
@@ -42,7 +43,7 @@ namespace Swashbuckle.AspNetCore.Filters
             OpenApiString xmlExample = null;
             if (operation.RequestBody.Content.Keys.Any(k => k.Contains("xml")))
             {
-                xmlExample = new OpenApiString(example.XmlSerialize());
+                xmlExample = new OpenApiString(example.XmlSerialize(mvcOutputFormatter));
             }
 
             foreach (var content in operation.RequestBody.Content)

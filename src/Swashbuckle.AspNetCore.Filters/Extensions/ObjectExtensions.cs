@@ -1,102 +1,56 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 
 namespace Swashbuckle.AspNetCore.Filters.Extensions
 {
     public static class ObjectExtensions
     {
-        public static string XmlSerialize<T>(
-            this T value,
-            OutputFormatterSelector outputFormatterSelector = null)
+        public static string XmlSerialize<T>(this T value)
         {
             if (value == null)
             {
                 return string.Empty;
             }
 
-            return outputFormatterSelector == null
-                ? UseXmlSerializer(value)
-                : UseXmlSerializerFromSelector(value, outputFormatterSelector);
-        }
-
-        private static string UseXmlSerializer<T>(T value)
-        {
             var xmlSerializer = new XmlSerializer(value.GetType());
             var stringWriter = new StringWriter();
             using (var writer = XmlWriter.Create(stringWriter))
             {
                 xmlSerializer.Serialize(writer, value);
-                var uglyXml = stringWriter.ToString();
 
-                var doc = XDocument.Parse(uglyXml);
-                return doc.ToString();
+                return stringWriter
+                    .ToString()
+                    .FormatXml();
             }
         }
 
-        private static string UseXmlSerializerFromSelector<T>(
-            T value,
-            OutputFormatterSelector outputFormatterSelector)
-        {
-            if (outputFormatterSelector == null)
-                throw new ArgumentNullException(nameof(outputFormatterSelector));
+        private static readonly MediaTypeHeaderValue ApplicationXml = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
 
-            using (var stringWriter = new StringWriter())
+        internal static string XmlSerialize<T>(this T value, MvcOutputFormatter mvcOutputFormatter)
+        {
+            if (mvcOutputFormatter == null)
+                throw new ArgumentNullException(nameof(mvcOutputFormatter));
+
+            try
             {
-                var outputFormatterContext = GetOutputFormatterContext(
-                    stringWriter,
-                    value,
-                    value.GetType(),
-                    "application/xml; charset=utf-8");
-
-                var xmlFormatter = outputFormatterSelector.SelectFormatter(
-                    outputFormatterContext,
-                    new List<IOutputFormatter>(),
-                    new MediaTypeCollection());
-
-                xmlFormatter.WriteAsync(outputFormatterContext).GetAwaiter().GetResult();
-                stringWriter.FlushAsync().GetAwaiter().GetResult();
-                return stringWriter.ToString();
+                return mvcOutputFormatter
+                    .Serialize(value, ApplicationXml)
+                    .FormatXml();
+            }
+            catch (MvcOutputFormatter.FormatterNotFound)
+            {
+                return value.XmlSerialize();
             }
         }
 
-        private static OutputFormatterWriteContext GetOutputFormatterContext(
-            TextWriter writer,
-            object outputValue,
-            Type outputType,
-            string contentType)
+        private static string FormatXml(this string unformattedXml)
         {
-            return new OutputFormatterWriteContext(
-                GetHttpContext(contentType),
-                (stream, encoding) => writer,
-                outputType,
-                outputValue);
-        }
-
-        private static HttpContext GetHttpContext(string contentType)
-        {
-            var httpContext = new DefaultHttpContext();
-
-            httpContext.Request.Headers["Accept-Charset"] = MediaTypeHeaderValue.Parse(contentType).Charset.ToString();
-            httpContext.Request.ContentType = contentType;
-
-            httpContext.Response.Body = new MemoryStream();
-            httpContext.RequestServices =
-                new ServiceCollection()
-                    .AddSingleton(Options.Create(new MvcOptions()))
-                    .BuildServiceProvider();
-
-            return httpContext;
+            var doc = XDocument.Parse(unformattedXml);
+            return doc.ToString();
         }
     }
 }
