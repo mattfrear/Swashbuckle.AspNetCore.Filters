@@ -48,9 +48,6 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
         }
 
         private static string FormatXml(this string unformattedXml)
-        {
-            var doc = XDocument.Parse(unformattedXml);
-            return doc.ToString();
-        }
+            => XDocument.Parse(unformattedXml).ToString();
     }
 }
