@@ -12,32 +12,66 @@ using Microsoft.Net.Http.Headers;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
+    using System.Linq;
+
     internal class MvcOutputFormatter
     {
-        private readonly OutputFormatterSelector outputFormatterSelector;
+        private readonly object initializeLock = new object();
+        private bool initializedOutputFormatterSelector;
+
+        private readonly IOptions<MvcOptions> selectorOptions;
+        private readonly ILoggerFactory loggerFactory;
+
+        private OutputFormatterSelector outputFormatterSelector;
+        private OutputFormatterSelector OutputFormatterSelector
+        {
+            get
+            {
+                lock (initializeLock)
+                {
+                    if (!initializedOutputFormatterSelector)
+                    {
+                        if (selectorOptions != null)
+                        {
+                            outputFormatterSelector = new DefaultOutputFormatterSelector(
+                                selectorOptions,
+                                loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory)));
+                        }
+                        initializedOutputFormatterSelector = true;
+                    }
+                }
+
+
+                return outputFormatterSelector;
+            }
+        }
 
         public MvcOutputFormatter(IOptions<MvcOptions> options, ILoggerFactory loggerFactory)
         {
-            if (options?.Value?.OutputFormatters?.Count > 0)
-            {
-                var selectorOptions = new MvcOptions
-                {
-                    ReturnHttpNotAcceptable = true,
-                    RespectBrowserAcceptHeader = true
-                };
-                foreach (var formatter in options.Value.OutputFormatters)
-                    selectorOptions.OutputFormatters.Add(formatter);
+            this.initializedOutputFormatterSelector = false;
+            this.selectorOptions = GetSelectorOptions(options);
+            this.loggerFactory = loggerFactory;
+        }
 
-                this.outputFormatterSelector = new DefaultOutputFormatterSelector(
-                    new OptionsWrapper<MvcOptions>(selectorOptions),
-                    loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory))
-                );
-            }
+        private static IOptions<MvcOptions> GetSelectorOptions(IOptions<MvcOptions> options)
+        {
+            if (options?.Value?.OutputFormatters == null || !options.Value.OutputFormatters.Any())
+                return null;
+
+            var selectorOptions = new MvcOptions
+            {
+                ReturnHttpNotAcceptable = true,
+                RespectBrowserAcceptHeader = true
+            };
+            foreach (var formatter in options.Value.OutputFormatters)
+                selectorOptions.OutputFormatters.Add(formatter);
+
+            return new OptionsWrapper<MvcOptions>(selectorOptions);
         }
 
         public string Serialize<T>(T value, MediaTypeHeaderValue contentType)
         {
-            if (outputFormatterSelector == null)
+            if (OutputFormatterSelector == null)
                 throw new FormatterNotFound(contentType);
 
             if (value == null)
@@ -51,7 +85,7 @@ namespace Swashbuckle.AspNetCore.Filters
                     value.GetType(),
                     contentType);
 
-                var formatter = outputFormatterSelector.SelectFormatter(
+                var formatter = OutputFormatterSelector.SelectFormatter(
                     outputFormatterContext,
                     new List<IOutputFormatter>(),
                     new MediaTypeCollection());
