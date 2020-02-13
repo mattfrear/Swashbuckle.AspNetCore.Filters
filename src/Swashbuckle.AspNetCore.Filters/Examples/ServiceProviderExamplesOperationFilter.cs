@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.JsonPatch.Operations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters.Extensions;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
 using System.Reflection;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Filters.Extensions;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -33,7 +36,7 @@ namespace Swashbuckle.AspNetCore.Filters
         private void SetRequestExamples(OpenApiOperation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
-
+            
             foreach (var parameterDescription in context.ApiDescription.ParameterDescriptions)
             {
                 if (actionAttributes.Any(a => a.RequestType == parameterDescription.Type))
@@ -61,6 +64,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private void SetResponseExamples(OpenApiOperation operation, OperationFilterContext context)
         {
+
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>();
             var responseAttributes = context.GetControllerAndActionAttributes<ProducesResponseTypeAttribute>().Select(a => new StatusCodeWithType(a.StatusCode, a.Type));
             var autodetectedResponses = context.ApiDescription.SupportedResponseTypes.Select(r => new StatusCodeWithType(r.StatusCode, r.Type));

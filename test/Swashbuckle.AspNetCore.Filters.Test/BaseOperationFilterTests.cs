@@ -48,7 +48,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             {
                 ContractResolver = contractResolver
             };
-
+            
             var schemaOptions = new SchemaGeneratorOptions();
 
             return new OperationFilterContext(

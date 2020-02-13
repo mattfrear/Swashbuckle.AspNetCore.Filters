@@ -1,8 +1,9 @@
-using System;
-using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters.Extensions;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
