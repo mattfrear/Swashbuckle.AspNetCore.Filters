@@ -11,17 +11,19 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
+        private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public RequestExample(
             JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator)
+            SerializerSettingsDuplicator serializerSettingsDuplicator,
+            MvcOutputFormatter mvcOutputFormatter)
         {
             this.jsonFormatter = jsonFormatter;
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
+            this.mvcOutputFormatter = mvcOutputFormatter;
         }
 
         public void SetRequestExampleForOperation(
-            MvcOutputFormatter mvcOutputFormatter,
             OpenApiOperation operation,
             object example,
             IContractResolver contractResolver = null,

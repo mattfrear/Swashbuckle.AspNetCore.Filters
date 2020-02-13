@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Writers;
 using Newtonsoft.Json;
 using NSubstitute;
 using Shouldly;
@@ -27,14 +25,15 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
             var jsonFormatter = new JsonFormatter();
+            var mvcOutputFormatter = new MvcOutputFormatter(new OptionsWrapper<MvcOptions>(null), null);
 
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(PersonResponseExample)).Returns(new PersonResponseExample());
             serviceProvider.GetService(typeof(PersonRequestExample)).Returns(new PersonRequestExample());
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
 
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }

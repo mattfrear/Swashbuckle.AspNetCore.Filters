@@ -1,6 +1,4 @@
 ﻿using Xunit;
-using Swashbuckle.AspNetCore.Swagger;
-using Newtonsoft.Json.Linq;
 using Shouldly;
 using System.Collections.Generic;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -29,9 +27,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
             var jsonFormatter = new JsonFormatter();
+            var mvcOutputFormatter = new MvcOutputFormatter(new OptionsWrapper<MvcOptions>(null), null);
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());

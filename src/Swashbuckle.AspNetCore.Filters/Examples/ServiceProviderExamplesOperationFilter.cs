@@ -3,9 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -16,7 +13,6 @@ namespace Swashbuckle.AspNetCore.Filters
         private readonly IServiceProvider serviceProvider;
         private readonly RequestExample requestExample;
         private readonly ResponseExample responseExample;
-        private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public ServiceProviderExamplesOperationFilter(
             IServiceProvider serviceProvider,
@@ -26,8 +22,6 @@ namespace Swashbuckle.AspNetCore.Filters
             this.serviceProvider = serviceProvider;
             this.requestExample = requestExample;
             this.responseExample = responseExample;
-
-            this.mvcOutputFormatter = new MvcOutputFormatter(serviceProvider.GetService<IOptions<MvcOptions>>(), serviceProvider.GetService<ILoggerFactory>());
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -49,7 +43,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 var example = serviceProvider.GetExampleForType(parameterDescription.Type);
 
-                requestExample.SetRequestExampleForOperation(mvcOutputFormatter, operation, example);
+                requestExample.SetRequestExampleForOperation(operation, example);
             }
         }
 
@@ -82,7 +76,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 var example = serviceProvider.GetExampleForType(response.Type);
 
-                responseExample.SetResponseExampleForStatusCode(mvcOutputFormatter, operation, response.StatusCode, example);
+                responseExample.SetResponseExampleForStatusCode(operation, response.StatusCode, example);
             }
         }
 
