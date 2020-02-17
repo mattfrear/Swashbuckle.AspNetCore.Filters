@@ -61,7 +61,7 @@ namespace WebApi2._0_Swashbuckle4
 
                 options.IgnoreObsoleteProperties();
             });
-            
+
             services.AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();
 
             services.AddAuthorization(options =>

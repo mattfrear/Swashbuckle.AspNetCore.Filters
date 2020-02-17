@@ -41,7 +41,6 @@ namespace Swashbuckle.AspNetCore.Filters
                     }
                 }
 
-
                 return outputFormatterSelector;
             }
         }
@@ -63,6 +62,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 ReturnHttpNotAcceptable = true,
                 RespectBrowserAcceptHeader = true
             };
+
             foreach (var formatter in options.Value.OutputFormatters)
                 selectorOptions.OutputFormatters.Add(formatter);
 
@@ -128,6 +128,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
             return httpContext;
         }
+
         internal class FormatterNotFound : Exception
         {
             public FormatterNotFound(MediaTypeHeaderValue contentType)
