@@ -1,8 +1,8 @@
-﻿namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
-{
-    using Shouldly;
-    using TestFixtures.Fakes.Examples;
+﻿using Shouldly;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 
+namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
+{
     public static class ExampleAssertExtensions
     {
         public static void ShouldMatch(this PersonRequest actualExample, PersonRequest expectedExample)

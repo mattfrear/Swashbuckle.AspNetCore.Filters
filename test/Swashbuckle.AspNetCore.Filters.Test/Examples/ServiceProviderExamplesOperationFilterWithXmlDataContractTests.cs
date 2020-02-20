@@ -14,7 +14,6 @@ using Swashbuckle.AspNetCore.Filters.Test.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
-
     public class ServiceProviderExamplesOperationFilterWithXmlDataContractTests : BaseOperationFilterTests
     {
         private readonly IOperationFilter sut;

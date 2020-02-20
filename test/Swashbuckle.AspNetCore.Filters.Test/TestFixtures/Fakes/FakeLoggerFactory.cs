@@ -1,8 +1,8 @@
-﻿namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
-{
-    using Microsoft.Extensions.Logging;
-    using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 
+namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
+{
     internal class FakeLoggerFactory : ILoggerFactory
     {
         private readonly ILoggerFactory factory;

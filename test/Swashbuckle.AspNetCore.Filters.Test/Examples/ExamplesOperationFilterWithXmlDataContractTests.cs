@@ -10,11 +10,10 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
+using Microsoft.OpenApi.Any;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
-    using Microsoft.OpenApi.Any;
-
     public class ExamplesOperationFilterWithXmlDataContractTests : BaseOperationFilterTests
     {
         private readonly ExamplesOperationFilter sut;
@@ -180,6 +179,5 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             formatedExample.EndsWith('"').ShouldBeTrue();
             formatedExample.StartsWith('"').ShouldBeTrue();
         }
-
     }
 }

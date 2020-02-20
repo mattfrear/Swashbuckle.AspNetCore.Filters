@@ -145,5 +145,4 @@ namespace Swashbuckle.AspNetCore.Filters
             { }
         }
     }
-
 }

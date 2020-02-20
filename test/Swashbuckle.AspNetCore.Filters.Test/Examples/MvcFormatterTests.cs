@@ -48,7 +48,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
     }
 
-
     public class GivenAMvcFormatterWithOutputFormatters_WhenSerializingAnObjectForAContentTypeThatIsNotConfigured
     {
         private readonly MvcOutputFormatter sut;

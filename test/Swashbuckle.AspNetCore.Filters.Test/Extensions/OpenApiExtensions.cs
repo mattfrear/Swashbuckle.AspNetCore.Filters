@@ -1,11 +1,11 @@
-﻿namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
-{
-    using System.Runtime.Serialization;
-    using System.Text;
-    using System.Xml;
-    using Microsoft.OpenApi.Any;
-    using Microsoft.OpenApi.Models;
+﻿using System.Runtime.Serialization;
+using System.Text;
+using System.Xml;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 
+namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
+{
     public static class OpenApiExtensions
     {
         public static T DeserializeDataContractXmlExampleAs<T>(this OpenApiRequestBody response)
