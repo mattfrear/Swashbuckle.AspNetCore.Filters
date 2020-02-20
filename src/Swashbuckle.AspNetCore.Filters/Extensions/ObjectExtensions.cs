@@ -33,7 +33,9 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
         internal static string XmlSerialize<T>(this T value, MvcOutputFormatter mvcOutputFormatter)
         {
             if (mvcOutputFormatter == null)
+            {
                 throw new ArgumentNullException(nameof(mvcOutputFormatter));
+            }
 
             try
             {

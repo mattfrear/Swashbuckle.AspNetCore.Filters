@@ -9,11 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using System.Linq;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    using System.Linq;
-
     internal class MvcOutputFormatter
     {
         private readonly object initializeLock = new object();
@@ -55,7 +54,9 @@ namespace Swashbuckle.AspNetCore.Filters
         private static IOptions<MvcOptions> GetSelectorOptions(IOptions<MvcOptions> options)
         {
             if (options?.Value?.OutputFormatters == null || !options.Value.OutputFormatters.Any())
+            {
                 return null;
+            }
 
             var selectorOptions = new MvcOptions
             {
@@ -64,7 +65,9 @@ namespace Swashbuckle.AspNetCore.Filters
             };
 
             foreach (var formatter in options.Value.OutputFormatters)
+            {
                 selectorOptions.OutputFormatters.Add(formatter);
+            }
 
             return new OptionsWrapper<MvcOptions>(selectorOptions);
         }
@@ -72,10 +75,14 @@ namespace Swashbuckle.AspNetCore.Filters
         public string Serialize<T>(T value, MediaTypeHeaderValue contentType)
         {
             if (OutputFormatterSelector == null)
+            {
                 throw new FormatterNotFound(contentType);
+            }
 
             if (value == null)
+            {
                 return string.Empty;
+            }
 
             using (var stringWriter = new StringWriter())
             {
@@ -91,7 +98,9 @@ namespace Swashbuckle.AspNetCore.Filters
                     new MediaTypeCollection());
 
                 if (formatter == null)
+                {
                     throw new FormatterNotFound(contentType);
+                }
 
                 formatter.WriteAsync(outputFormatterContext).GetAwaiter().GetResult();
                 stringWriter.FlushAsync().GetAwaiter().GetResult();
