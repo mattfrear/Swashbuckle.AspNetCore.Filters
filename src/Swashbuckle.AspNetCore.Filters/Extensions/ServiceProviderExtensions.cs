@@ -18,7 +18,7 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
         }
 
         /// <summary>
-        /// Searches the serviceProvider for an IExamplesProvider<T>, where T is the requested type 
+        /// Searches the serviceProvider for an IExamplesProvider<T>, where T is the requested type
         /// </summary>
         /// <param name="serviceProvider"></param>
         /// <param name="type"></param>
@@ -37,7 +37,7 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
                     && !type.GetTypeInfo().IsInterface;
             }
 
-            Type exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);
+            var exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);
             return GetExampleWithExamplesProviderType(serviceProvider, exampleProviderType);
         }
 
