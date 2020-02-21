@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Extensions;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
@@ -36,7 +33,7 @@ namespace Swashbuckle.AspNetCore.Filters
         private void SetRequestExamples(OpenApiOperation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
-            
+
             foreach (var parameterDescription in context.ApiDescription.ParameterDescriptions)
             {
                 if (actionAttributes.Any(a => a.RequestType == parameterDescription.Type))
@@ -83,6 +80,5 @@ namespace Swashbuckle.AspNetCore.Filters
                 responseExample.SetResponseExampleForStatusCode(operation, response.StatusCode, example);
             }
         }
-
     }
 }

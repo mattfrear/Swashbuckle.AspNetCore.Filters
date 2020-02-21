@@ -3,11 +3,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters.Extensions;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Linq;
-using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -15,13 +11,16 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
+        private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public RequestExample(
             JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator)
+            SerializerSettingsDuplicator serializerSettingsDuplicator,
+            MvcOutputFormatter mvcOutputFormatter)
         {
             this.jsonFormatter = jsonFormatter;
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
+            this.mvcOutputFormatter = mvcOutputFormatter;
         }
 
         public void SetRequestExampleForOperation(
@@ -46,7 +45,7 @@ namespace Swashbuckle.AspNetCore.Filters
             OpenApiString xmlExample = null;
             if (operation.RequestBody.Content.Keys.Any(k => k.Contains("xml")))
             {
-                xmlExample = new OpenApiString(example.XmlSerialize());
+                xmlExample = new OpenApiString(example.XmlSerialize(mvcOutputFormatter));
             }
 
             foreach (var content in operation.RequestBody.Content)

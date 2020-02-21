@@ -10,40 +10,38 @@ using NSubstitute;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
-    public class ServiceProviderExamplesOperationFilterTests : BaseOperationFilterTests
+    public class ServiceProviderExamplesOperationFilterWithXmlDataContractTests : BaseOperationFilterTests
     {
         private readonly IOperationFilter sut;
         private readonly IServiceProvider serviceProvider;
-        private SchemaGeneratorOptions schemaGeneratorOptions;
 
-        public ServiceProviderExamplesOperationFilterTests()
+        public ServiceProviderExamplesOperationFilterWithXmlDataContractTests()
         {
-            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
-            schemaGeneratorOptions = new SchemaGeneratorOptions();
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
-
-            var jsonFormatter = new JsonFormatter();
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
-
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
-
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
 
-            sut = new ServiceProviderExamplesOperationFilter(serviceProvider, requestExample, responseExample);
+            var jsonFormatter = new JsonFormatter();
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(
+                Options.Create(new MvcJsonOptions()),
+                Options.Create(new SchemaGeneratorOptions()));
+
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, new FakeLoggerFactory());
+            
+            sut = new ServiceProviderExamplesOperationFilter(
+                serviceProvider,
+                new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter),
+                new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter));
         }
 
         [Fact]
         public void Apply_SetsResponseExamples_FromMethodAttributes()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
@@ -53,19 +51,19 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
+            var actualExample = response.DeserializeDataContractXmlExampleAs<PersonResponse>();
 
-            var expectedExample = (PersonResponse)new PersonResponseAutoExample().GetExamples();
+            var expectedExample = new PersonResponseAutoExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
-            actualExample.Age.ShouldBe(27);
+            actualExample.Age.ShouldBe(expectedExample.Age);
         }
 
         [Fact]
         public void Apply_SetsResponseExamples_WhenMethodNotAnnotated()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
             var supportedResponseTypes = new List<ApiResponseType> { new ApiResponseType { StatusCode = 200, Type = typeof(PersonResponse) } };
@@ -76,7 +74,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
+            var actualExample = response.DeserializeDataContractXmlExampleAs<PersonResponse>();
 
             var expectedExample = (PersonResponse)new PersonResponseAutoExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
@@ -87,7 +85,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void Apply_SetsResponseExamples_FromControllerAttributes()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
             var filterContext = FilterContextFor(typeof(FakeControllers.SwaggerResponseController), nameof(FakeControllers.SwaggerResponseController.None));
@@ -97,9 +95,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
+            var actualExample = response.DeserializeDataContractXmlExampleAs<PersonResponse>();
 
-            var expectedExample = (PersonResponse)new PersonResponseAutoExample().GetExamples();
+            var expectedExample = new PersonResponseAutoExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
         }
@@ -108,7 +106,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void Apply_DoesNotSetResponseExamples_FromMethodAttributes_WhenSwaggerResponseExampleAttributePresent()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttribute));
@@ -118,7 +116,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var example = response.Content["application/json"].Example;
+            var example = response.Content["application/xml"].Example;
             example.ShouldBeNull();
         }
 
@@ -126,7 +124,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void Apply_SetsResponseExamples_FromMethodAttributes_WithGenericType()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.GenericAnnotatedWithSwaggerResponseAttribute));
@@ -137,7 +135,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<List<string>>(((OpenApiRawString)response.Content["application/json"].Example).Value);
+            var actualExample = response.DeserializeDataContractXmlExampleAs<List<string>>();
             actualExample[0].ShouldBe("Hello");
             actualExample[1].ShouldBe("there");
         }
@@ -151,7 +149,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             {
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
-                    { "application/json", new OpenApiMediaType() }
+                    { "application/xml", new OpenApiMediaType() }
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
@@ -162,8 +160,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
-            var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
+            var actualExample = requestBody.DeserializeDataContractXmlExampleAs<PersonRequest>();
+            var expectedExample = new PersonRequestAutoExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
         }
 
@@ -176,7 +174,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             {
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
-                    { "application/json", new OpenApiMediaType() }
+                    { "application/xml", new OpenApiMediaType() }
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
@@ -187,7 +185,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            requestBody.Content["application/json"].Example.ShouldBeNull();
+            requestBody.Content["application/xml"].Example.ShouldBeNull();
         }
 
         [Fact]
@@ -199,7 +197,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             {
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
-                    { "application/json", new OpenApiMediaType() }
+                    { "application/xml", new OpenApiMediaType() }
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
@@ -210,11 +208,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
-            var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
+            var actualExample = requestBody.DeserializeDataContractXmlExampleAs<PersonRequest>();
+            var expectedExample = new PersonRequestAutoExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
         }
-
 
         [Fact]
         public void Apply_WhenRequestIsAntInt_ShouldNotThrowException()
@@ -224,7 +221,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             {
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
-                    { "application/json", new OpenApiMediaType() }
+                    { "application/xml", new OpenApiMediaType() }
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
@@ -233,7 +230,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.RequestTakesAnInt), parameterDescriptions);
 
             // Act
-            sut.Apply(operation, filterContext);
+            Should.NotThrow(() => sut.Apply(operation, filterContext));
         }
 
         [Fact]
@@ -245,7 +242,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             {
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
-                    { "application/json", new OpenApiMediaType() { Schema = new OpenApiSchema { Reference = new OpenApiReference { Id = "definitions/Title" } } } }
+                    { "application/xml", new OpenApiMediaType() { Schema = new OpenApiSchema { Reference = new OpenApiReference { Id = "definitions/Title" } } } }
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
@@ -257,8 +254,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualParameterExample = Enum.Parse(typeof(Title), ((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
-            var expectedExample = new TitleExample().GetExamples().Value;
+            var actualParameterExample = requestBody.DeserializeDataContractXmlExampleAs<Title?>();
+            var expectedExample = new TitleExample().GetExamples();
             actualParameterExample.ShouldBe(expectedExample);
         }
 
@@ -271,7 +268,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             {
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
-                    { "application/json", new OpenApiMediaType() { Schema = new OpenApiSchema { Reference = new OpenApiReference { Id = "definitions/object" } } } }
+                    { "application/xml", new OpenApiMediaType() { Schema = new OpenApiSchema { Reference = new OpenApiReference { Id = "definitions/object" } } } }
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
@@ -282,32 +279,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
+            var actualExample = requestBody.DeserializeDataContractXmlExampleAs<IDictionary<string, object>>();
             actualExample["PropertyInt"].ShouldBe(1);
             actualExample["PropertyString"].ShouldBe("Some string");
         }
-
-        [Fact]
-        public void Apply_SetsResponseExamples_CorrectlyFormatsJsonExample()
-        {
-            // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
-            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
-            operation.Responses.Add("200", response);
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
-            SetSwaggerResponses(operation, filterContext);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            var example = response.Content["application/json"].Example;
-
-            var formatedExample = RenderOpenApiObject(example);
-            formatedExample.EndsWith('"').ShouldBeFalse();
-            formatedExample.StartsWith('"').ShouldBeFalse();
-        }
-
+        
         [Fact]
         public void Apply_SetsResponseExamples_CorrectlyFormatsXmlExample()
         {
@@ -327,27 +303,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var formatedExample = RenderOpenApiObject(example);
             formatedExample.EndsWith('"').ShouldBeTrue();
             formatedExample.StartsWith('"').ShouldBeTrue();
-        }
-
-        [Fact]
-        public void Apply_ShouldNotEmitObsoleteProperties()
-        {
-            // Arrange
-            schemaGeneratorOptions.IgnoreObsoleteProperties = true;
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
-            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
-            operation.Responses.Add("200", response);
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
-            SetSwaggerResponses(operation, filterContext);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
-            var expectedExample = new PersonResponseAutoExample().GetExamples();
-            jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}", Case.Sensitive);
-            jsonExample.ShouldContain($"\"id\": {expectedExample.Id}", Case.Sensitive);
         }
     }
 }

@@ -1,12 +1,10 @@
-using Swashbuckle.AspNetCore.Swagger;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Any;
 using Swashbuckle.AspNetCore.Filters.Extensions;
-using System;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -14,13 +12,16 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private readonly JsonFormatter jsonFormatter;
         private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
+        private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public ResponseExample(
             JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator)
+            SerializerSettingsDuplicator serializerSettingsDuplicator,
+            MvcOutputFormatter mvcOutputFormatter)
         {
             this.jsonFormatter = jsonFormatter;
             this.serializerSettingsDuplicator = serializerSettingsDuplicator;
+            this.mvcOutputFormatter = mvcOutputFormatter;
         }
 
         public void SetResponseExampleForStatusCode(
@@ -45,7 +46,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 OpenApiString xmlExample = null;
                 if (response.Value.Content.Keys.Any(k => k.Contains("xml")))
                 {
-                    xmlExample = new OpenApiString(example.XmlSerialize());
+                    xmlExample = new OpenApiString(example.XmlSerialize(mvcOutputFormatter));
                 }
 
                 foreach (var content in response.Value.Content)
