@@ -25,8 +25,7 @@ namespace WebApi3._0_Swashbuckle5
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddNewtonsoftJson(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()))
-                .AddXmlDataContractSerializerFormatters();
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
             services.AddSwaggerGen(options =>
             {
