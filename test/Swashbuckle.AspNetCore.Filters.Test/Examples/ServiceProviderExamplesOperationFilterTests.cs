@@ -1,4 +1,6 @@
 ﻿using Xunit;
+using Swashbuckle.AspNetCore.Swagger;
+using Newtonsoft.Json.Linq;
 using Shouldly;
 using System.Collections.Generic;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -11,7 +13,6 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Filters.Test.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -28,10 +29,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
             var jsonFormatter = new JsonFormatter();
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
@@ -164,7 +164,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Assert
             var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
-            actualExample.ShouldMatch(expectedExample);
+            AssertPersonRequestExampleMatches(actualExample, expectedExample);
         }
 
         [Fact]
@@ -212,9 +212,15 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Assert
             var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             var expectedExample = (PersonRequest)new PersonRequestAutoExample().GetExamples();
-            actualExample.ShouldMatch(expectedExample);
+            AssertPersonRequestExampleMatches(actualExample, expectedExample);
         }
 
+        private static void AssertPersonRequestExampleMatches(PersonRequest actualExample, PersonRequest expectedExample)
+        {
+            actualExample.Title.ShouldBe(expectedExample.Title);
+            actualExample.FirstName.ShouldBe(expectedExample.FirstName);
+            actualExample.Age.ShouldBe(expectedExample.Age);
+        }
 
         [Fact]
         public void Apply_WhenRequestIsAntInt_ShouldNotThrowException()

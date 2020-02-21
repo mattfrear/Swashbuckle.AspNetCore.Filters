@@ -12,7 +12,6 @@ namespace Swashbuckle.AspNetCore.Filters
             services.AddSingleton<ResponseExample>();
             services.AddSingleton<ExamplesOperationFilter>();
             services.AddSingleton<ServiceProviderExamplesOperationFilter>();
-            services.AddSingleton<MvcOutputFormatter>();
 
             services.Scan(scan => scan
                 .FromAssemblyOf<T>()

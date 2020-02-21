@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Writers;
 using Newtonsoft.Json;
 using NSubstitute;
 using Shouldly;
@@ -10,7 +12,6 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Swashbuckle.AspNetCore.Filters.Test.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -26,15 +27,14 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
             var jsonFormatter = new JsonFormatter();
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
 
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(PersonResponseExample)).Returns(new PersonResponseExample());
             serviceProvider.GetService(typeof(PersonRequestExample)).Returns(new PersonRequestExample());
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator);
+            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator);
 
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
@@ -124,9 +124,16 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Assert
             var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             var expectedExample = (PersonRequest)new PersonRequestExample().GetExamples();
-            actualExample.ShouldMatch(expectedExample);
+            AssertPersonRequestExampleMatches(actualExample, expectedExample);
         }
-        
+
+        private static void AssertPersonRequestExampleMatches(PersonRequest actualExample, PersonRequest expectedExample)
+        {
+            actualExample.Title.ShouldBe(expectedExample.Title);
+            actualExample.FirstName.ShouldBe(expectedExample.FirstName);
+            actualExample.Age.ShouldBe(expectedExample.Age);
+        }
+
         [Fact]
         public void Apply_WhenRequestIncorrect_ShouldNotThrowException()
         {
