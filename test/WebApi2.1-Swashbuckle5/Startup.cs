@@ -25,12 +25,10 @@ namespace WebApi2._0_Swashbuckle4
         public void ConfigureServices(IServiceCollection services)
         {
             services
-            .AddMvc(options => {
-                options.InputFormatters.Add(new XmlSerializerInputFormatter());
-                options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-            })
-            .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()))
-            .AddXmlDataContractSerializerFormatters();
+                .AddMvc()
+                .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()))
+                // .AddXmlSerializerFormatters()
+                .AddXmlDataContractSerializerFormatters();
 
             services.AddSwaggerGen(options =>
             {
