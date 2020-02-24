@@ -327,6 +327,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var formatedExample = RenderOpenApiObject(example);
             formatedExample.EndsWith('"').ShouldBeTrue();
             formatedExample.StartsWith('"').ShouldBeTrue();
+            formatedExample.Contains("<FirstName>").ShouldBeTrue();
         }
 
         [Fact]

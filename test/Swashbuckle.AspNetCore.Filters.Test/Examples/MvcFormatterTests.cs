@@ -22,7 +22,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var contentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
 
             Should
-                .Throw<MvcOutputFormatter.FormatterNotFound>(() => sut.Serialize(value, contentType))
+                .Throw<MvcOutputFormatter.FormatterNotFoundException>(() => sut.Serialize(value, contentType))
                 .Message.ShouldBe($"OutputFormatter not found for '{contentType}'");
         }
     }
@@ -62,7 +62,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var contentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
 
             Should
-                .Throw<MvcOutputFormatter.FormatterNotFound>(() => sut.Serialize(value, contentType))
+                .Throw<MvcOutputFormatter.FormatterNotFoundException>(() => sut.Serialize(value, contentType))
                 .Message.ShouldBe($"OutputFormatter not found for '{contentType}'");
         }
     }

@@ -126,7 +126,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var expectedExample = (PersonRequest)new PersonRequestExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
         }
-        
+
         [Fact]
         public void Apply_WhenRequestIncorrect_ShouldNotThrowException()
         {

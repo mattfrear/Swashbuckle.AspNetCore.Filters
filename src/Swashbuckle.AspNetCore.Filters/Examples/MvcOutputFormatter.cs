@@ -46,27 +46,6 @@ namespace Swashbuckle.AspNetCore.Filters
             }
         }
 
-        private static IOptions<MvcOptions> GetSelectorOptions(IOptions<MvcOptions> options)
-        {
-            if (options?.Value?.OutputFormatters == null || !options.Value.OutputFormatters.Any())
-            {
-                return null;
-            }
-
-            var selectorOptions = new MvcOptions
-            {
-                ReturnHttpNotAcceptable = true,
-                RespectBrowserAcceptHeader = true
-            };
-
-            foreach (var formatter in options.Value.OutputFormatters)
-            {
-                selectorOptions.OutputFormatters.Add(formatter);
-            }
-
-            return new OptionsWrapper<MvcOptions>(selectorOptions);
-        }
-
         public MvcOutputFormatter(IOptions<MvcOptions> options, ILoggerFactory loggerFactory)
         {
             this.initializedOutputFormatterSelector = false;
@@ -78,7 +57,7 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             if (OutputFormatterSelector == null)
             {
-                throw new FormatterNotFound(contentType);
+                throw new FormatterNotFoundException(contentType);
             }
 
             if (value == null)
@@ -101,13 +80,34 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 if (formatter == null)
                 {
-                    throw new FormatterNotFound(contentType);
+                    throw new FormatterNotFoundException(contentType);
                 }
 
                 formatter.WriteAsync(outputFormatterContext).GetAwaiter().GetResult();
                 stringWriter.FlushAsync().GetAwaiter().GetResult();
                 return stringWriter.ToString();
             }
+        }
+
+        private static IOptions<MvcOptions> GetSelectorOptions(IOptions<MvcOptions> options)
+        {
+            if (options?.Value?.OutputFormatters == null || !options.Value.OutputFormatters.Any())
+            {
+                return null;
+            }
+
+            var selectorOptions = new MvcOptions
+            {
+                ReturnHttpNotAcceptable = true,
+                RespectBrowserAcceptHeader = true
+            };
+
+            foreach (var formatter in options.Value.OutputFormatters)
+            {
+                selectorOptions.OutputFormatters.Add(formatter);
+            }
+
+            return new OptionsWrapper<MvcOptions>(selectorOptions);
         }
 
         private static OutputFormatterWriteContext GetOutputFormatterContext(
@@ -140,9 +140,9 @@ namespace Swashbuckle.AspNetCore.Filters
             return httpContext;
         }
 
-        internal class FormatterNotFound : Exception
+        internal class FormatterNotFoundException : Exception
         {
-            public FormatterNotFound(MediaTypeHeaderValue contentType)
+            public FormatterNotFoundException(MediaTypeHeaderValue contentType)
                 : base($"OutputFormatter not found for '{contentType}'")
             { }
         }

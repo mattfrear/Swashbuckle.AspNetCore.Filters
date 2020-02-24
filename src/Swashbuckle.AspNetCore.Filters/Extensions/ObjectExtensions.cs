@@ -43,7 +43,7 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
                     .Serialize(value, ApplicationXml)
                     .FormatXml();
             }
-            catch (MvcOutputFormatter.FormatterNotFound)
+            catch (MvcOutputFormatter.FormatterNotFoundException)
             {
                 return value.XmlSerialize();
             }
