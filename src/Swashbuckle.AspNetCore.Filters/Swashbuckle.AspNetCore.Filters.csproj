@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
-    <PackageVersion>5.0.1</PackageVersion>
+    <PackageVersion>5.0.2</PackageVersion>
     <Authors>Matt Frear</Authors>
     <Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -11,14 +11,14 @@
     <Copyright>2019</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
     <PackageReleaseNotes>
-      - Fix #136 use either XmlSerializer or DataContractSerializer to output XML examples, depending on what is configured. Thanks to @CumpsD and @ridingwolf for the PR.
+      PR #140 add extension methods AddSwaggerExamplesFromAssemblyOf and AddSwaggerExamplesFromAssemblies
     </PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>5.0.1</VersionPrefix>
+    <VersionPrefix>5.0.2</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>

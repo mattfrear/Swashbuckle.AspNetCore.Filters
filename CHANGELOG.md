@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.2] 2020-02-25
+### Added
+- PR #140 add extension methods AddSwaggerExamplesFromAssemblyOf and AddSwaggerExamplesFromAssemblies
+
 ## [5.0.1] 2020-02-25
 ### Fixed
 - Fix #136 use either XmlSerializer or DataContractSerializer to output XML examples, depending on what is configured. 
