@@ -18,10 +18,11 @@ namespace Swashbuckle.AspNetCore.Filters
         private readonly object initializeLock = new object();
         private bool initializedOutputFormatterSelector;
 
-        private readonly IOptions<MvcOptions> selectorOptions;
+        private readonly IOptions<MvcOptions> options;
         private readonly ILoggerFactory loggerFactory;
 
         private OutputFormatterSelector outputFormatterSelector;
+
         private OutputFormatterSelector OutputFormatterSelector
         {
             get
@@ -30,6 +31,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 {
                     if (!initializedOutputFormatterSelector)
                     {
+                        var selectorOptions = GetSelectorOptions(options);
                         if (selectorOptions != null)
                         {
                             outputFormatterSelector = new DefaultOutputFormatterSelector(
@@ -42,13 +44,6 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 return outputFormatterSelector;
             }
-        }
-
-        public MvcOutputFormatter(IOptions<MvcOptions> options, ILoggerFactory loggerFactory)
-        {
-            this.initializedOutputFormatterSelector = false;
-            this.selectorOptions = GetSelectorOptions(options);
-            this.loggerFactory = loggerFactory;
         }
 
         private static IOptions<MvcOptions> GetSelectorOptions(IOptions<MvcOptions> options)
@@ -70,6 +65,13 @@ namespace Swashbuckle.AspNetCore.Filters
             }
 
             return new OptionsWrapper<MvcOptions>(selectorOptions);
+        }
+
+        public MvcOutputFormatter(IOptions<MvcOptions> options, ILoggerFactory loggerFactory)
+        {
+            this.initializedOutputFormatterSelector = false;
+            this.options = options;
+            this.loggerFactory = loggerFactory;
         }
 
         public string Serialize<T>(T value, MediaTypeHeaderValue contentType)
