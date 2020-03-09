@@ -14,19 +14,16 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class RequestExample
     {
-        private readonly JsonFormatter jsonFormatter;
-        private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
+        private readonly JsonFormatterProvider jsonFormatterProvider;
         private readonly MvcOutputFormatter mvcOutputFormatter;
         private readonly SwaggerOptions swaggerOptions;
 
         public RequestExample(
-            JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator,
+            JsonFormatterProvider jsonFormatterProvider,
             MvcOutputFormatter mvcOutputFormatter,
             IOptions<SwaggerOptions> options)
         {
-            this.jsonFormatter = jsonFormatter;
-            this.serializerSettingsDuplicator = serializerSettingsDuplicator;
+            this.jsonFormatterProvider = jsonFormatterProvider;
             this.mvcOutputFormatter = mvcOutputFormatter;
             this.swaggerOptions = options?.Value;
         }
@@ -49,9 +46,9 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
+            var jsonFormatter = jsonFormatterProvider.GetFormatter(contractResolver, jsonConverter);
 
-            var examplesConverter = new ExamplesConverter(jsonFormatter, mvcOutputFormatter, serializerSettings);
+            var examplesConverter = new ExamplesConverter(jsonFormatter, mvcOutputFormatter);
 
             IOpenApiAny firstOpenApiExample;
             var multiple = example as IEnumerable<ISwaggerExample<object>>;

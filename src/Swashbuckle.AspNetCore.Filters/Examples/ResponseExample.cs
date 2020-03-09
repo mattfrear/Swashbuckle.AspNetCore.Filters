@@ -10,17 +10,14 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class ResponseExample
     {
-        private readonly JsonFormatter jsonFormatter;
-        private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
+        private readonly JsonFormatterProvider jsonFormatterProvider;
         private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public ResponseExample(
-            JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator,
+            JsonFormatterProvider jsonFormatterProvider,
             MvcOutputFormatter mvcOutputFormatter)
         {
-            this.jsonFormatter = jsonFormatter;
-            this.serializerSettingsDuplicator = serializerSettingsDuplicator;
+            this.jsonFormatterProvider = jsonFormatterProvider;
             this.mvcOutputFormatter = mvcOutputFormatter;
         }
 
@@ -42,9 +39,9 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
+            var jsonFormatter = jsonFormatterProvider.GetFormatter(contractResolver, jsonConverter);
 
-            var examplesConverter = new ExamplesConverter(jsonFormatter, mvcOutputFormatter, serializerSettings);
+            var examplesConverter = new ExamplesConverter(jsonFormatter, mvcOutputFormatter);
 
             var multiple = example as IEnumerable<ISwaggerExample<object>>;
             if (multiple == null)
@@ -56,7 +53,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 SetMultipleResponseExampleForStatusCode(response, multiple, examplesConverter);
             }
         }
-        
+
         private void SetSingleResponseExampleForStatusCode(
             KeyValuePair<string, OpenApiResponse> response,
             object example,

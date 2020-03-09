@@ -10,15 +10,13 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class ExamplesConverter
     {
-        private readonly JsonFormatter jsonFormatter;
+        private readonly IJsonFormatter jsonFormatter;
         private readonly MvcOutputFormatter mvcOutputFormatter;
-        private readonly JsonSerializerSettings serializerSettings;
 
-        public ExamplesConverter(JsonFormatter jsonFormatter, MvcOutputFormatter mvcOutputFormatter, JsonSerializerSettings serializerSettings)
+        public ExamplesConverter(IJsonFormatter jsonFormatter, MvcOutputFormatter mvcOutputFormatter)
         {
             this.jsonFormatter = jsonFormatter;
             this.mvcOutputFormatter = mvcOutputFormatter;
-            this.serializerSettings = serializerSettings;
         }
 
         public IOpenApiAny SerializeExampleXml(object exampleValue)
@@ -28,7 +26,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public IOpenApiAny SerializeExampleJson(object exampleValue)
         {
-            return new OpenApiRawString(jsonFormatter.FormatJson(exampleValue, serializerSettings));
+            return new OpenApiRawString(jsonFormatter.FormatJson(exampleValue));
         }
 
         private static IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(

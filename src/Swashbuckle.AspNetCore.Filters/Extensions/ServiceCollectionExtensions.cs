@@ -77,7 +77,8 @@ namespace Swashbuckle.AspNetCore.Filters
         private static void AddRequiredServices(IServiceCollection services)
         {
             services.AddSingleton<SerializerSettingsDuplicator>();
-            services.AddSingleton<JsonFormatter>();
+            services.AddSingleton<SerializerOptionsDuplicator>();
+            services.AddSingleton<JsonFormatterProvider>();
             services.AddSingleton<RequestExample>();
             services.AddSingleton<ResponseExample>();
             services.AddSingleton<ExamplesOperationFilter>();
