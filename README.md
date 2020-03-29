@@ -18,24 +18,26 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 
 - [Where to get it](#where-to-get-it)
 - [What's included](#whats-included)
-  - [Request example](#request-example) 
+  - [Request example](#request-example)
   - [Response example](#response-example)
   - [Security requirements filter](#security-requirements-filter)
   - [Add a request header](#add-a-request-header)
   - [Add a response header](#add-a-response-header)
   - [Add Authorization to Summary](#add-authorization-to-summary)
-- [Installation](#installation) 
+- [Installation](#installation)
 - [How to use](#how-to-use)
-  - [How to use - Request examples](#how-to-use---request-examples) 
+  - [How to use - Request examples](#how-to-use---request-examples)
     - [Automatic annotation](#automatic-annotation)
     - [Manual annotation](#manual-annotation)
-      [List Request examples](#list-request-examples)
+    - [List Request examples](#list-request-examples)
   - [How to use - Response examples](#how-to-use---response-examples)
     - [Automatic annotation](#automatic-annotation-1)
-    - [Manual annotation](#manual-annotation)
+    - [Manual annotation](#manual-annotation-1)
     - [Known issues](#known-issues)
+  - [How to use - Multiple examples](#how-to-use---multiple-examples)
   - [How to use - Security requirements filter](#how-to-use---security-requirements-filter)
   - [How to use - Request Header](#how-to-use---request-header)
+  - [How to use - Response headers](#how-to-use---response-headers)
   - [How to use - Authorization summary](#how-to-use---authorization-summary)
 - [Pascal case or Camel case?](#pascal-case-or-camel-case)
 - [Render Enums as strings](#render-enums-as-strings)
@@ -366,6 +368,56 @@ Example response for application/json mimetype of a Pet data type:
 #### Known issues
 - Request examples are not shown for querystring parameters (i.e. HTTP GET requests, or for querystring parameters for POST, PUT etc methods). Request examples will only be shown in request body.
 This is as per the OpenApi 3.0 spec.
+
+
+### How to use - Multiple examples
+
+Sometimes more than a single example are desirable for an API. In this case you can use `IMultipleExamplesProvider<T>` rather than `IExamplesProvider<T>` to return multiple examples. The example provider class is still located in the same way (automatic or manual annotation), but the `GetExamples()` call returns an enumerated list of examples along with their name and optional summary. To reduce boilerplate, it is recommended to use `yield return` for each example value. Every returned `SwaggerExample<T>` should have different value of `Name` property.
+
+```csharp
+public class DeliveryOptionsSearchModelExample : IMultipleExamplesProvider<DeliveryOptionsSearchModel>
+{
+    public IEnumerable<SwaggerExample<DeliveryOptionsSearchModel>> GetExamples()
+    {
+        // An example without a summary.
+        yield return SwaggerExample.Create(
+            "Great Britain",
+            new DeliveryOptionsSearchModel
+            {
+                Lang = "en-GB",
+                Currency = "GBP",
+                Address = new AddressModel
+                {
+                    Address1 = "1 Gwalior Road",
+                    Locality = "London",
+                    Country = "GB",
+                    PostalCode = "SW15 1NP"
+                }
+            }
+        );
+
+        // An example with a summary.
+        yield return SwaggerExample.Create(
+            "United States",
+            "A minor former colony of Great Britain",
+            new DeliveryOptionsSearchModel
+            {
+                Lang = "en-US",
+                Currency = "USD",
+                Address = new AddressModel
+                {
+                    Address1 = "123 Main Street",
+                    Locality = "New York",
+                    Country = "US",
+                    PostalCode = "10001"
+                }
+            },
+        );
+    }
+```
+
+Note that UIs may choose to display the summary in different ways; in ReDoc, for example, the summary (if present) replaces the name in the UI.
+
 
 ### How to use - Security requirements filter
 

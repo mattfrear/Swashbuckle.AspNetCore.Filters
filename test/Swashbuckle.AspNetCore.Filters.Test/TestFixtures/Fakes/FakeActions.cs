@@ -19,6 +19,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         }
 
         [SwaggerResponse(200, type: typeof(PersonResponse))]
+        [SwaggerResponseExample(200, typeof(PersonResponseMultipleExamples))]
+        public IActionResult AnnotatedWithSwaggerResponseMultipleExamplesAttribute()
+        {
+            throw new NotImplementedException();
+        }
+
+        [SwaggerResponse(200, type: typeof(PersonResponse))]
         [SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]
         public IActionResult AnnotatedWithSwaggerResponseExampleAttributePascalCase()
         {
@@ -39,6 +46,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
         public IActionResult AnnotatedWithSwaggerRequestExampleAttribute(PersonRequest personRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestMultipleExamples), jsonConverter: typeof(StringEnumConverter))]
+        public IActionResult AnnotatedWithSwaggerRequestMultipleExamplesAttribute(PersonRequest personRequest)
         {
             throw new NotImplementedException();
         }

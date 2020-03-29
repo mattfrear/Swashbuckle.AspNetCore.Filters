@@ -30,6 +30,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(PersonResponseExample)).Returns(new PersonResponseExample());
+            serviceProvider.GetService(typeof(PersonResponseMultipleExamples)).Returns(new PersonResponseMultipleExamples());
             serviceProvider.GetService(typeof(PersonRequestExample)).Returns(new PersonRequestExample());
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
@@ -105,7 +106,49 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
+        public void Apply_SetsMultipleResponseExamples_FromMethodAttributes()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseMultipleExamplesAttribute));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualExamples = (IDictionary<string, OpenApiExample>)response.Content["application/json"].Examples;
+            var expectedExamples = (IEnumerable<SwaggerExample<PersonResponse>>)new PersonResponseMultipleExamples().GetExamples();
+            actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
+        }
+
+        [Fact]
         public void Apply_SetsRequestExamples_FromMethodAttributes()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
+            var expectedExample = (PersonRequest)new PersonRequestExample().GetExamples();
+            actualExample.ShouldMatch(expectedExample);
+        }
+
+        [Fact]
+        public void Apply_SetsMultipleRequestExamples_FromMethodAttributes()
         {
             // Arrange
             var requestBody = new OpenApiRequestBody

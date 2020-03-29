@@ -1,10 +1,10 @@
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Any;
-using Swashbuckle.AspNetCore.Filters.Extensions;
+using System;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -37,28 +37,69 @@ namespace Swashbuckle.AspNetCore.Filters
             }
 
             var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode.ToString());
-
-            if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) == false && response.Value != null)
+            if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) != false || response.Value == null)
             {
-                var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
-                var jsonExample = new OpenApiRawString(jsonFormatter.FormatJson(example, serializerSettings));
+                return;
+            }
 
-                OpenApiString xmlExample = null;
-                if (response.Value.Content.Keys.Any(k => k.Contains("xml")))
+            var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
+
+            var examplesConverter = new ExamplesConverter(jsonFormatter, mvcOutputFormatter, serializerSettings);
+
+            var multiple = example as IEnumerable<ISwaggerExample<object>>;
+            if (multiple == null)
+            {
+                SetSingleResponseExampleForStatusCode(response, example, examplesConverter);
+            }
+            else
+            {
+                SetMultipleResponseExampleForStatusCode(response, multiple, examplesConverter);
+            }
+        }
+        
+        private void SetSingleResponseExampleForStatusCode(
+            KeyValuePair<string, OpenApiResponse> response,
+            object example,
+            ExamplesConverter examplesConverter)
+        {
+            var jsonExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleJson(example));
+            var xmlExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleXml(example));
+
+            foreach (var content in response.Value.Content)
+            {
+                if (content.Key.Contains("xml"))
                 {
-                    xmlExample = new OpenApiString(example.XmlSerialize(mvcOutputFormatter));
+                    content.Value.Example = xmlExample.Value;
                 }
-
-                foreach (var content in response.Value.Content)
+                else
                 {
-                    if (content.Key.Contains("xml"))
-                    {
-                        content.Value.Example = xmlExample;
-                    }
-                    else
-                    {
-                        content.Value.Example = jsonExample;
-                    }
+                    content.Value.Example = jsonExample.Value;
+                }
+            }
+        }
+
+        private void SetMultipleResponseExampleForStatusCode(
+            KeyValuePair<string, OpenApiResponse> response,
+            IEnumerable<ISwaggerExample<object>> examples,
+            ExamplesConverter examplesConverter)
+        {
+            var jsonExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryJson(examples)
+            );
+
+            var xmlExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
+            );
+
+            foreach (var content in response.Value.Content)
+            {
+                if (content.Key.Contains("xml"))
+                {
+                    content.Value.Examples = xmlExamples.Value;
+                }
+                else
+                {
+                    content.Value.Examples = jsonExamples.Value;
                 }
             }
         }

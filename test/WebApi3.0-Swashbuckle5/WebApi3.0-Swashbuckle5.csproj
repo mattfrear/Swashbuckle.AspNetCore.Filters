@@ -27,8 +27,10 @@
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonRequestDependencyInjectionExample.cs" Link="Models\Examples\PersonRequestDependencyInjectionExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonRequestExample.cs" Link="Models\Examples\PersonRequestExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonRequestExample2.cs" Link="Models\Examples\PersonRequestExample2.cs" />
+    <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonRequestMultipleExamples.cs" Link="Models\Examples\PersonRequestMultipleExamples.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonResponseAutoExample.cs" Link="Models\Examples\PersonResponseAutoExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonResponseExample.cs" Link="Models\Examples\PersonResponseExample.cs" />
+    <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonResponseMultipleExamples.cs" Link="Models\Examples\PersonResponseMultipleExamples.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonResponseExample2.cs" Link="Models\Examples\PersonResponseExample2.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\TitleExample.cs" Link="Models\Examples\TitleExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\WrappedPersonRequestExample.cs" Link="Models\Examples\WrappedPersonRequestExample.cs" />

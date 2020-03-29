@@ -64,6 +64,24 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// Posts a person. Multiple request body and response examples provided.
+        /// </summary>
+        /// <param name="personRequest"></param>
+        /// <returns></returns>
+        /// <response code="401">You are not authorized to access this endpoint</response>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("api/values/anyone")]
+        [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully added the person")]
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestMultipleExamples))]
+        [SwaggerResponseExample(200, typeof(PersonResponseMultipleExamples))]
+        public PersonResponse PostAnyone([FromBody]PersonRequest personRequest)
+        {
+            var personResponse = new PersonResponse { Id = 1, FirstName = "Dave", LastName = "Multi" };
+            return personResponse;
+        }
+
+        /// <summary>
         /// No [SwaggerRequestExample] or [SwaggerResponseExample] attributes on this one
         /// </summary>
         /// <param name="maleRequest"></param>

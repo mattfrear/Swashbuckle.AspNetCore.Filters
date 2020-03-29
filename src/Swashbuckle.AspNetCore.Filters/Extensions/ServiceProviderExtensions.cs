@@ -38,7 +38,12 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
             }
 
             var exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);
-            return GetExampleWithExamplesProviderType(serviceProvider, exampleProviderType);
+            var singleExample = GetExampleWithExamplesProviderType(serviceProvider, exampleProviderType);
+            if (singleExample != null)
+                return singleExample;
+            
+            var multipleExampleProviderType = typeof(IMultipleExamplesProvider<>).MakeGenericType(type);
+            return GetExampleWithExamplesProviderType(serviceProvider, multipleExampleProviderType);
         }
 
         private static object InvokeGetExamples(Type exampleProviderType, object exampleProviderObject)
