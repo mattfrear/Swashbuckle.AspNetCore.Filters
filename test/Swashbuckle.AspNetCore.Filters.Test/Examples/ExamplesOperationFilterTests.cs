@@ -4,13 +4,13 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using NSubstitute;
 using Shouldly;
+using Swashbuckle.AspNetCore.Filters.Test.Extensions;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Swashbuckle.AspNetCore.Filters.Test.Extensions;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -57,7 +57,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Assert
             var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
 
-            var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
+            var expectedExample = new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
             actualExample.Age.ShouldBe(27);
@@ -80,7 +80,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Assert
             var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
 
-            var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
+            var expectedExample = new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
         }
@@ -101,7 +101,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             // Assert
             string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
-            var expectedExample = (PersonResponse)new PersonResponseExample().GetExamples();
+            var expectedExample = new PersonResponseExample().GetExamples();
             jsonExample.ShouldContain($"\"Id\": {expectedExample.Id}", Case.Sensitive);
         }
 
@@ -119,8 +119,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExamples = (IDictionary<string, OpenApiExample>)response.Content["application/json"].Examples;
-            var expectedExamples = (IEnumerable<SwaggerExample<PersonResponse>>)new PersonResponseMultipleExamples().GetExamples();
+            var actualExamples = response.Content["application/json"].Examples;
+            var expectedExamples = new PersonResponseMultipleExamples().GetExamples();
             actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
         }
 
@@ -143,7 +143,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             // Assert
             var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
-            var expectedExample = (PersonRequest)new PersonRequestExample().GetExamples();
+            var expectedExample = new PersonRequestExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
         }
 
@@ -166,7 +166,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             // Assert
             var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
-            var expectedExample = (PersonRequest)new PersonRequestExample().GetExamples();
+            var expectedExample = new PersonRequestExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
         }
 

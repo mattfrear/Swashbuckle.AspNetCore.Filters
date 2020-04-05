@@ -1,16 +1,16 @@
-﻿using Xunit;
-using Shouldly;
-using System.Collections.Generic;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
-using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using NSubstitute;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using NSubstitute;
+using Shouldly;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
