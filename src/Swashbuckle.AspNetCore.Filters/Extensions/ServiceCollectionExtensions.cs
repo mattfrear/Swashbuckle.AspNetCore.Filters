@@ -40,6 +40,14 @@ namespace Swashbuckle.AspNetCore.Filters
                     .WithSingletonLifetime()
             );
 
+            services.Scan(scan => scan
+                .FromAssembliesOf(types)
+                    .AddClasses(classes => classes.AssignableTo(typeof(IMultipleExamplesProvider<>)))
+                    .AsImplementedInterfaces()
+                    .AsSelf()
+                    .WithSingletonLifetime()
+            );
+
             return services;
         }
 
@@ -50,6 +58,14 @@ namespace Swashbuckle.AspNetCore.Filters
             services.Scan(scan => scan
                 .FromAssemblies(assemblies)
                     .AddClasses(classes => classes.AssignableTo(typeof(IExamplesProvider<>)))
+                    .AsImplementedInterfaces()
+                    .AsSelf()
+                    .WithSingletonLifetime()
+            );
+
+            services.Scan(scan => scan
+                .FromAssemblies(assemblies)
+                    .AddClasses(classes => classes.AssignableTo(typeof(IMultipleExamplesProvider<>)))
                     .AsImplementedInterfaces()
                     .AsSelf()
                     .WithSingletonLifetime()
