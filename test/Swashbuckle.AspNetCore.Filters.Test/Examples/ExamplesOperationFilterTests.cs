@@ -7,6 +7,7 @@ using Shouldly;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -32,12 +33,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(PersonResponseExample)).Returns(new PersonResponseExample());
             serviceProvider.GetService(typeof(PersonResponseMultipleExamples)).Returns(new PersonResponseMultipleExamples());
             serviceProvider.GetService(typeof(PersonRequestExample)).Returns(new PersonRequestExample());
+            serviceProvider.GetService(typeof(PersonRequestMultipleExamples)).Returns(new PersonRequestMultipleExamples());
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
             var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
             var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
 
-            sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
+            sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample, Options.Create(new SwaggerOptions()));
         }
 
         [Fact]
@@ -159,15 +161,15 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute));
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestMultipleExamplesAttribute));
 
             // Act
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
-            var expectedExample = new PersonRequestExample().GetExamples();
-            actualExample.ShouldMatch(expectedExample);
+            var actualExamples = requestBody.Content["application/json"].Examples;
+            var expectedExamples = new PersonRequestMultipleExamples().GetExamples();
+            actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
         }
 
         [Fact]
