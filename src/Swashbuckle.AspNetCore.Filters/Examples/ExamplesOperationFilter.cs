@@ -28,11 +28,11 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            SetRequestModelExamples(operation, context);
-            SetResponseModelExamples(operation, context);
+            SetRequestExamples(operation, context);
+            SetResponseExamples(operation, context);
         }
 
-        private void SetRequestModelExamples(OpenApiOperation operation, OperationFilterContext context)
+        private void SetRequestExamples(OpenApiOperation operation, OperationFilterContext context)
         {
             var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
 
@@ -42,13 +42,15 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 requestExample.SetRequestExampleForOperation(
                     operation,
+                    context.SchemaRepository,
+                    attr.RequestType,
                     example,
                     attr.ContractResolver,
                     attr.JsonConverter);
             }
         }
 
-        private void SetResponseModelExamples(OpenApiOperation operation, OperationFilterContext context)
+        private void SetResponseExamples(OpenApiOperation operation, OperationFilterContext context)
         {
             var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>();
 

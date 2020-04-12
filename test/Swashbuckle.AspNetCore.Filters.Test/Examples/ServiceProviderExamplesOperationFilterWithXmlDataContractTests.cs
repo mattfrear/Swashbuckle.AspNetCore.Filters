@@ -33,7 +33,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             sut = new ServiceProviderExamplesOperationFilter(
                 serviceProvider,
-                new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter),
+                new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions())),
                 new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter));
         }
 

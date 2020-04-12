@@ -8,6 +8,7 @@ using Shouldly;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         private readonly IOperationFilter sut;
         private readonly IServiceProvider serviceProvider;
         private SchemaGeneratorOptions schemaGeneratorOptions;
+        private SwaggerOptions swaggerOptions = new SwaggerOptions { SerializeAsV2 = true };
 
         public ServiceProviderExamplesOperationFilterTests()
         {
@@ -31,7 +33,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var jsonFormatter = new JsonFormatter();
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(swaggerOptions));
             var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
 
             serviceProvider = Substitute.For<IServiceProvider>();
@@ -41,7 +43,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_SetsResponseExamples_FromMethodAttributes()
+        public void SetsResponseExamples_FromMethodAttributes()
         {
             // Arrange
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
@@ -63,7 +65,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_SetsResponseExamples_WhenMethodNotAnnotated()
+        public void SetsResponseExamples_WhenMethodNotAnnotated()
         {
             // Arrange
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
@@ -85,7 +87,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_SetsResponseExamples_FromControllerAttributes()
+        public void SetsResponseExamples_FromControllerAttributes()
         {
             // Arrange
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
@@ -106,7 +108,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_DoesNotSetResponseExamples_FromMethodAttributes_WhenSwaggerResponseExampleAttributePresent()
+        public void DoesNotSetResponseExamples_FromMethodAttributes_WhenSwaggerResponseExampleAttributePresent()
         {
             // Arrange
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
@@ -124,7 +126,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_SetsResponseExamples_FromMethodAttributes_WithGenericType()
+        public void SetsResponseExamples_FromMethodAttributes_WithGenericType()
         {
             // Arrange
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
@@ -144,7 +146,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_SetsRequestExamples_FromMethodAttributes()
+        public void SetsRequestExamples_FromMethodParameters()
         {
             // Arrange
             serviceProvider.GetService(typeof(IExamplesProvider<PersonRequest>)).Returns(new PersonRequestAutoExample());
@@ -166,10 +168,14 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             var expectedExample = new PersonRequestAutoExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
+
+            // Assert SerializeAsV2
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
+            actualSchemaExample.ShouldMatch(expectedExample);
         }
 
         [Fact]
-        public void Apply_DoesNotSetRequestExamples_FromMethodAttributes_WhenSwaggerRequestExampleAttributePresent()
+        public void DoesNotSetRequestExamples_FromMethodAttributes_WhenSwaggerRequestExampleAttributePresent()
         {
             // Arrange
             serviceProvider.GetService(typeof(IExamplesProvider<PersonRequest>)).Returns(new PersonRequestAutoExample());
@@ -192,7 +198,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_SetsRequestExamplesForInterface_FromMethodAttributes()
+        public void SetsRequestExamplesForInterface_FromMethodAttributes()
         {
             // Arrange
             serviceProvider.GetService(typeof(IExamplesProvider<IPersonRequest>)).Returns(new IPersonRequestAutoExample());
@@ -214,11 +220,14 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             var expectedExample = new PersonRequestAutoExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
+
+            // Assert SerializeAsV2
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["IPersonRequest"].Example).Value);
+            actualSchemaExample.ShouldMatch(expectedExample);
         }
 
-
         [Fact]
-        public void Apply_WhenRequestIsAntInt_ShouldNotThrowException()
+        public void WhenRequestIsAntInt_ShouldNotThrowException()
         {
             // Arrange
             var requestBody = new OpenApiRequestBody
@@ -238,7 +247,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_WhenRequestIsANullableEnum_ShouldNotThrowException()
+        public void WhenRequestIsANullableEnum_ShouldNotThrowException()
         {
             // Arrange
             serviceProvider.GetService(typeof(IExamplesProvider<Title?>)).Returns(new TitleExample());
@@ -261,10 +270,14 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var actualParameterExample = Enum.Parse(typeof(Title), ((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
             var expectedExample = new TitleExample().GetExamples().Value;
             actualParameterExample.ShouldBe(expectedExample);
+
+            // Assert SerializeAsV2
+            var actualSchemaExample = JsonConvert.DeserializeObject<Title>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["Title"].Example).Value);
+            actualSchemaExample.ShouldBe(expectedExample);
         }
 
         [Fact]
-        public void Apply_SetsMultipleRequestExamples()
+        public void SetsMultipleRequestExamples()
         {
             // Arrange
             serviceProvider.GetService(typeof(IMultipleExamplesProvider<PersonRequest>)).Returns(new PersonRequestMultipleExamples());
@@ -286,10 +299,14 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var actualExamples = requestBody.Content["application/json"].Examples;
             var expectedExamples = new PersonRequestMultipleExamples().GetExamples();
             actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
+
+            // Assert SerializeAsV2
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
+            actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
         }
 
         [Fact]
-        public void Apply_WhenMultipleRequestsExamplesIsEmpty_ShouldSetNoRequests()
+        public void WhenMultipleRequestsExamplesIsEmpty_ShouldSetNoRequests()
         {
             // Arrange
             serviceProvider.GetService(typeof(IMultipleExamplesProvider<PersonRequest>)).Returns(new PersonRequestMultipleExamplesEmpty());
@@ -313,7 +330,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_WhenMultipleRequestsExamplesKeysAreDuplicated_ShouldNotThrow()
+        public void WhenMultipleRequestsExamplesKeysAreDuplicated_ShouldNotThrow()
         {
             // Arrange
             serviceProvider.GetService(typeof(IMultipleExamplesProvider<PersonRequest>)).Returns(new PersonRequestMultipleExamplesDuplicatedKeys());
@@ -342,7 +359,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_WhenMultipleRequestsExamplesReturnsNull_ShouldNotThrow()
+        public void WhenMultipleRequestsExamplesReturnsNull_ShouldNotThrow()
         {
             // Arrange
             serviceProvider.GetService(typeof(IMultipleExamplesProvider<PersonRequest>)).Returns(new PersonRequestMultipleExamplesNull());
@@ -366,7 +383,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_WhenPassingDictionary_ShouldSetExampleOnRequestSchema()
+        public void WhenPassingDictionary_ShouldSetExampleOnRequestSchema()
         {
             // Arrange
             serviceProvider.GetService(typeof(IExamplesProvider<Dictionary<string, object>>)).Returns(new DictionaryAutoRequestExample());
@@ -391,7 +408,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_SetsResponseExamples_CorrectlyFormatsJsonExample()
+        public void SetsResponseExamples_CorrectlyFormatsJsonExample()
         {
             // Arrange
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
@@ -412,7 +429,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_SetsResponseExamples_CorrectlyFormatsXmlExample()
+        public void SetsResponseExamples_CorrectlyFormatsXmlExample()
         {
             // Arrange
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
@@ -434,7 +451,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void Apply_ShouldNotEmitObsoleteProperties()
+        public void ShouldNotEmitObsoleteProperties()
         {
             // Arrange
             schemaGeneratorOptions.IgnoreObsoleteProperties = true;

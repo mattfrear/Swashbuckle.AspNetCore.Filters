@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.Filters.Extensions
 {
-    public static class ServiceProviderExtensions
+    internal static class ServiceProviderExtensions
     {
         /// <summary>
         /// Gets a specific IExamplesProvider<T> from the ServiceProvider and calls GetExamples() on it
@@ -40,8 +40,10 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
             var exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);
             var singleExample = GetExampleWithExamplesProviderType(serviceProvider, exampleProviderType);
             if (singleExample != null)
+            {
                 return singleExample;
-            
+            }
+
             var multipleExampleProviderType = typeof(IMultipleExamplesProvider<>).MakeGenericType(type);
             return GetExampleWithExamplesProviderType(serviceProvider, multipleExampleProviderType);
         }

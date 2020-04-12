@@ -7,7 +7,7 @@ using Microsoft.Net.Http.Headers;
 
 namespace Swashbuckle.AspNetCore.Filters.Extensions
 {
-    public static class ObjectExtensions
+    internal static class ObjectExtensions
     {
         public static string XmlSerialize<T>(this T value)
         {

@@ -94,7 +94,9 @@ namespace WebApi3._0_Swashbuckle5
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger();
+            app.UseSwagger(
+                // c => c.SerializeAsV2 = true
+            );
 
             app.UseSwaggerUI(c =>
             {

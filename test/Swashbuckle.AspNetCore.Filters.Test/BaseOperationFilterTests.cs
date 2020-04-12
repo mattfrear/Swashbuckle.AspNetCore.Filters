@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
+using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Newtonsoft;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -51,10 +52,21 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             
             var schemaOptions = new SchemaGeneratorOptions();
 
+            var schemaRepository = new SchemaRepository();
+
+            var methodInfo = controllerType.GetMethod(actionName);
+            foreach (var parameterInfo in methodInfo.GetParameters())
+            {
+                schemaRepository.GetOrAdd(parameterInfo.ParameterType, parameterInfo.ParameterType.SchemaDefinitionName(), () => new OpenApiSchema()
+                {
+                    Reference = new OpenApiReference { Id = parameterInfo.Name }
+                });
+            }
+
             return new OperationFilterContext(
                 apiDescription,
                 new NewtonsoftSchemaGenerator(schemaOptions, jsonSerializerSettings),
-                new SchemaRepository(),
+                schemaRepository,
                 (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
         }
 
