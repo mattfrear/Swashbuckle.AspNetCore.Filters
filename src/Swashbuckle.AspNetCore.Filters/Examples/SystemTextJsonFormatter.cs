@@ -2,11 +2,11 @@ using System.Text.Json;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    internal class SystemJsonFormatter : IJsonFormatter
+    internal class SystemTextJsonFormatter : IJsonFormatter
     {
         private readonly JsonSerializerOptions serializerOptions;
 
-        public SystemJsonFormatter(JsonSerializerOptions serializerOptions)
+        public SystemTextJsonFormatter(JsonSerializerOptions serializerOptions)
         {
             serializerOptions.WriteIndented = true;
             this.serializerOptions = serializerOptions;

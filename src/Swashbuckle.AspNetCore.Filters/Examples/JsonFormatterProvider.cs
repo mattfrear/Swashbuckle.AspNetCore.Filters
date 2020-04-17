@@ -33,7 +33,7 @@ namespace Swashbuckle.AspNetCore.Filters
             if (UseNewtonsoft(contractResolver, jsonConverter))
                 return new NewtonsoftJsonFormatter(serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter));
 
-            return new SystemJsonFormatter(serializerOptionsDuplicator.SerializerOptions());
+            return new SystemTextJsonFormatter(serializerOptionsDuplicator.SerializerOptions());
         }
 
         private bool UseNewtonsoft(IContractResolver contractResolver = null, JsonConverter jsonConverter = null) =>
