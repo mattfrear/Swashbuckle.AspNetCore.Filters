@@ -24,17 +24,18 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
 
-            var jsonFormatter = new JsonFormatter();
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(
-                Options.Create(new MvcJsonOptions()),
-                Options.Create(new SchemaGeneratorOptions()));
+            var mvcOptions = Options.Create(new MvcOptions());
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(Options.Create(new MvcJsonOptions()), Options.Create(new SchemaGeneratorOptions()));
+            var serializerOptionsDuplicator = new SerializerOptionsDuplicator(Options.Create(new SchemaGeneratorOptions()));
+
+            var jsonFormatterProvider = new JsonFormatterProvider(serializerSettingsDuplicator, serializerOptionsDuplicator, mvcOptions);
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, new FakeLoggerFactory());
 
             sut = new ServiceProviderExamplesOperationFilter(
                 serviceProvider,
-                new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions())),
-                new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter));
+                new RequestExample(jsonFormatterProvider, mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions())),
+                new ResponseExample(jsonFormatterProvider, mvcOutputFormatter));
         }
 
         [Fact]

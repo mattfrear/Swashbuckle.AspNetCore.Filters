@@ -25,11 +25,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public ExamplesOperationFilterTests()
         {
-            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
             schemaGeneratorOptions = new SchemaGeneratorOptions();
+            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
+            var mvcOptions = Options.Create(new MvcOptions());
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
+            var serializerOptionsDuplicator = new SerializerOptionsDuplicator(Options.Create(schemaGeneratorOptions));
 
-            var jsonFormatter = new JsonFormatter();
+            var jsonFormatter = new JsonFormatterProvider(serializerSettingsDuplicator, serializerOptionsDuplicator, mvcOptions);
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
 
             var serviceProvider = Substitute.For<IServiceProvider>();
@@ -39,8 +41,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(PersonRequestMultipleExamples)).Returns(new PersonRequestMultipleExamples());
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var requestExample = new RequestExample(jsonFormatter, mvcOutputFormatter, Options.Create(swaggerOptions));
+            var responseExample = new ResponseExample(jsonFormatter, mvcOutputFormatter);
 
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }

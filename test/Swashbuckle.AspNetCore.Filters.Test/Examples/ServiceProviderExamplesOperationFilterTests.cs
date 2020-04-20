@@ -26,15 +26,18 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public ServiceProviderExamplesOperationFilterTests()
         {
-            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
             schemaGeneratorOptions = new SchemaGeneratorOptions();
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
-            var jsonFormatter = new JsonFormatter();
+            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
+            var mvcOptions = Options.Create(new MvcOptions());
+            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
+            var serializerOptionsDuplicator = new SerializerOptionsDuplicator(Options.Create(schemaGeneratorOptions));
+
+            var jsonFormatter = new JsonFormatterProvider(serializerSettingsDuplicator, serializerOptionsDuplicator, mvcOptions);
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var requestExample = new RequestExample(jsonFormatter, mvcOutputFormatter, Options.Create(swaggerOptions));
+            var responseExample = new ResponseExample(jsonFormatter, mvcOutputFormatter);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
