@@ -212,6 +212,8 @@ Therefore, I recommend that you move away from using my `ExamplesOperationFilter
 
 However, you may have a use case where XML comments doesn't work for you, e.g.
 - You want to generate examples at runtime not design time
+- You need XML request examples (not JSON)
+- You want examples to be added to the schema under the path, rather than the schema under the component
 - Some other ReDoc issue which I don't understand as I don't use ReDoc...
 
 In which case, read on...
