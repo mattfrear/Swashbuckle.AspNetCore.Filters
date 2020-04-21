@@ -178,6 +178,36 @@ This will register your examples with the ServiceProvider.
 
 ### How to use - Request examples
 
+### DO NOT USE THIS FILTER UNLESS YOU HAVE TO
+Since May 2018, Swashbuckle.AspNetCore supports adding examples via XML comments:
+
+```csharp
+public class Product
+{
+    /// <summary>
+    /// The name of the product
+    /// </summary>
+    /// <example>Men's basketball shoes</example>
+    public string Name { get; set; }
+```csharp
+
+This works for request examples and response examples, and it even works for example querystring and route parameters, i.e. on GET requests!
+
+And soon (April 2020, once my PR has been released) you'll be able to add examples for reference types on the querystring too, e.g.
+
+```csharp
+/// <param name="id" example="123">The product id</param>
+[HttpGet("{id}")]
+public Product GetById(int id)
+
+Therefore, I recommend that you move away from using my `ExamplesOperationFilter`. Personally, I don't use it any more and would like to deprecate it.
+https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters/issues/108
+
+However, you may have a use case where XML comments doesn't work for you, e.g.
+- You want to generate examples at runtime not design time
+
+In which case, read on...
+
 #### Automatic annotation
 Version 4.0 and above supports automatic annotation.
 
