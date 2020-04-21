@@ -198,7 +198,7 @@ This works for request examples and response examples, and it even works for exa
 ![example on querystring](https://user-images.githubusercontent.com/169179/79851411-6282a780-8419-11ea-853f-318d1443e7a9.png)
 
 
-And soon (April 2020, once [my Swashbuckle.AspNetCore PR](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/pull/1629) has been released) you'll be able to add examples for reference types on the querystring too, e.g.
+And soon (April 2020, once [my Swashbuckle.AspNetCore PR](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/pull/1629) has been released) you'll be able to add examples for primitive types on the querystring too, e.g.
 
 ```csharp
 /// <param name="id" example="123">The product id</param>
