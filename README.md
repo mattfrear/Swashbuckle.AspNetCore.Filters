@@ -189,16 +189,19 @@ public class Product
     /// </summary>
     /// <example>Men's basketball shoes</example>
     public string Name { get; set; }
-```csharp
+```
 
 This works for request examples and response examples, and it even works for example querystring and route parameters, i.e. on GET requests!
+![example on querystring](https://user-images.githubusercontent.com/169179/79845040-9e653f00-8410-11ea-8e97-06aff68ddd66.png)
 
-And soon (April 2020, once my PR has been released) you'll be able to add examples for reference types on the querystring too, e.g.
+
+And soon (April 2020, once my Swashbuckle.AspNetCore PR has been released) you'll be able to add examples for reference types on the querystring too, e.g.
 
 ```csharp
 /// <param name="id" example="123">The product id</param>
 [HttpGet("{id}")]
 public Product GetById(int id)
+```
 
 Therefore, I recommend that you move away from using my `ExamplesOperationFilter`. Personally, I don't use it any more and would like to deprecate it.
 https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters/issues/108
