@@ -32,7 +32,7 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
     - [Manual annotation](#manual-annotation)
     - [List Request examples](#list-request-examples)
   - [How to use - Response examples](#how-to-use---response-examples)
-  - [DO NOT USE THIS FILTER UNLESS YOU HAVE TO](#do-not-use-this-filter-unless-you-have-to)
+  - [AGAIN, DO NOT USE THIS FILTER UNLESS YOU HAVE TO](#again-do-not-use-this-filter-unless-you-have-to)
     - [Automatic annotation](#automatic-annotation-1)
     - [Manual annotation](#manual-annotation-1)
     - [Known issues](#known-issues)
@@ -198,7 +198,7 @@ This works for request examples and response examples, and it even works for exa
 ![example on querystring](https://user-images.githubusercontent.com/169179/79851411-6282a780-8419-11ea-853f-318d1443e7a9.png)
 
 
-And soon (April 2020, once my Swashbuckle.AspNetCore PR has been released) you'll be able to add examples for reference types on the querystring too, e.g.
+And soon (April 2020, once [my Swashbuckle.AspNetCore PR](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/pull/1629) has been released) you'll be able to add examples for reference types on the querystring too, e.g.
 
 ```csharp
 /// <param name="id" example="123">The product id</param>
@@ -206,12 +206,13 @@ And soon (April 2020, once my Swashbuckle.AspNetCore PR has been released) you'l
 public Product GetById(int id)
 ```
 
-Therefore, I recommend that you move away from using my `ExamplesOperationFilter`. Personally, I don't use it any more and would like to deprecate it.
+See [the instructions on Swashbuckle.AspNetCore's Readme](https://github.com/domaindrivendev/Swashbuckle.AspNetCore#include-descriptions-from-xml-comments).
 
-https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters/issues/108
+Therefore, I recommend that you move away from using my `ExamplesOperationFilter`. Personally, I don't use it any more [and would like to deprecate it](https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters/issues/108).
 
 However, you may have a use case where XML comments doesn't work for you, e.g.
 - You want to generate examples at runtime not design time
+- Some other ReDoc issue which I don't understand as I don't use ReDoc...
 
 In which case, read on...
 
