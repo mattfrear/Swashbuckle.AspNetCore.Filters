@@ -192,7 +192,8 @@ public class Product
 ```
 
 This works for request examples and response examples, and it even works for example querystring and route parameters, i.e. on GET requests!
-![example on querystring](https://user-images.githubusercontent.com/169179/79845040-9e653f00-8410-11ea-8e97-06aff68ddd66.png)
+
+![example on querystring](https://user-images.githubusercontent.com/169179/79851411-6282a780-8419-11ea-853f-318d1443e7a9.png)
 
 
 And soon (April 2020, once my Swashbuckle.AspNetCore PR has been released) you'll be able to add examples for reference types on the querystring too, e.g.
@@ -204,6 +205,7 @@ public Product GetById(int id)
 ```
 
 Therefore, I recommend that you move away from using my `ExamplesOperationFilter`. Personally, I don't use it any more and would like to deprecate it.
+
 https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters/issues/108
 
 However, you may have a use case where XML comments doesn't work for you, e.g.
