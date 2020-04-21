@@ -27,10 +27,12 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 - [Installation](#installation)
 - [How to use](#how-to-use)
   - [How to use - Request examples](#how-to-use---request-examples)
+  - [DO NOT USE THIS FILTER UNLESS YOU HAVE TO](#do-not-use-this-filter-unless-you-have-to)
     - [Automatic annotation](#automatic-annotation)
     - [Manual annotation](#manual-annotation)
     - [List Request examples](#list-request-examples)
   - [How to use - Response examples](#how-to-use---response-examples)
+  - [DO NOT USE THIS FILTER UNLESS YOU HAVE TO](#do-not-use-this-filter-unless-you-have-to)
     - [Automatic annotation](#automatic-annotation-1)
     - [Manual annotation](#manual-annotation-1)
     - [Known issues](#known-issues)
@@ -318,6 +320,13 @@ public class ListPeopleRequestExample : IExamplesProvider<PeopleRequest>
 ```
 
 ### How to use - Response examples
+### AGAIN, DO NOT USE THIS FILTER UNLESS YOU HAVE TO
+I repeat my earlier assertion - Since May 2018, Swashbuckle.AspNetCore supports adding examples via XML comments.
+
+[See above for instructions](#do-not-use-this-filter-unless-you-have-to)
+
+If you still want to use it, read on...
+
 #### Automatic annotation
 Version 4.0 supports automatic annotation.
 If it's obvious which type your action returns, then no `ProducesResponseType` or `SwaggerResponse` attributes need to be specified, e.g.
