@@ -195,8 +195,17 @@ public class Product
 
 This works for request examples and response examples, and it even works for example querystring and route parameters, i.e. on GET requests!
 
+Example in a querystring on GET:
+
 ![example on querystring](https://user-images.githubusercontent.com/169179/79851411-6282a780-8419-11ea-853f-318d1443e7a9.png)
 
+Example request body in a POST:
+
+![example request body](https://mattfrear.files.wordpress.com/2020/04/request.png)
+
+Example response:
+
+![example response](https://mattfrear.files.wordpress.com/2020/04/post.png)
 
 And soon (April 2020, once [my Swashbuckle.AspNetCore PR](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/pull/1629) has been released) you'll be able to add examples for primitive types on the querystring too, e.g.
 
