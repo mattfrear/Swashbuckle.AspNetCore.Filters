@@ -26,7 +26,11 @@ namespace WebApi2._0_Swashbuckle4
         {
             services
                 .AddMvc()
-                .AddJsonOptions(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()))
+                .AddJsonOptions(opt =>
+                {
+                    opt.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    // opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                })
                 .AddXmlSerializerFormatters();
                 //.AddXmlDataContractSerializerFormatters();
 
