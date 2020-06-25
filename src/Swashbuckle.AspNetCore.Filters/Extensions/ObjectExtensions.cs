@@ -29,6 +29,7 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
         }
 
         private static readonly MediaTypeHeaderValue ApplicationXml = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
+        private static readonly MediaTypeHeaderValue ApplicationJson = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
 
         internal static string XmlSerialize<T>(this T value, MvcOutputFormatter mvcOutputFormatter)
         {
@@ -42,6 +43,24 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
                 return mvcOutputFormatter
                     .Serialize(value, ApplicationXml)
                     .FormatXml();
+            }
+            catch (MvcOutputFormatter.FormatterNotFoundException)
+            {
+                return value.XmlSerialize();
+            }
+        }
+
+        internal static string JsonSerialize<T>(this T value, MvcOutputFormatter mvcOutputFormatter)
+        {
+            if (mvcOutputFormatter == null)
+            {
+                throw new ArgumentNullException(nameof(mvcOutputFormatter));
+            }
+
+            try
+            {
+                return mvcOutputFormatter
+                    .Serialize(value, ApplicationJson);
             }
             catch (MvcOutputFormatter.FormatterNotFoundException)
             {

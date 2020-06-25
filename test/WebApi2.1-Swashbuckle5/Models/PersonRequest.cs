@@ -14,6 +14,7 @@ namespace WebApi.Models
         /// <summary>
         /// The first name of the person
         /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("flc")]
         public string FirstName { get; set; }
 
         public decimal? Income { get; set; }
