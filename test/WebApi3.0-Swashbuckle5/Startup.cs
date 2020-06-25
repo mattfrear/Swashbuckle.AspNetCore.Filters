@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,11 +26,12 @@ namespace WebApi3._0_Swashbuckle5
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddNewtonsoftJson(opt =>
-                {
-                    opt.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    // opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                })
+                //.AddNewtonsoftJson(opt =>
+                //{
+                //    opt.SerializerSettings.Converters.Add(new StringEnumConverter());
+                //    // opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                //})
+                .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
                 // .AddXmlSerializerFormatters();
                 .AddXmlDataContractSerializerFormatters();
 

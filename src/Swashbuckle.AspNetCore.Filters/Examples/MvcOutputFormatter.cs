@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using System.Linq;
+using System.Text;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -80,12 +81,21 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 if (formatter == null)
                 {
-                    throw new FormatterNotFoundException(contentType);
+                    // throw new FormatterNotFoundException(contentType);
+                    return string.Empty;
                 }
 
                 formatter.WriteAsync(outputFormatterContext).GetAwaiter().GetResult();
                 stringWriter.FlushAsync().GetAwaiter().GetResult();
-                return stringWriter.ToString();
+                var result = stringWriter.ToString();
+                if (string.IsNullOrEmpty(result))
+                {
+                    // workaround for SystemTextJsonOutputFormatter
+                    var ms = (MemoryStream)outputFormatterContext.HttpContext.Response.Body;
+                    result = Encoding.UTF8.GetString(ms.ToArray());
+                }
+
+                return result;
             }
         }
 
