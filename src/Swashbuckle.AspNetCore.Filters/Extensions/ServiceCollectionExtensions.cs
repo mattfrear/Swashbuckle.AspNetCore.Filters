@@ -8,7 +8,7 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         public static IServiceCollection AddSwaggerExamplesFromAssemblyOf<T>(this IServiceCollection services)
         {
-            AddRequiredServices(services);
+            AddSwaggerExamples(services);
 
             services.Scan(scan => scan
                 .FromAssemblyOf<T>()
@@ -30,7 +30,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public static IServiceCollection AddSwaggerExamplesFromAssemblyOf(this IServiceCollection services, params Type[] types)
         {
-            AddRequiredServices(services);
+            AddSwaggerExamples(services);
 
             services.Scan(scan => scan
                 .FromAssembliesOf(types)
@@ -53,7 +53,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public static IServiceCollection AddSwaggerExamplesFromAssemblies(this IServiceCollection services, params Assembly[] assemblies)
         {
-            AddRequiredServices(services);
+            AddSwaggerExamples(services);
 
             services.Scan(scan => scan
                 .FromAssemblies(assemblies)
@@ -74,7 +74,7 @@ namespace Swashbuckle.AspNetCore.Filters
             return services;
         }
 
-        private static void AddRequiredServices(IServiceCollection services)
+        public static void AddSwaggerExamples(this IServiceCollection services)
         {
             services.AddSingleton<SerializerSettingsDuplicator>();
             services.AddSingleton<JsonFormatter>();
