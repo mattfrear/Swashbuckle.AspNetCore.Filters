@@ -22,6 +22,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         private ExamplesOperationFilter sut;
         private SchemaGeneratorOptions schemaGeneratorOptions;
         private SwaggerOptions swaggerOptions = new SwaggerOptions { SerializeAsV2 = true };
+        private MvcOutputFormatter mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithNewtonsoftFormatter, new FakeLoggerFactory());
 
         public ExamplesOperationFilterTests()
         {
@@ -30,7 +31,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
             var jsonFormatter = new JsonFormatter();
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
 
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(PersonResponseExample)).Returns(new PersonResponseExample());
@@ -258,6 +258,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void SetsResponseExamples_CorrectlyFormatsXmlExample()
         {
             // Arrange
+            mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, new FakeLoggerFactory());
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);

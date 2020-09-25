@@ -11,6 +11,9 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class ExamplesConverter
     {
+        private static readonly MediaTypeHeaderValue ApplicationXml = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
+        private static readonly MediaTypeHeaderValue ApplicationJson = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+
         private readonly JsonFormatter jsonFormatter;
         private readonly MvcOutputFormatter mvcOutputFormatter;
         private readonly JsonSerializerSettings serializerSettings;
@@ -22,14 +25,26 @@ namespace Swashbuckle.AspNetCore.Filters
             this.serializerSettings = serializerSettings;
         }
 
-        public IOpenApiAny SerializeExampleXml(object exampleValue)
+        public IOpenApiAny SerializeExampleXml(object value)
         {
-            return new OpenApiString(exampleValue.XmlSerialize(mvcOutputFormatter));
+            return new OpenApiString(mvcOutputFormatter.Serialize(value, ApplicationXml).FormatXml());
         }
 
-        public IOpenApiAny SerializeExampleJson(object exampleValue)
+        public IOpenApiAny SerializeExampleJson(object value)
         {
-            return new OpenApiRawString(exampleValue.JsonSerialize(mvcOutputFormatter));
+            return new OpenApiRawString(mvcOutputFormatter.Serialize(value, ApplicationJson));
+        }
+
+        public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryXml(
+            IEnumerable<ISwaggerExample<object>> examples)
+        {
+            return ToOpenApiExamplesDictionary(examples, SerializeExampleXml);
+        }
+
+        public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryJson(
+            IEnumerable<ISwaggerExample<object>> examples)
+        {
+            return ToOpenApiExamplesDictionary(examples, SerializeExampleJson);
         }
 
         private static IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(
@@ -50,24 +65,6 @@ namespace Swashbuckle.AspNetCore.Filters
                 grouping => grouping.First());
 
             return examplesDict;
-        }
-
-        public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryXml(
-            IEnumerable<ISwaggerExample<object>> examples)
-        {
-            return ToOpenApiExamplesDictionary(examples, SerializeExampleXml);
-        }
-
-        public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryJson(
-            IEnumerable<ISwaggerExample<object>> examples)
-        {
-            return ToOpenApiExamplesDictionary(examples, SerializeExampleJson);
-        }
-
-        internal IOpenApiAny Serialize(object example, string key)
-        {
-            var serializedExample = mvcOutputFormatter.Serialize(example, MediaTypeHeaderValue.Parse(key));
-            return new OpenApiString(serializedExample);
         }
     }
 }
