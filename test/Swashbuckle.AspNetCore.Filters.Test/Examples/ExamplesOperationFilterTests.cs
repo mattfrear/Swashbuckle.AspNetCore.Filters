@@ -294,8 +294,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Assert
             string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
             var expectedExample = new PersonResponseExample().GetExamples();
-            jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}", Case.Sensitive);
-            jsonExample.ShouldContain($"\"id\": {expectedExample.Id}", Case.Sensitive);
+            jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}");
+            jsonExample.ShouldContain($"\"id\": {expectedExample.Id}");
         }
     }
 }

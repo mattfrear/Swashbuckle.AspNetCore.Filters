@@ -4,30 +4,12 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace Swashbuckle.AspNetCore.Filters.Extensions
 {
     internal static class ObjectExtensions
     {
-        public static string XmlSerialize<T>(this T value)
-        {
-            if (value == null)
-            {
-                return string.Empty;
-            }
-
-            var xmlSerializer = new XmlSerializer(value.GetType());
-            var stringWriter = new StringWriter();
-            using (var writer = XmlWriter.Create(stringWriter))
-            {
-                xmlSerializer.Serialize(writer, value);
-
-                return stringWriter
-                    .ToString()
-                    .FormatXml();
-            }
-        }
-
         private static readonly MediaTypeHeaderValue ApplicationXml = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
         private static readonly MediaTypeHeaderValue ApplicationJson = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
 
@@ -64,7 +46,27 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
             }
             catch (MvcOutputFormatter.FormatterNotFoundException)
             {
-                return value.XmlSerialize();
+                var serializerSettings = new JsonSerializerSettings { Formatting = Newtonsoft.Json.Formatting.Indented };
+                return JsonConvert.SerializeObject(value, serializerSettings);
+            }
+        }
+
+        private static string XmlSerialize<T>(this T value)
+        {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
+            var xmlSerializer = new XmlSerializer(value.GetType());
+            var stringWriter = new StringWriter();
+            using (var writer = XmlWriter.Create(stringWriter))
+            {
+                xmlSerializer.Serialize(writer, value);
+
+                return stringWriter
+                    .ToString()
+                    .FormatXml();
             }
         }
 

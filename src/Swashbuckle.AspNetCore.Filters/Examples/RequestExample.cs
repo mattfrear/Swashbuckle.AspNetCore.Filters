@@ -95,15 +95,14 @@ namespace Swashbuckle.AspNetCore.Filters
 
             foreach (var content in operation.RequestBody.Content)
             {
-                content.Value.Example = examplesConverter.Serialize(example, content.Key);
-                //if (content.Key.Contains("xml"))
-                //{
-                //    content.Value.Example = xmlExample.Value;
-                //}
-                //else
-                //{
-                //    content.Value.Example = jsonExample.Value;
-                //}
+                if (content.Key.Contains("xml"))
+                {
+                    content.Value.Example = xmlExample.Value;
+                }
+                else
+                {
+                    content.Value.Example = jsonExample.Value;
+                }
             }
 
             return operation.RequestBody.Content.FirstOrDefault().Value?.Example;
