@@ -81,8 +81,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 if (formatter == null)
                 {
-                    // throw new FormatterNotFoundException(contentType);
-                    return string.Empty;
+                    throw new FormatterNotFoundException(contentType);
                 }
 
                 formatter.WriteAsync(outputFormatterContext).GetAwaiter().GetResult();
