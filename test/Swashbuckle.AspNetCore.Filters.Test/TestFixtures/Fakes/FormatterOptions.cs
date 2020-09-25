@@ -8,6 +8,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 {
     internal class FormatterOptions : IOptions<MvcOptions>
     {
+        private static JsonOutputFormatter jsonOutputFormatter = new JsonOutputFormatter(new JsonSerializerSettings { Formatting = Formatting.Indented }, ArrayPool<char>.Shared);
+
         private FormatterOptions(params IOutputFormatter[] formatters)
         {
             Value = new MvcOptions();
@@ -20,10 +22,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         public static FormatterOptions WithXmlDataContractFormatter
             => new FormatterOptions(new XmlDataContractSerializerOutputFormatter());
 
-        public static FormatterOptions WithNewtonsoftFormatter
-            => new FormatterOptions(new JsonOutputFormatter(new JsonSerializerSettings { Formatting = Formatting.Indented }, ArrayPool<char>.Shared));
+        public static FormatterOptions WithNewtonsoftFormatter => new FormatterOptions(jsonOutputFormatter);
 
-        public static FormatterOptions WithoutFormatters
-            => new FormatterOptions();
+        public static FormatterOptions WithXmlAndJsonFormatters => new FormatterOptions(new XmlSerializerOutputFormatter(), jsonOutputFormatter);
+
+        public static FormatterOptions WithoutFormatters => new FormatterOptions();
     }
 }

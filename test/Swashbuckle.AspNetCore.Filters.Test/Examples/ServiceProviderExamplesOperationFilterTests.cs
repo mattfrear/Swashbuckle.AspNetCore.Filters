@@ -31,7 +31,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
             var jsonFormatter = new JsonFormatter();
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithNewtonsoftFormatter, new FakeLoggerFactory());
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndJsonFormatters, new FakeLoggerFactory());
 
             var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(swaggerOptions));
             var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
