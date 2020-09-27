@@ -26,13 +26,13 @@ namespace WebApi3._0_Swashbuckle5
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddNewtonsoftJson(opt =>
-                {
-                    opt.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    opt.SerializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver(opt.SerializerSettings.ContractResolver);
-                    // opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                })
-                // .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+                //.AddNewtonsoftJson(opt =>
+                //{
+                //    opt.SerializerSettings.Converters.Add(new StringEnumConverter());
+                //    opt.SerializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver(opt.SerializerSettings.ContractResolver);
+                //    // opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                //})
+                .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
                 // .AddXmlSerializerFormatters();
                 .AddXmlDataContractSerializerFormatters();
 

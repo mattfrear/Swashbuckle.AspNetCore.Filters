@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace WebApi.Models
 {
@@ -14,7 +15,7 @@ namespace WebApi.Models
         /// <summary>
         /// The first name of the person
         /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("flc")]
+        [JsonPropertyName("first")]
         public string FirstName { get; set; }
 
         public decimal? Income { get; set; }
