@@ -26,13 +26,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         }
 
         [SwaggerResponse(200, type: typeof(PersonResponse))]
-        [SwaggerResponseExample(200, typeof(PersonResponseExample))]
-        public IActionResult AnnotatedWithSwaggerResponseExampleAttributePascalCase()
-        {
-            throw new NotImplementedException();
-        }
-
-        [SwaggerResponse(200, type: typeof(PersonResponse))]
         public IActionResult AnnotatedWithSwaggerResponseAttribute()
         {
             throw new NotImplementedException();

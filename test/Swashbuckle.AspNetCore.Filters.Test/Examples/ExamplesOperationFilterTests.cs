@@ -61,7 +61,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var expectedExample = new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
-            actualExample.Age.ShouldBe(27);
         }
 
         [Fact]
@@ -86,7 +85,15 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
         }
 
-        [Fact]
+        /* [Fact]
+         This test is no longer needed - we used to have a ContractResolver parameter on the SwaggerResponse attribute,
+         but that has been removed.
+         Your examples will be output with whichever ContractResolver is registered, e.g.
+         services.AddControllers()
+            .AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
+        
         public void SetsResponseExamples_FromMethodAttributesPascalCase()
         {
             // Arrange
@@ -104,7 +111,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
             var expectedExample = new PersonResponseExample().GetExamples();
             jsonExample.ShouldContain($"\"Id\": {expectedExample.Id}", Case.Sensitive);
-        }
+        } */
 
         [Fact]
         public void SetsMultipleResponseExamples_FromMethodAttributes()
@@ -272,10 +279,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             formatedExample.StartsWith('"').ShouldBeTrue();
         }
 
-        // [Fact] this no longer works.
-        // In order to add System.Text.Json support I changed the code to use whichever JSON provider
-        // the MVC pipeline is registered with - Newtonsoft or System.Text.Json.
-        // The code I'd written to exclude obsolete properties used a custom Newtonsoft IContractResolver.
+        [Fact]
         public void ShouldNotEmitObsoleteProperties()
         {
             // Arrange
@@ -293,8 +297,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Assert
             string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
             var expectedExample = new PersonResponseExample().GetExamples();
-            jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}");
-            jsonExample.ShouldContain($"\"id\": {expectedExample.Id}");
+            jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}", Case.Sensitive);
+            jsonExample.ShouldContain($"\"id\": {expectedExample.Id}", Case.Sensitive);
         }
     }
 }
