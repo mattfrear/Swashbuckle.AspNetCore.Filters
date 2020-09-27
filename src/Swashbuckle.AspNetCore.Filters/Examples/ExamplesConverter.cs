@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Filters.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -14,15 +13,11 @@ namespace Swashbuckle.AspNetCore.Filters
         private static readonly MediaTypeHeaderValue ApplicationXml = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
         private static readonly MediaTypeHeaderValue ApplicationJson = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
 
-        private readonly JsonFormatter jsonFormatter;
         private readonly MvcOutputFormatter mvcOutputFormatter;
-        private readonly JsonSerializerSettings serializerSettings;
 
-        public ExamplesConverter(JsonFormatter jsonFormatter, MvcOutputFormatter mvcOutputFormatter, JsonSerializerSettings serializerSettings)
+        public ExamplesConverter(MvcOutputFormatter mvcOutputFormatter)
         {
-            this.jsonFormatter = jsonFormatter;
             this.mvcOutputFormatter = mvcOutputFormatter;
-            this.serializerSettings = serializerSettings;
         }
 
         public IOpenApiAny SerializeExampleXml(object value)

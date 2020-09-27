@@ -76,8 +76,6 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public static void AddSwaggerExamples(this IServiceCollection services)
         {
-            services.AddSingleton<SerializerSettingsDuplicator>();
-            services.AddSingleton<JsonFormatter>();
             services.AddSingleton<RequestExample>();
             services.AddSingleton<ResponseExample>();
             services.AddSingleton<ExamplesOperationFilter>();

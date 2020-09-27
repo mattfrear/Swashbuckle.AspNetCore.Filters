@@ -16,7 +16,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void SchemaDefinitionName_ShouldCalculate(Type type, string expectedName)
         {
             // Arrange
-            var sut = new RequestExample(null, null, null, null);
+            var sut = new RequestExample(null, null);
 
             // Act
             var result = type.SchemaDefinitionName();

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NSubstitute;
@@ -24,17 +23,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
 
-            var jsonFormatter = new JsonFormatter();
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(
-                Options.Create(new MvcJsonOptions()),
-                Options.Create(new SchemaGeneratorOptions()));
-
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, new FakeLoggerFactory());
 
             sut = new ServiceProviderExamplesOperationFilter(
                 serviceProvider,
-                new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions())),
-                new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter));
+                new RequestExample(mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions())),
+                new ResponseExample(mvcOutputFormatter));
         }
 
         [Fact]

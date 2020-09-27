@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace WebApi.Models
 {
@@ -18,6 +19,7 @@ namespace WebApi.Models
         [Description("The first name of the person")]
         public string FirstName { get; set; }
 
+        // [JsonPropertyName("poo")]
         [JsonProperty("last")]
         [Description("The last name of the person")]
         public string LastName { get; set; }

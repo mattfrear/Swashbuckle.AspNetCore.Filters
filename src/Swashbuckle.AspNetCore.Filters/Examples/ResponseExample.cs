@@ -1,35 +1,25 @@
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Any;
-using System;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
     internal class ResponseExample
     {
-        private readonly JsonFormatter jsonFormatter;
-        private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
         private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public ResponseExample(
-            JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator,
             MvcOutputFormatter mvcOutputFormatter)
         {
-            this.jsonFormatter = jsonFormatter;
-            this.serializerSettingsDuplicator = serializerSettingsDuplicator;
             this.mvcOutputFormatter = mvcOutputFormatter;
         }
 
         public void SetResponseExampleForStatusCode(
             OpenApiOperation operation,
             int statusCode,
-            object example,
-            IContractResolver contractResolver = null,
-            JsonConverter jsonConverter = null)
+            object example)
         {
             if (example == null)
             {
@@ -42,9 +32,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
-
-            var examplesConverter = new ExamplesConverter(jsonFormatter, mvcOutputFormatter, serializerSettings);
+            var examplesConverter = new ExamplesConverter(mvcOutputFormatter);
 
             var multiple = example as IEnumerable<ISwaggerExample<object>>;
             if (multiple == null)

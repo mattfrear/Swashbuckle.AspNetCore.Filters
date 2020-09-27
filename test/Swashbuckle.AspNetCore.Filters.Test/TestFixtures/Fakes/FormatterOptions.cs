@@ -8,7 +8,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 {
     internal class FormatterOptions : IOptions<MvcOptions>
     {
-        private static JsonOutputFormatter jsonOutputFormatter = new JsonOutputFormatter(new JsonSerializerSettings { Formatting = Formatting.Indented }, ArrayPool<char>.Shared);
+        private static NewtonsoftJsonOutputFormatter jsonOutputFormatter = new NewtonsoftJsonOutputFormatter(new JsonSerializerSettings { Formatting = Formatting.Indented }, ArrayPool<char>.Shared, new MvcOptions());
 
         private FormatterOptions(params IOutputFormatter[] formatters)
         {

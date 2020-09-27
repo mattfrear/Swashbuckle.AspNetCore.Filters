@@ -44,9 +44,7 @@ namespace Swashbuckle.AspNetCore.Filters
                     operation,
                     context.SchemaRepository,
                     attr.RequestType,
-                    example,
-                    attr.ContractResolver,
-                    attr.JsonConverter);
+                    example);
             }
         }
 
@@ -61,9 +59,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 responseExample.SetResponseExampleForStatusCode(
                     operation,
                     attr.StatusCode,
-                    example,
-                    attr.ContractResolver,
-                    attr.JsonConverter);
+                    example);
             }
         }
     }

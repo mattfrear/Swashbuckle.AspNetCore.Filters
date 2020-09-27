@@ -25,11 +25,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public ExamplesOperationFilterTests()
         {
-            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
             schemaGeneratorOptions = new SchemaGeneratorOptions();
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
-
-            var jsonFormatter = new JsonFormatter();
 
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(PersonResponseExample)).Returns(new PersonResponseExample());
@@ -39,8 +35,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndJsonFormatters, new FakeLoggerFactory());
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
+            var responseExample = new ResponseExample(mvcOutputFormatter);
 
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }

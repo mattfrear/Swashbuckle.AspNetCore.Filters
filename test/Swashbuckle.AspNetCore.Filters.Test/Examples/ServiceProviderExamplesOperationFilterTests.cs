@@ -26,15 +26,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public ServiceProviderExamplesOperationFilterTests()
         {
-            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
             schemaGeneratorOptions = new SchemaGeneratorOptions();
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
-            var jsonFormatter = new JsonFormatter();
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndJsonFormatters, new FakeLoggerFactory());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
+            var responseExample = new ResponseExample(mvcOutputFormatter);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
@@ -470,5 +467,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}", Case.Sensitive);
             jsonExample.ShouldContain($"\"id\": {expectedExample.Id}", Case.Sensitive);
         }
+
+        // todo, add tests which use System.Text.Json.
     }
 }
