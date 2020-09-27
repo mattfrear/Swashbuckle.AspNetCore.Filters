@@ -16,6 +16,7 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 
 ## Table of Contents
 
+- [Changelog](#changelog)
 - [Where to get it](#where-to-get-it)
 - [What's included](#whats-included)
   - [Request example](#request-example)
@@ -44,6 +45,9 @@ This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://gi
 - [Pascal case or Camel case?](#pascal-case-or-camel-case)
 - [Render Enums as strings](#render-enums-as-strings)
 - [Advanced: Examples with Dependency injection](#advanced-examples-with-dependency-injection)
+
+## Changelog
+See the [CHANGELOG.md](CHANGELOG.md).
 
 ## Where to get it
 From NuGet.
@@ -315,7 +319,7 @@ Your IExamplesProvider should only return a single `T` and not a `List<T>`.
 Working example:
 
 ```csharp
-[SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample), jsonConverter: typeof(StringEnumConverter))]
+[SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample))]
 public IEnumerable<PersonResponse> GetPersonList([FromBody]List<PeopleRequest> peopleRequest)
 {
 
@@ -543,12 +547,20 @@ public PersonResponse GetPerson([FromBody]PersonRequest personRequest)
 You can optionally specify policies `[Authorize("Customer")]` or roles `[Authorize(Roles = "Customer")]` and they will be added to the Summary too.
 
 ## Pascal case or Camel case?
-The default is camelCase. If you want PascalCase you can pass in a `DefaultContractResolver` like so:
-`[SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]`
+~~The default is camelCase. If you want PascalCase you can pass in a `DefaultContractResolver` like so:
+`[SwaggerResponseExample(200, typeof(PersonResponseExample), typeof(DefaultContractResolver))]`~~
+
+The above is no longer supported - it will output Examples using whichever JSON serializer your controllers are configured with
+in `services.AddControllers()`.
+
 
 ## Render Enums as strings
-By default `enum`s will output their integer values. If you want to output strings you can pass in a `StringEnumConverter` like so:
-`[SwaggerResponseExample(200, typeof(PersonResponseExample), jsonConverter: typeof(StringEnumConverter))]`
+~~By default `enum`s will output their integer values. If you want to output strings you can pass in a `StringEnumConverter` like so:
+`[SwaggerResponseExample(200, typeof(PersonResponseExample), jsonConverter: typeof(StringEnumConverter))]`~~
+
+The above is no longer supported - it will output Examples using whichever JSON serializer your controllers are configured with
+in `services.AddControllers()`.
+
 
 ## Advanced: Examples with Dependency injection
 
