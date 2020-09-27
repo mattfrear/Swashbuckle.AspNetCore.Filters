@@ -26,15 +26,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public ServiceProviderExamplesOperationFilterTests()
         {
-            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
             schemaGeneratorOptions = new SchemaGeneratorOptions();
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
 
-            var jsonFormatter = new JsonFormatter();
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
+            var responseExample = new ResponseExample(mvcOutputFormatter);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
@@ -61,7 +58,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var expectedExample = new PersonResponseAutoExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
-            actualExample.Age.ShouldBe(27);
         }
 
         [Fact]
@@ -454,7 +450,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void ShouldNotEmitObsoleteProperties()
         {
             // Arrange
-            schemaGeneratorOptions.IgnoreObsoleteProperties = true;
+            // schemaGeneratorOptions.IgnoreObsoleteProperties = true;
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
@@ -469,6 +465,29 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var expectedExample = new PersonResponseAutoExample().GetExamples();
             jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}", Case.Sensitive);
             jsonExample.ShouldContain($"\"id\": {expectedExample.Id}", Case.Sensitive);
+        }
+
+        [Fact]
+        public void ShouldEmitSystemTextJsonPropertyName()
+        {
+            // Arrange
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithSystemTextJsonFormatter, new FakeLoggerFactory());
+            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var sut = new ServiceProviderExamplesOperationFilter(serviceProvider, null, responseExample);
+
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
+            var expectedExample = new PersonResponseAutoExample().GetExamples();
+            jsonExample.ShouldContain($"\"lastagain\": \"{expectedExample.LastName}\"", Case.Sensitive);
         }
     }
 }

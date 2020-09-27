@@ -51,7 +51,7 @@ namespace WebApi.Controllers
         [SwaggerResponse(500, type: null, description: "There was an unexpected error")]
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
 
-        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample))]
 
         [SwaggerResponseHeader(StatusCodes.Status200OK, "Location", "string", "Location of the newly created resource")]
         [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
@@ -98,8 +98,8 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("api/values/genericperson")]
         [SwaggerResponse(200, type: typeof(ResponseWrapper<PersonResponse>), description: "Successfully found the person")]
-        [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample), jsonConverter: typeof(StringEnumConverter))]
-        [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample))]
+        [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample))]
         [Authorize(Roles = "Customer")]
         public ResponseWrapper<PersonResponse> PostGenericPerson([FromBody]RequestWrapper<PersonRequest> personRequest)
         {
@@ -116,7 +116,7 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         [Route("api/values/listperson")]
         [SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>), description: "Successfully found the people")]
-        [SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample))]
         public IEnumerable<PersonResponse> PostPersonList([FromBody]List<PeopleRequest> peopleRequest)
         {
             var people = new[] { new PersonResponse { Id = 1, FirstName = "Sally" } };
@@ -132,7 +132,7 @@ namespace WebApi.Controllers
         [Route("api/values/dictionary")]
         [SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
         [SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
-        [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample))]
         public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
         {
             return new Dictionary<string, object> { { "Some", 1 } };
@@ -147,7 +147,7 @@ namespace WebApi.Controllers
         [Route("api/values/data")]
         [SwaggerResponse(200, type: typeof(DynamicData), description: "Successfully found the data")]
         [SwaggerResponseExample(200, typeof(DynamicDataResponseExample))]
-        [SwaggerRequestExample(typeof(DynamicData), typeof(DynamicDataRequestExample), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerRequestExample(typeof(DynamicData), typeof(DynamicDataRequestExample))]
         public DynamicData GetData([FromBody]DynamicData personRequest)
         {
             var personResponse = new DynamicData();
@@ -157,7 +157,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("api/values/differentperson")]
-        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2), jsonConverter: typeof(StringEnumConverter))]
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2))]
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(PersonResponseExample2))]
         public PersonResponse PostDifferentPerson([FromBody]PersonRequest personRequest)

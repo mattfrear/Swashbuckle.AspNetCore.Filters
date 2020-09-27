@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace WebApi.Models
 {
@@ -18,7 +19,8 @@ namespace WebApi.Models
         [Description("The first name of the person")]
         public string FirstName { get; set; }
 
-        [JsonProperty("last")]
+        [JsonPropertyName("laster")] // System.Text.Json
+        [JsonProperty("last")]       // Newtonsoft.Json
         [Description("The last name of the person")]
         public string LastName { get; set; }
 

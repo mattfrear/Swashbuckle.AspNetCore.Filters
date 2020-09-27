@@ -25,12 +25,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public ExamplesOperationFilterTests()
         {
-            var mvcJsonOptions = Options.Create(new MvcJsonOptions());
             schemaGeneratorOptions = new SchemaGeneratorOptions();
-            var serializerSettingsDuplicator = new SerializerSettingsDuplicator(mvcJsonOptions, Options.Create(schemaGeneratorOptions));
-
-            var jsonFormatter = new JsonFormatter();
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, new FakeLoggerFactory());
 
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(PersonResponseExample)).Returns(new PersonResponseExample());
@@ -39,8 +34,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(PersonRequestMultipleExamples)).Returns(new PersonRequestMultipleExamples());
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
-            var requestExample = new RequestExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(jsonFormatter, serializerSettingsDuplicator, mvcOutputFormatter);
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
+            var responseExample = new ResponseExample(mvcOutputFormatter);
 
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
@@ -65,7 +61,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var expectedExample = new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
-            actualExample.Age.ShouldBe(27);
         }
 
         [Fact]
@@ -90,7 +85,15 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
         }
 
-        [Fact]
+        /* [Fact]
+         This test is no longer needed - we used to have a ContractResolver parameter on the SwaggerResponse attribute,
+         but that has been removed.
+         Your examples will be output with whichever ContractResolver is registered, e.g.
+         services.AddControllers()
+            .AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
+        
         public void SetsResponseExamples_FromMethodAttributesPascalCase()
         {
             // Arrange
@@ -108,7 +111,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
             var expectedExample = new PersonResponseExample().GetExamples();
             jsonExample.ShouldContain($"\"Id\": {expectedExample.Id}", Case.Sensitive);
-        }
+        } */
 
         [Fact]
         public void SetsMultipleResponseExamples_FromMethodAttributes()

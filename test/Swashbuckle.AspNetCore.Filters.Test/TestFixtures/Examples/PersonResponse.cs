@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 {
@@ -18,6 +19,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
         [Description("The first name of the person")]
         public string FirstName { get; set; }
 
+        [JsonPropertyName("lastagain")]
         [JsonProperty("last")]
         [Description("The last name of the person")]
         public string LastName { get; set; }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -14,19 +12,13 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class RequestExample
     {
-        private readonly JsonFormatter jsonFormatter;
-        private readonly SerializerSettingsDuplicator serializerSettingsDuplicator;
         private readonly MvcOutputFormatter mvcOutputFormatter;
         private readonly SwaggerOptions swaggerOptions;
 
         public RequestExample(
-            JsonFormatter jsonFormatter,
-            SerializerSettingsDuplicator serializerSettingsDuplicator,
             MvcOutputFormatter mvcOutputFormatter,
             IOptions<SwaggerOptions> options)
         {
-            this.jsonFormatter = jsonFormatter;
-            this.serializerSettingsDuplicator = serializerSettingsDuplicator;
             this.mvcOutputFormatter = mvcOutputFormatter;
             this.swaggerOptions = options?.Value;
         }
@@ -35,9 +27,7 @@ namespace Swashbuckle.AspNetCore.Filters
             OpenApiOperation operation,
             SchemaRepository schemaRepository,
             Type requestType,
-            object example,
-            IContractResolver contractResolver = null,
-            JsonConverter jsonConverter = null)
+            object example)
         {
             if (example == null)
             {
@@ -49,9 +39,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            var serializerSettings = serializerSettingsDuplicator.SerializerSettings(contractResolver, jsonConverter);
-
-            var examplesConverter = new ExamplesConverter(jsonFormatter, mvcOutputFormatter, serializerSettings);
+            var examplesConverter = new ExamplesConverter(mvcOutputFormatter);
 
             IOpenApiAny firstOpenApiExample;
             var multiple = example as IEnumerable<ISwaggerExample<object>>;

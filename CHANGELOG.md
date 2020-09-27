@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.0] 2020-09-27
+### Fixed 
+- Issue #132 Support `[System.Text.JsonPropertyNameAttribute]`. This is a breaking change which rewrote how the examples
+ are generated. Instead of explicitly using Newtonsoft's `JsonConvert.SerializeObject()`, I now use whichever JSON
+ serializer is registered with the MVC pipeline, i.e. during `services.AddControllers()`.
+
+### Removed
+- contractResolver and jsonConverter parameters from `[SwaggerRequestExampleAttribute]`.
+- contractResolver and jsonConverter parameters from `[SwaggerResponseExampleAttribute]`.
+- `Microsoft.AspNetCore.Mvc.NewtonsoftJson` dependency.
+
+### Changed
+- If you are using `options.IgnoreObsoleteProperties();` and you want your Examples to not have the 
+  obsolete properties, then you will need to register my custom Newtonsoft `ExcludeObsoletePropertiesResolver`,
+  e.g.
+```csharp
+services.AddControllers()
+    .AddNewtonsoftJson(opt =>
+    {
+        opt.SerializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver(opt.SerializerSettings.ContractResolver);
+```
+
 ## [5.1.2] 2020-06-25
 ### Fixed
 - #154 Upgrade to Microsoft.OpenApi 1.2.2 because 1.2.0 had breaking changes
