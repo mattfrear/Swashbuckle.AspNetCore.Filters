@@ -28,7 +28,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             schemaGeneratorOptions = new SchemaGeneratorOptions();
 
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndJsonFormatters, new FakeLoggerFactory());
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
 
             var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
             var responseExample = new ResponseExample(mvcOutputFormatter);
