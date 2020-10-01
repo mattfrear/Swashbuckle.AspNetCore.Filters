@@ -180,6 +180,16 @@ or
 ```
 This will register your examples with the ServiceProvider.
 
+### Serialize Swagger in the 2.0 format
+There are two ways to tell Swashbuckle.AspNetCore to output the swagger.json in the legacy Swagger 2.0 format:
+```csharp
+app.UseSwagger(c => c.SerializeAsV2 = true);
+
+// OR
+services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = true);
+```
+If you want to SerializeAsV2 then you must call `services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = true);` if you're using my Request example filter.
+
 ## How to use
 
 ### How to use - Request examples
