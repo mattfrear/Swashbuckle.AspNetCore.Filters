@@ -186,9 +186,10 @@ There are two ways to tell Swashbuckle.AspNetCore to output the swagger.json in 
 app.UseSwagger(c => c.SerializeAsV2 = true);
 
 // OR
+
 services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = true);
 ```
-If you want to SerializeAsV2 then you must call `services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = true);` if you're using my Request example filter.
+If you want to SerializeAsV2 and you're using my Request example filter then you must call `services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = true);`.
 
 ## How to use
 
