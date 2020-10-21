@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/test/Swashbuckle.AspNetCore.Filters.Test/Swashbuckle.AspNetCore.Filters.Test.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "shell",
+            "group": "test",
+            "args": [
+                "test",
+                "${workspaceFolder}/test/Swashbuckle.AspNetCore.Filters.Test/Swashbuckle.AspNetCore.Filters.Test.csproj"
+            ],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

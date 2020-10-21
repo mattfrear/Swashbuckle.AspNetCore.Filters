@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28917.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3C314E2-1A92-43F6-B38B-7FA0FC1863EA}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		CHANGELOG.md = CHANGELOG.md
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{32C79B97-862D-4E61-99FA-9D4A894BA3A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Filters", "src\Swashbuckle.AspNetCore.Filters\Swashbuckle.AspNetCore.Filters.csproj", "{BF2A4583-1466-440D-B818-0169634DA8F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{B47A2133-3F12-4616-BC3B-1C85E25087E9}"
+	ProjectSection(SolutionItems) = preProject
+		tools\key.snk = tools\key.snk
+		tools\NuGet instructions.txt = tools\NuGet instructions.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0C0D0AB6-777A-4327-92B6-41AA086FC049}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Filters.Test", "test\Swashbuckle.AspNetCore.Filters.Test\Swashbuckle.AspNetCore.Filters.Test.csproj", "{8D343046-925C-4D1E-829E-BF7A03E2426D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi2.1-Swashbuckle5", "test\WebApi2.1-Swashbuckle5\WebApi2.1-Swashbuckle5.csproj", "{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi3.0-Swashbuckle5", "test\WebApi3.0-Swashbuckle5\WebApi3.0-Swashbuckle5.csproj", "{635832B3-0B2B-456C-BF55-E4179E7996E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF2A4583-1466-440D-B818-0169634DA8F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2A4583-1466-440D-B818-0169634DA8F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2A4583-1466-440D-B818-0169634DA8F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2A4583-1466-440D-B818-0169634DA8F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D343046-925C-4D1E-829E-BF7A03E2426D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D343046-925C-4D1E-829E-BF7A03E2426D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D343046-925C-4D1E-829E-BF7A03E2426D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D343046-925C-4D1E-829E-BF7A03E2426D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{635832B3-0B2B-456C-BF55-E4179E7996E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{635832B3-0B2B-456C-BF55-E4179E7996E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{635832B3-0B2B-456C-BF55-E4179E7996E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{635832B3-0B2B-456C-BF55-E4179E7996E2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BF2A4583-1466-440D-B818-0169634DA8F0} = {32C79B97-862D-4E61-99FA-9D4A894BA3A1}
+		{8D343046-925C-4D1E-829E-BF7A03E2426D} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
+		{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
+		{635832B3-0B2B-456C-BF55-E4179E7996E2} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24267CCB-C313-45F2-83DE-727185B6A4D7}
+	EndGlobalSection
+EndGlobal
