@@ -9,10 +9,10 @@
 This library contains a bunch of filters for [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
 - Add example requests https://mattfrear.com/2016/01/25/generating-swagger-example-requests-with-swashbuckle/
 - Add example responses https://mattfrear.com/2015/04/21/generating-swagger-example-responses-with-swashbuckle/
-- Add security info to each operation that has an `[Authorize]` endpoint, allowing you to send OAuth2 bearer tokens via Swagger-UI https://mattfrear.com/2018/07/21/add-an-authorization-header-to-your-swagger-ui-with-swashbuckle-revisited/
+- Add security info to each operation that has an `[Authorize]` attribute, allowing you to send OAuth2 bearer tokens via Swagger-UI https://mattfrear.com/2018/07/21/add-an-authorization-header-to-your-swagger-ui-with-swashbuckle-revisited/
 - Add any old request header to all requests
 - Add any old response header to all responses
-- Add an indicator to each endpoint to show if it has an `[Authorize]` header (and for which policies and roles)
+- Add an indicator to each endpoint to show if it has an `[Authorize]` attribute (and for which policies and roles)
 
 ## Table of Contents
 
@@ -492,7 +492,8 @@ Note that UIs may choose to display the summary in different ways; in ReDoc, for
 
 ### How to use - Security requirements filter
 
-First you need to already have OAuth2 configured correctly, and some of your controllers and actions locked down with the `[Authorize]` attribute.
+First you need to already have OAuth2 configured correctly, and some of your controllers and actions locked down with the `[Authorize]` attribute. 
+N.B. globally registered Authorization filters are not detected.
 
 Then you need to tell Swagger that you're using OAuth2, as shown in the Installation section above:
 ```csharp
