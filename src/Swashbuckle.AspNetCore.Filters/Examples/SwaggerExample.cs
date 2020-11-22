@@ -7,7 +7,7 @@ namespace Swashbuckle.AspNetCore.Filters
     public class SwaggerExample<T> : ISwaggerExample<T>
     {
         /// <summary>
-        /// Name of the example.  Required.
+        /// Name of the example. Required.
         /// </summary>
         public string Name { get; set; }
 
@@ -17,7 +17,12 @@ namespace Swashbuckle.AspNetCore.Filters
         public string Summary { get; set; }
 
         /// <summary>
-        /// The example value.  Required.
+        /// Optional description of the example. SwaggerUI renders this with markdown support.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// The example value. Required.
         /// </summary>
         public T Value { get; set; }
     }
@@ -50,6 +55,20 @@ namespace Swashbuckle.AspNetCore.Filters
         public static SwaggerExample<T> Create<T>(string name, string summary, T value)
         {
             return new SwaggerExample<T> {Name = name, Summary = summary, Value = value};
+        }
+
+        /// <summary>
+        /// Create an example for a type.
+        /// </summary>
+        /// <param name="name">Name of the example.</param>
+        /// <param name="summary">Summary of the example.</param>
+        /// <param name="description">Description of the example.</param>
+        /// <param name="value">Example value.</param>
+        /// <typeparam name="T">Type that the example is for.</typeparam>
+        /// <returns>An example for the type.</returns>
+        public static SwaggerExample<T> Create<T>(string name, string summary, string description, T value)
+        {
+            return new SwaggerExample<T> { Name = name, Summary = summary, Description = description, Value = value };
         }
     }
 }
