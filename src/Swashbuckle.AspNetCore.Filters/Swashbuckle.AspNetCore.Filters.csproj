@@ -2,23 +2,23 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
-    <PackageVersion>6.0.1</PackageVersion>
+    <PackageVersion>6.1.0</PackageVersion>
     <Authors>Matt Frear</Authors>
     <Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters/blob/master/LICENSE</PackageLicenseUrl>
-    <Copyright>2019</Copyright>
+    <Copyright>2021</Copyright>
     <PackageTags>Swagger Swashbuckle</PackageTags>
     <PackageReleaseNotes>
-      Restore Newtonsoft dependency
+      Support auto example for `ProducesDefaultResponseType`.
     </PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>6.0.1</VersionPrefix>
+    <VersionPrefix>6.1.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
