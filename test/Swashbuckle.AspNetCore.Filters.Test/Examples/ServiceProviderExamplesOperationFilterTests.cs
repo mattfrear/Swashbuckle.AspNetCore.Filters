@@ -35,7 +35,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
-            serviceProvider.GetService(typeof(IExamplesProvider<DefaultResponse>)).Returns(new DefaultResponseExample());
 
             sut = new ServiceProviderExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
@@ -498,18 +497,18 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("default", response);
-            var supportedResponseTypes = new List<ApiResponseType> { new ApiResponseType { StatusCode = 0, Type = typeof(DefaultResponse) } };
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.HasDefaultAnnotation), supportedResponseTypes: supportedResponseTypes);
+            var supportedResponseTypes = new List<ApiResponseType> { new ApiResponseType { StatusCode = 0, Type = typeof(PersonResponse) } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.PersonResponseNotAnnotated), supportedResponseTypes: supportedResponseTypes);
             SetSwaggerResponses(operation, filterContext);
 
             // Act
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<DefaultResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
 
-            var expectedExample = new DefaultResponseExample().GetExamples();
-            actualExample.Message.ShouldBe(expectedExample.Message);
+            var expectedExample = new PersonResponseExample().GetExamples();
+            actualExample.Id.ShouldBe(expectedExample.Id);
         }
     }
 }

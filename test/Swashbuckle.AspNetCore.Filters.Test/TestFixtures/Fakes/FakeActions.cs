@@ -146,11 +146,5 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         {
             throw new NotImplementedException();
         }
-
-        [ProducesDefaultResponseType(typeof(DefaultResponse))]
-        public PersonResponse HasDefaultAnnotation()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

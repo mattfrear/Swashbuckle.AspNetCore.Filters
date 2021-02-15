@@ -46,7 +46,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 SetMultipleResponseExampleForStatusCode(response, multiple, examplesConverter);
             }
         }
-        
+
         private void SetSingleResponseExampleForStatusCode(
             KeyValuePair<string, OpenApiResponse> response,
             object example,
