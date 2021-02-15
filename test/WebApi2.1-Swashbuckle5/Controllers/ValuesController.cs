@@ -170,6 +170,9 @@ namespace WebApi.Controllers
         [Route("api/values/dependencyinjectionperson")]
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestDependencyInjectionExample))]
+#if NETCOREAPP3_0
+        [ProducesDefaultResponseType(typeof(ErrorResponse))]
+#endif
         public PersonResponse PostDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };

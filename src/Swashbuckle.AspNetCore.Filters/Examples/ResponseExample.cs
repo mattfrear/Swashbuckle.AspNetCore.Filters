@@ -26,8 +26,10 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            var response = operation.Responses.FirstOrDefault(r => r.Key == statusCode.ToString());
-            if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) != false || response.Value == null)
+            var key = statusCode == 0 ? "default" : statusCode.ToString();
+            var response = operation.Responses.FirstOrDefault(r => r.Key == key);
+
+            if (response.Equals(default(KeyValuePair<string, OpenApiResponse>)) || response.Value == null)
             {
                 return;
             }
