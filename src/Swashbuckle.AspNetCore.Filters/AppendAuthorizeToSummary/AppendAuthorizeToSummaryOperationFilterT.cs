@@ -16,8 +16,7 @@ namespace Swashbuckle.AspNetCore.Filters
         /// <summary>
         /// Constructor for AppendAuthorizeToSummaryOperationFilter
         /// </summary>
-        /// <param name="policySelectionCondition">Selects which attributes have policies. e.g. (a => !string.IsNullOrEmpty(a.Policy))</param>
-        /// <param name="policySelector">Used to select the authorization policy from the attribute e.g. (a => a.Policy)</param>
+        /// <param name="policySelectors">Used to select the authorization policy from the attribute e.g. (a => a.Policy)</param>
         public AppendAuthorizeToSummaryOperationFilter(IEnumerable<PolicySelectorWithLabel<T>> policySelectors)
         {
             this.policySelectors = policySelectors;
