@@ -16,8 +16,6 @@ namespace Swashbuckle.AspNetCore.Filters
         /// </summary>
         /// <param name="requestType">The type passed to the request</param>
         /// <param name="examplesProviderType">A type that inherits from IExamplesProvider</param>
-        /// <param name="contractResolver">An optional json contract Resolver if you want to override the one you use</param>
-        /// <param name="jsonConverter">An optional jsonConverter to use, e.g. typeof(StringEnumConverter) will render strings as enums</param>
         public SwaggerRequestExampleAttribute(Type requestType, Type examplesProviderType)
         {
             RequestType = requestType;

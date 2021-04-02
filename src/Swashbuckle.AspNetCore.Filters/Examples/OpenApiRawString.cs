@@ -7,7 +7,7 @@ namespace Swashbuckle.AspNetCore.Filters
     /// <summary>
     /// Represents a raw value that should not be encoded
     /// </summary>
-    internal class OpenApiRawString : IOpenApiAny, IOpenApiPrimitive
+    internal class OpenApiRawString : IOpenApiPrimitive
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenApiRawString"/> class.
