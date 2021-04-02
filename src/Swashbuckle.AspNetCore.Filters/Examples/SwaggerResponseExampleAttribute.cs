@@ -16,8 +16,6 @@ namespace Swashbuckle.AspNetCore.Filters
         /// </summary>
         /// <param name="statusCode">The HTTP status code, e.g. 200</param>
         /// <param name="examplesProviderType">A type that inherits from IExamplesProvider</param>
-        /// <param name="contractResolver">An optional json contract Resolver if you want to override the one you use</param>
-        /// <param name="jsonConverter">An optional jsonConverter to use, e.g. typeof(StringEnumConverter) will render strings as enums</param>
         public SwaggerResponseExampleAttribute(int statusCode, Type examplesProviderType)
         {
             StatusCode = statusCode;
