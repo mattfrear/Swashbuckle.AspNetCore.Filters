@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Security
 - PR #176 update NuGet packages
+- PR #178 dependency cleanup
 
 ## [6.1.0] - 2021-02-15
 ### Added
