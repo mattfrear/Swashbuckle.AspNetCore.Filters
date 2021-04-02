@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
 		CHANGELOG.md = CHANGELOG.md
+		src\Directory.Build.props = src\Directory.Build.props
+		src\key.snk = src\key.snk
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -28,6 +30,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi2.1-Swashbuckle5", "test\WebApi2.1-Swashbuckle5\WebApi2.1-Swashbuckle5.csproj", "{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi3.0-Swashbuckle5", "test\WebApi3.0-Swashbuckle5\WebApi3.0-Swashbuckle5.csproj", "{635832B3-0B2B-456C-BF55-E4179E7996E2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Filters.Abstractions", "src\Swashbuckle.AspNetCore.Filters.Abstractions\Swashbuckle.AspNetCore.Filters.Abstractions.csproj", "{0965C00A-B186-4816-981D-EF3A68A75FB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,10 @@ Global
 		{635832B3-0B2B-456C-BF55-E4179E7996E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{635832B3-0B2B-456C-BF55-E4179E7996E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{635832B3-0B2B-456C-BF55-E4179E7996E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0965C00A-B186-4816-981D-EF3A68A75FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0965C00A-B186-4816-981D-EF3A68A75FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0965C00A-B186-4816-981D-EF3A68A75FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0965C00A-B186-4816-981D-EF3A68A75FB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +68,7 @@ Global
 		{8D343046-925C-4D1E-829E-BF7A03E2426D} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
 		{B0FAA1D6-7D7D-4951-B9F7-2CF8CADABA1D} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
 		{635832B3-0B2B-456C-BF55-E4179E7996E2} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
+		{0965C00A-B186-4816-981D-EF3A68A75FB5} = {32C79B97-862D-4E61-99FA-9D4A894BA3A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24267CCB-C313-45F2-83DE-727185B6A4D7}

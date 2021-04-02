@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Swashbuckle.AspNetCore.Filters;
-#if NETCOREAPP3_0
+﻿using Swashbuckle.AspNetCore.Filters;
+#if NETCOREAPP3_1
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
+#else
+using Microsoft.AspNetCore.Hosting;
 #endif
 
 namespace WebApi.Models.Examples
