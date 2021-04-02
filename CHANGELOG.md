@@ -4,15 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [6.1.0]
+## [Unreleased]
+### Security
+- PR #176 update NuGet packages
+
+## [6.1.0] - 2021-02-15
 ### Added
 - Issue #171 support auto example for `ProducesDefaultResponseType`.
 
-## [6.0.1] 2020-10-16
+## [6.0.1] - 2020-10-16
 ### Fixed
 - PR #161 restore NewtonsoftJson dependency.
 
-## [6.0.0] 2020-09-27
+## [6.0.0] - 2020-09-27
 ### Fixed 
 - Issue #132 Support `[System.Text.JsonPropertyNameAttribute]`. This is a breaking change which rewrote how the examples
  are generated. Instead of explicitly using Newtonsoft's `JsonConvert.SerializeObject()`, I now use whichever JSON
@@ -34,22 +38,22 @@ services.AddControllers()
         opt.SerializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver(opt.SerializerSettings.ContractResolver);
 ```
 
-## [5.1.2] 2020-06-25
+## [5.1.2] - 2020-06-25
 ### Fixed
 - #154 Upgrade to Microsoft.OpenApi 1.2.2 because 1.2.0 had breaking changes
 ### Added
 - Add `services.AddSwaggerExamples()` extension method to allow examples without automatic annotation
 
-## [5.1.1] 2020-04-12
+## [5.1.1] - 2020-04-12
 ### Fixed
 - #115 Added workaround for request examples when SerializeAsV2 = true
 - #148 AddSwaggerExamplesFromAssemblies method does not scan for IMultipleExamplesProvider implementations
 
-## [5.1.0] 2020-04-05
+## [5.1.0] - 2020-04-05
 ### Added
 - PR #147 add support for multiple request and response examples. Thanks to @tomkludy and @pozy for the contribution.
 
-## [5.0.2] 2020-02-25
+## [5.0.2] - 2020-02-25
 ### Added
 - PR #140 add extension methods AddSwaggerExamplesFromAssemblyOf and AddSwaggerExamplesFromAssemblies
 
@@ -58,17 +62,17 @@ services.AddControllers()
 - Fix #136 use either XmlSerializer or DataContractSerializer to output XML examples, depending on what is configured. 
   Thanks to @CumpsD and @ridingwolf for the PR.
 
-## [5.0.0] 2020-01-21
+## [5.0.0] - 2020-01-21
 ### Changed
 - Use Swashbuckle.AspNetCore 5.0.0
 
-## [5.0.0-rc9] 2019-12-31
+## [5.0.0-rc9] - 2019-12-31
 ### Fixed
 - PR #110, where using IgnoreObsoleteProperties option causes PascalCase to be emitted instead of camelCase.
 ### Changed
 - Use Swashbuckle.AspNetCore 5.0.0-rc5
 
-## [5.0.0-rc8] 2019-08-02
+## [5.0.0-rc8] - 2019-08-02
 ### Fixed
 - Issue #106 SecurityRequirementsOperationFilter removes existing OpenApiSecurityRequirements
 ## Added 
@@ -78,23 +82,23 @@ services.AddControllers()
 ### Fixed
 - Issue #98 check schemaGeneratorOptions.IgnoreObsoleteProperties when generating json examples
 
-## [5.0.0-rc6] 2019-07-26
+## [5.0.0-rc6] - 2019-07-26
 ### Added
 - PR #103 - Response Headers filter can now take an array of status codes
 
-## [5.0.0-rc5] 2019-07-24
+## [5.0.0-rc5] - 2019-07-24
 ### Fixed
 - Issue #101, Exception with SecurityRequirementsOperationFilter when you have already added a 401 or a 403
 
-## [5.0.0-rc4] 2019-07-13
+## [5.0.0-rc4] - 2019-07-13
 ### Fixed
 - Issue #99, JSON examples were encoded JSON
 
-## [5.0.0-rc3] 2019-06-10
+## [5.0.0-rc3] - 2019-06-10
 ### Removed
 - Remove IExamplesProvider interface. Only support IExamplesProvider<T>
 
-## [5.0.0-rc2] 2019-05-30
+## [5.0.0-rc2] - 2019-05-30
 ### Changed
 - Use Swashbuckle.AspNetCore 5.0.0-rc2
 - Support .NET Core 3.0 preview 5
