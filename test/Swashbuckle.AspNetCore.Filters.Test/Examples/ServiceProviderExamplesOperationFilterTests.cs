@@ -447,27 +447,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
-        public void ShouldNotEmitObsoleteProperties()
-        {
-            // Arrange
-            // schemaGeneratorOptions.IgnoreObsoleteProperties = true;
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
-            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
-            operation.Responses.Add("200", response);
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
-            SetSwaggerResponses(operation, filterContext);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
-            var expectedExample = new PersonResponseAutoExample().GetExamples();
-            jsonExample.ShouldNotContain($"\"age\": {expectedExample.Age}", Case.Sensitive);
-            jsonExample.ShouldContain($"\"id\": {expectedExample.Id}", Case.Sensitive);
-        }
-
-        [Fact]
         public void ShouldEmitSystemTextJsonPropertyName()
         {
             // Arrange

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System.Buffers;
 using System.Text.Json;
 
@@ -14,10 +13,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
-                ContractResolver = new ExcludeObsoletePropertiesResolver(new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                })
             },
             ArrayPool<char>.Shared,
             new MvcOptions());
