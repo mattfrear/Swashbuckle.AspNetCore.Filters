@@ -1,8 +1,12 @@
-1. Update the VersionPrefix, PackageVersion and PackageReleaseNotes in the .csproj
+1. Update the VersionPrefix, PackageVersion and PackageReleaseNotes in the Directory.Build.props
 2. Update Changelog
 3. Commit changes
 4. git tag -a v1.2.5 -m 'Fix issue #89'
 5. git push --follow-tags
-6. dotnet pack --configuration release
-7. cd src\Swashbuckle.AspNetCore.Filters\bin\Release
-8. nuget push Swashbuckle.AspNetCore.Filters.1.2.0.nupkg MySecretNuGetApiKeyHere -Source https://www.nuget.org/api/v2/package
+
+dotnet pack -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+cd src\Swashbuckle.AspNetCore.Filters\bin\Debug
+nuget push Swashbuckle.AspNetCore.Filters.7.0.0.nupkg MySecretNuGetApiKeyHere -Source https://api.nuget.org/v3/index.json
+
+cd src\Swashbuckle.AspNetCore.Filters.Abstractions\bin\Debug
+nuget push Swashbuckle.AspNetCore.Filters.Abstrations.7.0.0.nupkg MySecretNuGetApiKeyHere -Source https://api.nuget.org/v3/index.json
