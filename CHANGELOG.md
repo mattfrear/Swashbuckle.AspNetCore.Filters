@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Security
 - PR #176 update NuGet packages
+
+### Changed
 - PR #178 dependency cleanup
+- PR #179 introduce Swashbuckle.AspNetCore.Filters.Abstractions package so that IExamplesProvider can be consumed without Swashbuckle dependency.
+
+### Added
+- Target .NET 5.0
+- Microsoft.SourceLink.GitHub NuGet reference
 
 ## [6.1.0] - 2021-02-15
 ### Added

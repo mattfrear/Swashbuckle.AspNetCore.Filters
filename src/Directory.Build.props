@@ -14,7 +14,8 @@
 			Support auto example for `ProducesDefaultResponseType`.
 		</PackageReleaseNotes>
 		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
+		<Repository>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</Repository>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	</PropertyGroup>
 
 	<PropertyGroup>

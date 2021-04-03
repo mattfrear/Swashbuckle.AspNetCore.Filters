@@ -45,8 +45,6 @@ namespace WebApi3._0_Swashbuckle5
 
                 options.OperationFilter<AddResponseHeadersFilter>();
 
-                options.DescribeAllEnumsAsStrings();
-
                 var filePath = Path.Combine(AppContext.BaseDirectory, "WebApi.xml");
                 options.IncludeXmlComments(filePath);
 
