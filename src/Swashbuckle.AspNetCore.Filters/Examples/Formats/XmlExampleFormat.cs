@@ -12,7 +12,7 @@ namespace Swashbuckle.AspNetCore.Filters.Examples
 
         public override IOpenApiAny Format(string s)
         {
-            return base.Format(s.FormatXml());
+            return new OpenApiString(s.FormatXml());
         }
     }
 }
