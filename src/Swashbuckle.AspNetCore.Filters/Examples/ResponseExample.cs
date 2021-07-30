@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Swashbuckle.AspNetCore.Filters.Examples;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -52,20 +53,15 @@ namespace Swashbuckle.AspNetCore.Filters
             object example,
             ExamplesConverter examplesConverter)
         {
-            var jsonExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleJson(example));
-            var xmlExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleXml(example));
-
             foreach (var content in response.Value.Content)
             {
-                if (content.Key.Contains("xml"))
-                {
-                    content.Value.Example = xmlExample.Value;
-                }
-                else
-                {
-                    content.Value.Example = jsonExample.Value;
-                }
+                var format = ExampleFormats.GetFormat(content.Key);
+                if (format == null)
+                    continue; // fail more gracefully?
+
+                content.Value.Example = examplesConverter.SerializeExample(example, format);
             }
+
         }
 
         private void SetMultipleResponseExampleForStatusCode(
@@ -73,24 +69,13 @@ namespace Swashbuckle.AspNetCore.Filters
             IEnumerable<ISwaggerExample<object>> examples,
             ExamplesConverter examplesConverter)
         {
-            var jsonExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-                examplesConverter.ToOpenApiExamplesDictionaryJson(examples)
-            );
-
-            var xmlExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-                examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
-            );
-
             foreach (var content in response.Value.Content)
             {
-                if (content.Key.Contains("xml"))
-                {
-                    content.Value.Examples = xmlExamples.Value;
-                }
-                else
-                {
-                    content.Value.Examples = jsonExamples.Value;
-                }
+                var format = ExampleFormats.GetFormat(content.Key);
+                if (format == null)
+                    continue; // fail more gracefully?
+
+                content.Value.Examples = examplesConverter.ToOpenApiExamplesDictionary(examples, format);
             }
         }
     }

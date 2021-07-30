@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.Filters.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Swashbuckle.AspNetCore.Filters.Examples;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -12,6 +13,7 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private static readonly MediaTypeHeaderValue ApplicationXml = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
         private static readonly MediaTypeHeaderValue ApplicationJson = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+        private static readonly MediaTypeHeaderValue ApplicationYaml = MediaTypeHeaderValue.Parse("application/yaml; charset=utf-8");
 
         private readonly MvcOutputFormatter mvcOutputFormatter;
 
@@ -20,26 +22,17 @@ namespace Swashbuckle.AspNetCore.Filters
             this.mvcOutputFormatter = mvcOutputFormatter;
         }
 
-        public IOpenApiAny SerializeExampleXml(object value)
+        public IOpenApiAny SerializeExample(object value, ExampleFormat format)
         {
-            return new OpenApiString(mvcOutputFormatter.Serialize(value, ApplicationXml).FormatXml());
+            var stringValue = format.Format(mvcOutputFormatter.Serialize(value, format.MimeType));
+            return new OpenApiRawString(stringValue);
         }
 
-        public IOpenApiAny SerializeExampleJson(object value)
+        public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(
+            IEnumerable<ISwaggerExample<object>> examples,
+            ExampleFormat format)
         {
-            return new OpenApiRawString(mvcOutputFormatter.Serialize(value, ApplicationJson));
-        }
-
-        public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryXml(
-            IEnumerable<ISwaggerExample<object>> examples)
-        {
-            return ToOpenApiExamplesDictionary(examples, SerializeExampleXml);
-        }
-
-        public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryJson(
-            IEnumerable<ISwaggerExample<object>> examples)
-        {
-            return ToOpenApiExamplesDictionary(examples, SerializeExampleJson);
+            return ToOpenApiExamplesDictionary(examples, x => SerializeExample(x, format));
         }
 
         private static IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(
