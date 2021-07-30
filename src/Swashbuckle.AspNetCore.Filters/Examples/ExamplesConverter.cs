@@ -11,10 +11,6 @@ namespace Swashbuckle.AspNetCore.Filters
 {
     internal class ExamplesConverter
     {
-        private static readonly MediaTypeHeaderValue ApplicationXml = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
-        private static readonly MediaTypeHeaderValue ApplicationJson = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-        private static readonly MediaTypeHeaderValue ApplicationYaml = MediaTypeHeaderValue.Parse("application/yaml; charset=utf-8");
-
         private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public ExamplesConverter(MvcOutputFormatter mvcOutputFormatter)
@@ -24,8 +20,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public IOpenApiAny SerializeExample(object value, ExampleFormat format)
         {
-            var stringValue = format.Format(mvcOutputFormatter.Serialize(value, format.MimeType));
-            return new OpenApiRawString(stringValue);
+            return format.Format(mvcOutputFormatter.Serialize(value, format.MimeType));
         }
 
         public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(
