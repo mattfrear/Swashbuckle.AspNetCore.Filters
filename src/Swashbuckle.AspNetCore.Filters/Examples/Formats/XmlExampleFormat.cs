@@ -5,7 +5,7 @@ namespace Swashbuckle.AspNetCore.Filters.Examples
 {
     internal class XmlExampleFormat : ExampleFormat
     {
-        public XmlExampleFormat() : base("application/xml; charset=utf-8")
+        public XmlExampleFormat() : base("application/xml")
         {
 
         }
