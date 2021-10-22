@@ -361,31 +361,8 @@ If it's obvious which type your action returns, then no `ProducesResponseType` o
 public async Task<ActionResult<IEnumerable<Country>>> Get(string lang)
 // or public ActionResult<IEnumerable<Country>> Get(string lang)
 // or public IEnumerable<Country> Get(string lang)
-
 ```
 
-Or, you can optionally decorate your methods (or controller) with either the `ProducesResponseType` or the `SwaggerResponse` attribute:
-```csharp
-[SwaggerResponse(200, "The list of countries", typeof(IEnumerable<Country>))]
-// or, like this [ProducesResponseType(typeof(IEnumerable<Country>), 200)]
-[SwaggerResponse(400, type: typeof(IEnumerable<ErrorResource>))]
-public async Task<HttpResponseMessage> Get(string lang)
-```
-Now you’ll need to add an Examples class, which will implement `IExamplesProvider<T>` to generate the example data for the Response:
-
-```csharp	
-public class CountryExamples : IExamplesProvider<IEnumerable<Country>>
-{
-    public IEnumerable<Country> GetExamples()
-    {
-        return new List<Country>
-        {
-            new Country { Code = "AA", Name = "Test Country" },
-            new Country { Code = "BB", Name = "And another" }
-        };
-    }
-}
-```
 #### Manual annotation
 Alternatively, if you want to be more explicit, you can use the `SwaggerResponseExample` attribute. This is how it was done in versions 1.0 - 3.0. Any manual annotations will override automatic annotations.
 
