@@ -7,6 +7,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Net.Http.Headers;
+using Swashbuckle.AspNetCore.Filters.Examples;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -78,19 +80,13 @@ namespace Swashbuckle.AspNetCore.Filters
             object example,
             ExamplesConverter examplesConverter)
         {
-            var jsonExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleJson(example));
-            var xmlExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleXml(example));
-
             foreach (var content in operation.RequestBody.Content)
             {
-                if (content.Key.Contains("xml"))
-                {
-                    content.Value.Example = xmlExample.Value;
-                }
-                else
-                {
-                    content.Value.Example = jsonExample.Value;
-                }
+                var format = ExampleFormats.GetFormat(content.Key);
+                if (format == null)
+                    continue; // fail more gracefully?
+
+                content.Value.Example = examplesConverter.SerializeExample(example, format);
             }
 
             return operation.RequestBody.Content.FirstOrDefault().Value?.Example;
@@ -105,24 +101,13 @@ namespace Swashbuckle.AspNetCore.Filters
             IEnumerable<ISwaggerExample<object>> examples,
             ExamplesConverter examplesConverter)
         {
-            var jsonExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-                examplesConverter.ToOpenApiExamplesDictionaryJson(examples)
-            );
-
-            var xmlExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-                examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
-            );
-
             foreach (var content in operation.RequestBody.Content)
             {
-                if (content.Key.Contains("xml"))
-                {
-                    content.Value.Examples = xmlExamples.Value;
-                }
-                else
-                {
-                    content.Value.Examples = jsonExamples.Value;
-                }
+                var format = ExampleFormats.GetFormat(content.Key);
+                if (format == null)
+                    continue; // fail more gracefully?
+
+                content.Value.Examples = examplesConverter.ToOpenApiExamplesDictionary(examples, format);
             }
 
             return operation.RequestBody.Content.FirstOrDefault().Value?.Examples?.FirstOrDefault().Value?.Value;
