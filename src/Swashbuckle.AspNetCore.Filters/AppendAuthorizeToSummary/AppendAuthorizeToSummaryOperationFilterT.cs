@@ -24,12 +24,12 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
+            if (context.GetMethodAttributes<AllowAnonymousAttribute>().Any())
             {
                 return;
             }
 
-            var authorizeAttributes = context.GetControllerAndActionAttributes<T>();
+            var authorizeAttributes = context.GetMethodAttributes<T>();
 
             if (authorizeAttributes.Any())
             {
