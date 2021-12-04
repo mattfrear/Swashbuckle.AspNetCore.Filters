@@ -21,7 +21,6 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
-using static Swashbuckle.AspNetCore.Filters.Test.AppendAuthorizeToSummaryOperationFilterTests;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
 {
