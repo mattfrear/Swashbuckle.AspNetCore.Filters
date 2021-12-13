@@ -34,7 +34,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private void SetRequestExamples(OpenApiOperation operation, OperationFilterContext context)
         {
-            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
+            var actionAttributes = context.GetControllerAndActionAttributes<SwaggerRequestExampleAttribute>();
 
             foreach (var attr in actionAttributes)
             {
@@ -50,7 +50,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private void SetResponseExamples(OpenApiOperation operation, OperationFilterContext context)
         {
-            var responseAttributes = context.GetMethodAttributes<SwaggerResponseExampleAttribute>();
+            var responseAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>();
 
             foreach (var attr in responseAttributes)
             {

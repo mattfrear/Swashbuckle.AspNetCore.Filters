@@ -32,7 +32,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private void SetRequestExamples(OpenApiOperation operation, OperationFilterContext context)
         {
-            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
+            var actionAttributes = context.GetControllerAndActionAttributes<SwaggerRequestExampleAttribute>();
 
             foreach (var parameterDescription in context.ApiDescription.ParameterDescriptions)
             {
@@ -61,8 +61,8 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private void SetResponseExamples(OpenApiOperation operation, OperationFilterContext context)
         {
-            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerResponseExampleAttribute>();
-            var responseAttributes = context.GetMethodAttributes<ProducesResponseTypeAttribute>().Select(a => new StatusCodeWithType(a.StatusCode, a.Type));
+            var actionAttributes = context.GetControllerAndActionAttributes<SwaggerResponseExampleAttribute>().Select(a => new StatusCodeWithType(a.StatusCode, a.ExamplesProviderType));
+            var responseAttributes = context.GetControllerAndActionAttributes<ProducesResponseTypeAttribute>().Select(a => new StatusCodeWithType(a.StatusCode, a.Type));
             var autodetectedResponses = context.ApiDescription.SupportedResponseTypes.Select(r => new StatusCodeWithType(r.StatusCode, r.Type));
 
             var responses = responseAttributes.Concat(autodetectedResponses);
