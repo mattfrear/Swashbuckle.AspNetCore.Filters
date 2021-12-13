@@ -19,7 +19,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_AppendsAuth_ControllerAction()
+        public void Apply_AppendsAuth()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -33,7 +33,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_AppendsPolicy_ControllerAction()
+        public void Apply_AppendsPolicy()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -47,7 +47,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_AppendsMultiplePolicies_ControllerAction()
+        public void Apply_AppendsMultiplePolicies()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -61,7 +61,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_AppendsRole_ControllerAction()
+        public void Apply_AppendsRole()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -75,7 +75,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_AppendsMultipleRoles_ControllerAction()
+        public void Apply_AppendsMultipleRoles()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -89,7 +89,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_AppendsMultipleRolesInOneAttribute_ControllerAction()
+        public void Apply_AppendsMultipleRolesInOneAttribute()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -103,7 +103,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_AppendsPolicyAndRole_ControllerAction()
+        public void Apply_AppendsPolicyAndRole()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -117,7 +117,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_WorksWhenNoAuthorize_ControllerAction()
+        public void Apply_WorksWhenNoAuthorize()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -131,7 +131,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_AppendsWhenAuthIsOnController_ControllerAction()
+        public void Apply_AppendsWhenAuthIsOnController()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -145,7 +145,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         }
 
         [Fact]
-        public void Apply_DoesNotAppendWhenMethodHasAllowAnonymous_ControllerAction()
+        public void Apply_DoesNotAppendWhenMethodHasAllowAnonymous()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
@@ -156,119 +156,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test
 
             // Assert
             operation.Summary.ShouldBe("Test summary");
-        }
-
-
-        [Fact]
-        public void Apply_DoesNotAppendWhenControllerHasAllowAnonymous_ControllerAction()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(typeof(AllowAnonymousController), nameof(AllowAnonymousController.Customer));
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            operation.Summary.ShouldBe("Test summary");
-        }
-
-        [Fact]
-        public void Apply_AppendsAuth_Endpoint()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { Summary = "Test summary" };
-            var builder = CreateBuilder().RequireAuthorization();
-            var endpoint = builder.Build();
-            var filterContext = FilterContextFor(endpoint);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            operation.Summary.ShouldBe("Test summary (Auth)");
-        }
-
-        [Fact]
-        public void Apply_AppendsPolicy_Endpoint()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { Summary = "Test summary" };
-            var builder = CreateBuilder().RequireAuthorization("Administrator");
-            var endpoint = builder.Build();
-            var filterContext = FilterContextFor(endpoint);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator)");
-        }
-
-        [Fact]
-        public void Apply_AppendsMultiplePolicies_Endpoint()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { Summary = "Test summary" };
-            var builder = CreateBuilder().RequireAuthorization("Administrator","Customer");
-            var endpoint = builder.Build();
-            var filterContext = FilterContextFor(endpoint);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator, Customer)");
-        }
-
-        [Fact]
-        public void Apply_AppendsRole_Endpoint()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { Summary = "Test summary" };
-            var builder = CreateBuilder().RequireAuthorization(new AuthorizeAttribute { Roles = "Administrator"});
-            var endpoint = builder.Build();
-            var filterContext = FilterContextFor(endpoint);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator)");
-        }
-
-        [Fact]
-        public void Apply_AppendsMultipleRoles_Endpoint()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { Summary = "Test summary" };
-            var builder = CreateBuilder()
-                .RequireAuthorization(new AuthorizeAttribute {Roles = "Administrator"})
-                .RequireAuthorization(new AuthorizeAttribute {Roles = "Customer" });
-            var endpoint = builder.Build();
-            var filterContext = FilterContextFor(endpoint);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator, Customer)");
-        }
-
-        [Fact]
-        public void Apply_AppendsMultipleRolesInOneAttribute_Endpoint()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { Summary = "Test summary" };
-            var builder = CreateBuilder().RequireAuthorization(new AuthorizeAttribute { Roles = "Administrator, Customer" });
-            var endpoint = builder.Build();
-            var filterContext = FilterContextFor(endpoint);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            operation.Summary.ShouldBe("Test summary (Auth roles: Administrator, Customer)");
         }
 
         [Fact]
@@ -293,22 +180,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
             var builder = CreateBuilder();
-            var endpoint = builder.Build();
-            var filterContext = FilterContextFor(endpoint);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            operation.Summary.ShouldBe("Test summary");
-        }
-
-        [Fact]
-        public void Apply_DoesNotAppendWhenMethodHasAllowAnonymous_Endpoint()
-        {
-            // Arrange
-            var operation = new OpenApiOperation { Summary = "Test summary" };
-            var builder = CreateBuilder().AllowAnonymous();
             var endpoint = builder.Build();
             var filterContext = FilterContextFor(endpoint);
 
