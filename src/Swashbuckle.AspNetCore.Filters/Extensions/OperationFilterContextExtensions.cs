@@ -7,10 +7,10 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
 {
     internal static class OperationFilterContextExtensions
     {
-        public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context) where T : Attribute
+        public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context, bool inherit = false) where T : Attribute
         {
-            var controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();
-            var actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
+            var controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>(inherit);
+            var actionAttributes = context.MethodInfo.GetCustomAttributes<T>(inherit);
 
             var result = new List<T>(controllerAttributes);
             result.AddRange(actionAttributes);
