@@ -39,7 +39,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 return;
             }
 
-            var actionAttributes = context.GetControllerAndActionAttributes<T>();
+            var actionAttributes = context.GetControllerAndActionAttributes<T>(inherit: true);
 
             if (!actionAttributes.Any())
             {
