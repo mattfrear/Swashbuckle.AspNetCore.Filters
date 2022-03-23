@@ -67,6 +67,18 @@ namespace Swashbuckle.AspNetCore.Filters
                     }
                 }
             }
+
+            // Use ISchemaGenerator to generate schemas
+            // schemaGenerator.GenerateSchema(typeof(ResponseExample), schemaRepository);
+            // schemaGenerator.GenerateSchema(typeof(ResponseExample), schemaRepository);
+            // schemaGenerator.GenerateSchema(typeof(ResponseExample), schemaRepository);
+
+            // Check if all types already exists as Schema in SchemaRepository
+            // If not - create missing schemas
+            // If only one example is provided and matches current schema don't change anything
+            // If only one example is provided and does not match schema, replace schema for current example
+            // If multiple examples provided of same type, set schema as Reference
+            // If multiple examples provided of different types, set Reference to null and fill OneOf schemas list
         }
 
         /// <summary>
