@@ -368,6 +368,7 @@ Alternatively, if you want to be more explicit, you can use the `SwaggerResponse
 
 Decorate your methods with the new SwaggerResponseExample attribute:
 ```csharp
+[Produces("application/json")]
 [SwaggerResponse(200, "The list of countries", typeof(IEnumerable<Country>))]
 // or, like this [ProducesResponseType(typeof(IEnumerable<Country>), 200)]
 [SwaggerResponseExample(200, typeof(CountryExamples))]
