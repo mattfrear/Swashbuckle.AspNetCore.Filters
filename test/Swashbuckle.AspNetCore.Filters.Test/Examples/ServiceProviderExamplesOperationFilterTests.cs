@@ -30,7 +30,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
 
-            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions), new FakeNewtonsoftSchemaGenerator());
             var responseExample = new ResponseExample(mvcOutputFormatter);
 
             serviceProvider = Substitute.For<IServiceProvider>();

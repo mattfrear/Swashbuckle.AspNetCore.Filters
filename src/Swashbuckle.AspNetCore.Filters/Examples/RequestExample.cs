@@ -1,25 +1,28 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
     internal class RequestExample
     {
         private readonly MvcOutputFormatter mvcOutputFormatter;
+        private readonly ISchemaGenerator schemaGenerator;
         private readonly SwaggerOptions swaggerOptions;
 
         public RequestExample(
             MvcOutputFormatter mvcOutputFormatter,
-            IOptions<SwaggerOptions> options)
+            IOptions<SwaggerOptions> options,
+            ISchemaGenerator schemaGenerator)
         {
             this.mvcOutputFormatter = mvcOutputFormatter;
+            this.schemaGenerator = schemaGenerator;
             this.swaggerOptions = options?.Value;
         }
 
@@ -42,14 +45,16 @@ namespace Swashbuckle.AspNetCore.Filters
             var examplesConverter = new ExamplesConverter(mvcOutputFormatter);
 
             IOpenApiAny firstOpenApiExample;
-            var multiple = example as IEnumerable<ISwaggerExample<object>>;
-            if (multiple == null)
+            if (example is IEnumerable<ISwaggerExample<object>> multiple)
             {
-                firstOpenApiExample = SetSingleRequestExampleForOperation(operation, example, examplesConverter);
+                var multipleList = multiple.ToList();
+                firstOpenApiExample = SetMultipleRequestExamplesForOperation(operation, multipleList, examplesConverter);
+                SetMultipleSchema(operation, schemaRepository, multipleList);
             }
             else
             {
-                firstOpenApiExample = SetMultipleRequestExamplesForOperation(operation, multiple, examplesConverter);
+                firstOpenApiExample = SetSingleRequestExampleForOperation(operation, example, examplesConverter);
+                SetSingleSchema(operation, schemaRepository, example);
             }
 
             if (swaggerOptions.SerializeAsV2)
@@ -67,18 +72,54 @@ namespace Swashbuckle.AspNetCore.Filters
                     }
                 }
             }
+        }
 
-            // Use ISchemaGenerator to generate schemas
-            // schemaGenerator.GenerateSchema(typeof(ResponseExample), schemaRepository);
-            // schemaGenerator.GenerateSchema(typeof(ResponseExample), schemaRepository);
-            // schemaGenerator.GenerateSchema(typeof(ResponseExample), schemaRepository);
+        /// <summary>
+        /// Sets the operation schema to match exactly the types of the associated examples.
+        /// <para>Generates new schemas when needed</para>
+        /// </summary>
+        private void SetMultipleSchema(OpenApiOperation operation,
+                SchemaRepository schemaRepository,
+                List<ISwaggerExample<object>> examples)
+        {
+            var exampleTypes = examples.Select(x => x.Value?.GetType()).Distinct().ToList();
 
-            // Check if all types already exists as Schema in SchemaRepository
-            // If not - create missing schemas
-            // If only one example is provided and matches current schema don't change anything
-            // If only one example is provided and does not match schema, replace schema for current example
-            // If multiple examples provided of same type, set schema as Reference
-            // If multiple examples provided of different types, set Reference to null and fill OneOf schemas list
+            if (exampleTypes.Count == 1)
+            {
+                SetSingleSchema(operation, schemaRepository, examples.First());
+                return;
+            }
+
+            var schemas = exampleTypes.Select(type => schemaGenerator.GenerateSchema(type, schemaRepository)).ToList();
+
+            foreach (var content in operation.RequestBody.Content)
+            {
+                if (content.Value.Examples.Count == 0)
+                    continue;
+
+                content.Value.Schema = new OpenApiSchema
+                {
+                    OneOf = schemas
+                };
+            }
+        }
+
+        /// <summary>
+        /// Sets the operation schema to match exactly the type of the associated example.
+        /// <para>Generates new schema when needed</para>
+        /// </summary>
+        private void SetSingleSchema(OpenApiOperation operation, SchemaRepository schemaRepository, object example)
+        {
+            var exampleType = example.GetType();
+            var schemaDefinition = schemaGenerator.GenerateSchema(exampleType, schemaRepository);
+
+            foreach (var content in operation.RequestBody.Content)
+            {
+                if (content.Value.Example == null)
+                    continue;
+
+                content.Value.Schema = schemaDefinition;
+            }
         }
 
         /// <summary>

@@ -13,6 +13,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Swashbuckle.AspNetCore.Newtonsoft;
 using Xunit;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
@@ -35,7 +36,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
-            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions), new FakeNewtonsoftSchemaGenerator());
             var responseExample = new ResponseExample(mvcOutputFormatter);
 
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
@@ -93,7 +94,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             .AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
-        
+
         public void SetsResponseExamples_FromMethodAttributesPascalCase()
         {
             // Arrange

@@ -27,7 +27,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             sut = new ServiceProviderExamplesOperationFilter(
                 serviceProvider,
-                new RequestExample(mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions())),
+                new RequestExample(mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions()), new FakeNewtonsoftSchemaGenerator()),
                 new ResponseExample(mvcOutputFormatter));
         }
 
