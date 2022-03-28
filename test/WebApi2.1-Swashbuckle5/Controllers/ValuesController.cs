@@ -232,4 +232,9 @@ namespace WebApi.Controllers
         {
         }
     }
+
+    public enum Test
+    {
+
+    }
 }

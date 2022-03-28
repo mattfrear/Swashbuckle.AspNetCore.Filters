@@ -31,19 +31,19 @@ namespace Swashbuckle.AspNetCore.Filters
         }
 
         public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryXml(
-            IEnumerable<ISwaggerExample<object>> examples)
+            IEnumerable<ISwaggerExample> examples)
         {
             return ToOpenApiExamplesDictionary(examples, SerializeExampleXml);
         }
 
         public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryJson(
-            IEnumerable<ISwaggerExample<object>> examples)
+            IEnumerable<ISwaggerExample> examples)
         {
             return ToOpenApiExamplesDictionary(examples, SerializeExampleJson);
         }
 
         private static IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(
-            IEnumerable<ISwaggerExample<object>> examples,
+            IEnumerable<ISwaggerExample> examples,
             Func<object, IOpenApiAny> exampleConverter)
         {
             var groupedExamples = examples.GroupBy(
@@ -51,7 +51,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 ex => new OpenApiExample
                 {
                     Summary = ex.Summary,
-                    Value = exampleConverter(ex.Value)
+                    Value = exampleConverter(ex.GetValue())
                 });
 
             // If names are duplicated, only the first one is taken

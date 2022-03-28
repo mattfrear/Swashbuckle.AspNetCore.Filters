@@ -49,23 +49,21 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             {
                 ContractResolver = contractResolver
             };
-            
+
             var schemaOptions = new SchemaGeneratorOptions();
 
             var schemaRepository = new SchemaRepository();
+            var schemaGenerator = new NewtonsoftSchemaGenerator(schemaOptions, jsonSerializerSettings);
 
             var methodInfo = controllerType.GetMethod(actionName);
             foreach (var parameterInfo in methodInfo.GetParameters())
             {
-                schemaRepository.GetOrAdd(parameterInfo.ParameterType, parameterInfo.ParameterType.SchemaDefinitionName(), () => new OpenApiSchema()
-                {
-                    Reference = new OpenApiReference { Id = parameterInfo.Name }
-                });
+                schemaGenerator.GenerateSchema(parameterInfo.ParameterType, schemaRepository); // Let's generate schema by generator, it's not always simple "Reference" schema
             }
 
             return new OperationFilterContext(
                 apiDescription,
-                new NewtonsoftSchemaGenerator(schemaOptions, jsonSerializerSettings),
+                schemaGenerator,
                 schemaRepository,
                 (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
         }

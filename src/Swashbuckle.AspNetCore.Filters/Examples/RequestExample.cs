@@ -45,7 +45,7 @@ namespace Swashbuckle.AspNetCore.Filters
             var examplesConverter = new ExamplesConverter(mvcOutputFormatter);
 
             IOpenApiAny firstOpenApiExample;
-            if (example is IEnumerable<ISwaggerExample<object>> multiple)
+            if (example is IEnumerable<ISwaggerExample> multiple)
             {
                 var multipleList = multiple.ToList();
                 firstOpenApiExample = SetMultipleRequestExamplesForOperation(operation, multipleList, examplesConverter);
@@ -80,13 +80,13 @@ namespace Swashbuckle.AspNetCore.Filters
         /// </summary>
         private void SetMultipleSchema(OpenApiOperation operation,
                 SchemaRepository schemaRepository,
-                List<ISwaggerExample<object>> examples)
+                List<ISwaggerExample> examples)
         {
-            var exampleTypes = examples.Where(x => x.Value != null).Select(x => x.Value?.GetType()).Distinct().ToList();
+            var exampleTypes = examples.Where(x => x.GetValue() != null).Select(x => x.GetValue()?.GetType()).Distinct().ToList();
 
             if (exampleTypes.Count == 1)
             {
-                SetSingleSchema(operation, schemaRepository, examples[0].Value);
+                SetSingleSchema(operation, schemaRepository, examples[0].GetValue());
                 return;
             }
 
@@ -158,7 +158,7 @@ namespace Swashbuckle.AspNetCore.Filters
         /// <returns>The first example so that it can be reused on the definition for V2</returns>
         private IOpenApiAny SetMultipleRequestExamplesForOperation(
             OpenApiOperation operation,
-            IEnumerable<ISwaggerExample<object>> examples,
+            IEnumerable<ISwaggerExample> examples,
             ExamplesConverter examplesConverter)
         {
             var jsonExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
