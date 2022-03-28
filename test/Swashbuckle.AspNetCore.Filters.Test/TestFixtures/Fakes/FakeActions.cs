@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 
@@ -14,6 +12,22 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         [SwaggerResponse(200, type: typeof(PersonResponse))]
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
         public IActionResult AnnotatedWithSwaggerResponseExampleAttribute()
+        {
+            throw new NotImplementedException();
+        }
+
+        [SwaggerResponse(200, type: typeof(object))]
+        [SwaggerRequestExample(typeof(object), typeof(MultipleTypesRequestExamples))]
+        [SwaggerResponseExample(200, typeof(MultipleTypesResponseExamples))]
+        public IActionResult AnnotatedWithSwaggerResponseAndRequestMultipleExamplesNotMatchingResponseAndBodyType([FromBody] object body)
+        {
+            throw new NotImplementedException();
+        }
+
+        [SwaggerResponse(200, type: typeof(object))]
+        [SwaggerRequestExample(typeof(object), typeof(PersonRequestExample))]
+        [SwaggerResponseExample(200, typeof(PersonResponseExample))]
+        public IActionResult AnnotatedWithSwaggerResponseAndRequestExampleNotMatchingBodyType([FromBody] object ops)
         {
             throw new NotImplementedException();
         }

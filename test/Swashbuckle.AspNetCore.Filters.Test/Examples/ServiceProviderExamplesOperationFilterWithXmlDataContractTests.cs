@@ -25,10 +25,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, new FakeLoggerFactory());
 
+            var schemaGenerator = new FakeNewtonsoftSchemaGenerator();
             sut = new ServiceProviderExamplesOperationFilter(
                 serviceProvider,
-                new RequestExample(mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions()), new FakeNewtonsoftSchemaGenerator()),
-                new ResponseExample(mvcOutputFormatter));
+                new RequestExample(mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions()), schemaGenerator),
+                new ResponseExample(mvcOutputFormatter, schemaGenerator));
         }
 
         [Fact]

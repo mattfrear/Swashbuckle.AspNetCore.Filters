@@ -82,11 +82,11 @@ namespace Swashbuckle.AspNetCore.Filters
                 SchemaRepository schemaRepository,
                 List<ISwaggerExample<object>> examples)
         {
-            var exampleTypes = examples.Select(x => x.Value?.GetType()).Distinct().ToList();
+            var exampleTypes = examples.Where(x => x.Value != null).Select(x => x.Value?.GetType()).Distinct().ToList();
 
             if (exampleTypes.Count == 1)
             {
-                SetSingleSchema(operation, schemaRepository, examples.First());
+                SetSingleSchema(operation, schemaRepository, examples[0].Value);
                 return;
             }
 
@@ -110,12 +110,15 @@ namespace Swashbuckle.AspNetCore.Filters
         /// </summary>
         private void SetSingleSchema(OpenApiOperation operation, SchemaRepository schemaRepository, object example)
         {
+            if (example == null)
+                return;
+
             var exampleType = example.GetType();
             var schemaDefinition = schemaGenerator.GenerateSchema(exampleType, schemaRepository);
 
             foreach (var content in operation.RequestBody.Content)
             {
-                if (content.Value.Example == null)
+                if (content.Value.Example == null && !content.Value.Examples.Any())
                     continue;
 
                 content.Value.Schema = schemaDefinition;

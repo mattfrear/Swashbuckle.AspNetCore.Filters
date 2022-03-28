@@ -25,7 +25,7 @@ namespace Swashbuckle.AspNetCore.Filters
     /// <summary>
     /// Helper class to reduce generic boilerplate
     /// </summary>
-    public static class SwaggerExample
+    public class SwaggerExample : SwaggerExample<object>
     {
         /// <summary>
         /// Create an example for a type.

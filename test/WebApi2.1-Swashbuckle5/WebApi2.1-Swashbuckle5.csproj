@@ -19,4 +19,10 @@
     <ProjectReference Include="..\..\src\Swashbuckle.AspNetCore.Filters\Swashbuckle.AspNetCore.Filters.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Models\Examples\MultipleTypesRequestExamples.cs">
+      <Link>Models\Examples\MultipleTypesRequestExamples.cs</Link>
+    </Compile>
+  </ItemGroup>
+
 </Project>

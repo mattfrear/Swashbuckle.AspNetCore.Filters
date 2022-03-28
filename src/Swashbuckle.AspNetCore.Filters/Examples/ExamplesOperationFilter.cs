@@ -58,6 +58,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 responseExample.SetResponseExampleForStatusCode(
                     operation,
+                    context.SchemaRepository,
                     attr.StatusCode,
                     example);
             }

@@ -30,8 +30,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
 
-            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions), new FakeNewtonsoftSchemaGenerator());
-            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var schemaGenerator = new FakeNewtonsoftSchemaGenerator();
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions), schemaGenerator);
+            var responseExample = new ResponseExample(mvcOutputFormatter, schemaGenerator);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
@@ -451,7 +452,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             // Arrange
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithSystemTextJsonFormatter, new FakeLoggerFactory());
-            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var responseExample = new ResponseExample(mvcOutputFormatter, new FakeNewtonsoftSchemaGenerator());
             var sut = new ServiceProviderExamplesOperationFilter(serviceProvider, null, responseExample);
 
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
