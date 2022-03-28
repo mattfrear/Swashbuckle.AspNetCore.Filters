@@ -37,6 +37,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(MultipleTypesRequestExamples)).Returns(new MultipleTypesRequestExamples());
             serviceProvider.GetService(typeof(MultipleTypesResponseExamples)).Returns(new MultipleTypesResponseExamples());
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
+            serviceProvider.GetService(typeof(TitleMultipleExamplesProvider)).Returns(new TitleMultipleExamplesProvider());
 
             var schemaGenerator = new FakeNewtonsoftSchemaGenerator();
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
@@ -454,6 +455,33 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             // Assert SerializeAsV2
             var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
+            actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
+        }
+
+        [Fact]
+        public void SetsMultipleRequestEnumExamplesCorrectly_FromMethodAttributes()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithEnumMultipleExamples));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualExamples = requestBody.Content["application/json"].Examples;
+            var expectedExamples = new TitleMultipleExamplesProvider().GetExamples();
+            actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
+
+            // Assert SerializeAsV2
+            var actualSchemaExample = JsonConvert.DeserializeObject<Title>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["Title"].Example).Value);
             actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
         }
 

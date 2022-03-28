@@ -85,6 +85,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             throw new NotImplementedException();
         }
 
+        [SwaggerRequestExample(typeof(Title), typeof(TitleMultipleExamplesProvider))]
+        public IActionResult AnnotatedWithEnumMultipleExamples(Title personRequest)
+        {
+            throw new NotImplementedException();
+        }
+
         public IActionResult DictionaryRequestAttribute(Dictionary<string, object> personRequest)
         {
             throw new NotImplementedException();
