@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
@@ -7,6 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Generic;
 using System.Net;
+using Newtonsoft.Json;
 using WebApi.Models;
 using WebApi.Models.Examples;
 
@@ -49,9 +51,7 @@ namespace WebApi.Controllers
         [SwaggerResponseExample(200, typeof(PersonResponseExample))]
         [SwaggerResponse(500, type: null, description: "There was an unexpected error")]
         [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
-
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample))]
-
         [SwaggerResponseHeader(StatusCodes.Status200OK, "Location", "string", "Location of the newly created resource")]
         [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
         [SwaggerResponseHeader(new int[] { 200, 401, 403, 404 }, "CustomHeader", "string", "A custom header")]
@@ -78,6 +78,45 @@ namespace WebApi.Controllers
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave", LastName = "Multi" };
             return personResponse;
+        }
+
+        /// <summary>
+        /// Posts multiple types. Multiple types request body and response examples with properly generated schema
+        /// </summary>
+        /// <param name="type">Type of object to handle. Person or Animal</param>
+        /// <param name="requestObject"></param>
+        /// <response code="400">Some request input is invalid</response>
+        /// <response code="401">You are not authorized to access this endpoint</response>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("api/values/multipletypes/{type}")]
+        [SwaggerResponse(200, type: typeof(object), description: "Successfully added object")]
+        [SwaggerRequestExample(typeof(object), typeof(MultipleTypesRequestExamples))]
+        [SwaggerResponseExample(200, typeof(MultipleTypesResponseExamples))]
+        public object PostMultipleTypes([FromBody] object requestObject,
+                string type)
+        {
+            Type objectType;
+            switch (type)
+            {
+                case "Person": objectType = typeof(PersonResponse); break;
+                case "Animal": objectType = typeof(AnimalResponse); break;
+                default: return BadRequest(new ErrorResponse {ErrorCode = 400, Message = "Provided type is invalid"});
+            }
+
+            try
+            {
+                var deserialized = JsonConvert.DeserializeObject(requestObject.ToString(), objectType, new JsonSerializerSettings
+                {
+                    MissingMemberHandling = MissingMemberHandling.Error
+                });
+
+                return deserialized;
+            }
+            catch
+            {
+                return BadRequest(new ErrorResponse {ErrorCode = 400, Message = "Request body is invalid"});
+            }
         }
 
         /// <summary>
@@ -192,5 +231,10 @@ namespace WebApi.Controllers
         public void NullableEnumTest([FromBody]Title? someEnum)
         {
         }
+    }
+
+    public enum Test
+    {
+
     }
 }

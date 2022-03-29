@@ -13,6 +13,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Swashbuckle.AspNetCore.Filters.Extensions;
+using Swashbuckle.AspNetCore.Newtonsoft;
 using Xunit;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
@@ -32,11 +34,15 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(PersonResponseMultipleExamples)).Returns(new PersonResponseMultipleExamples());
             serviceProvider.GetService(typeof(PersonRequestExample)).Returns(new PersonRequestExample());
             serviceProvider.GetService(typeof(PersonRequestMultipleExamples)).Returns(new PersonRequestMultipleExamples());
+            serviceProvider.GetService(typeof(MultipleTypesRequestExamples)).Returns(new MultipleTypesRequestExamples());
+            serviceProvider.GetService(typeof(MultipleTypesResponseExamples)).Returns(new MultipleTypesResponseExamples());
             serviceProvider.GetService(typeof(DictionaryRequestExample)).Returns(new DictionaryRequestExample());
+            serviceProvider.GetService(typeof(TitleMultipleExamplesProvider)).Returns(new TitleMultipleExamplesProvider());
 
+            var schemaGenerator = new FakeNewtonsoftSchemaGenerator();
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
-            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions), schemaGenerator);
+            var responseExample = new ResponseExample(mvcOutputFormatter, schemaGenerator);
 
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
@@ -93,7 +99,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             .AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
-        
+
         public void SetsResponseExamples_FromMethodAttributesPascalCase()
         {
             // Arrange
@@ -160,6 +166,272 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
+        public void GeneratesNewSchemaInSchemaRepository_FromMethodAttributes_WhenExpectedRequestSchemaDidNotExist()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAndRequestExampleNotMatchingBodyType));
+
+            var expDefinitionName = new PersonRequestExample().GetExamples().GetType().SchemaDefinitionName();
+
+            // Act
+            filterContext.SchemaRepository.Schemas.ShouldNotContain(x => x.Key == expDefinitionName);
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            filterContext.SchemaRepository.Schemas.ShouldContain(x => x.Key == expDefinitionName);
+        }
+
+        [Fact]
+        public void SetsRequestCorrectSingleSchema_FromMethodAttributes_WhenExampleNotMatchBodyType()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAndRequestExampleNotMatchingBodyType));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualSchemaDefinition = requestBody.Content["application/json"].Schema.Reference.Id;
+            var expectedSchemaDefinition = new PersonRequestExample().GetExamples().GetType().SchemaDefinitionName();
+            actualSchemaDefinition.ShouldMatch(expectedSchemaDefinition);
+        }
+
+        [Fact]
+        public void GeneratesNewSchemasInSchemaRepository_FromMethodAttributes_WhenExpectedSchemasDidNotExist()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAndRequestMultipleExamplesNotMatchingResponseAndBodyType));
+
+            // Act
+            var expSchemas = new MultipleTypesRequestExamples().GetExamples().Select(x => x.Value.GetType().SchemaDefinitionName()).Distinct().ToList();
+            filterContext.SchemaRepository.Schemas.Select(x => x.Key).ShouldNotContain(x => expSchemas.Contains(x));
+
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            expSchemas.ShouldBeSubsetOf(filterContext.SchemaRepository.Schemas.Select(x => x.Key));
+        }
+
+        [Fact]
+        public void SetsRequestCorrectMultipleRequestSchema_FromMethodAttributes_WhenMultipleExamplesAreOfDifferentTypes()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAndRequestMultipleExamplesNotMatchingResponseAndBodyType));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            requestBody.Content["application/json"].Schema.Reference.ShouldBeNull();
+            requestBody.Content["application/json"].Schema.OneOf.Select(x => x.Reference.Id).ShouldBe(
+                new MultipleTypesRequestExamples().GetExamples().Select(x => x.Value.GetType().SchemaDefinitionName()).Distinct()
+            );
+        }
+
+        [Fact]
+        public void DoesNotGenerateAdditionalRequestSchema_FromMethodAttributes_WhenSchemaAlreadyExists()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestExampleAttribute));
+
+            // Act
+            filterContext.SchemaRepository.Schemas.Select(x => x.Key)
+                    .Count(x => x == typeof(PersonRequest).SchemaDefinitionName()).ShouldBe(1);
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            filterContext.SchemaRepository.Schemas.Select(x => x.Key)
+                    .Count(x => x == typeof(PersonRequest).SchemaDefinitionName()).ShouldBe(1);
+        }
+
+        [Fact]
+        public void SetsSingleRequestSchemaCorrectly_FromMethodAttributes_WhenMultipleExamplesAreOfSameType()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerRequestMultipleExamplesAttribute));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            requestBody.Content["application/json"].Schema.Reference.Id.ShouldBe(typeof(PersonRequest).SchemaDefinitionName());
+        }
+
+
+        [Fact]
+        public void GeneratesNewSchemaInSchemaRepository_FromMethodAttributes_WhenExpectedResponseSchemaDidNotExist()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAndRequestExampleNotMatchingBodyType));
+            var expDefinitionName = new PersonResponseExample().GetExamples().GetType().SchemaDefinitionName();
+
+            // Act
+            filterContext.SchemaRepository.Schemas.ShouldNotContain(x => x.Key == expDefinitionName);
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            filterContext.SchemaRepository.Schemas.ShouldContain(x => x.Key == expDefinitionName);
+        }
+
+        [Fact]
+        public void SetsResponseCorrectSingleSchema_FromMethodAttributes_WhenExampleDiffersFromDeclaredType()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType()} } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAndRequestExampleNotMatchingBodyType));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualSchemaDefinition = operation.Responses["200"].Content["application/json"].Schema.Reference.Id;
+            var expectedSchemaDefinition = new PersonResponseExample().GetExamples().GetType().SchemaDefinitionName();
+            actualSchemaDefinition.ShouldMatch(expectedSchemaDefinition);
+        }
+
+        [Fact]
+        public void GeneratesNewSchemasInSchemaRepository_FromMethodAttributes_WhenExpectedResponseSchemasDidNotExist()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType()} } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAndRequestMultipleExamplesNotMatchingResponseAndBodyType));
+
+            // Act
+            var expSchemas = new MultipleTypesResponseExamples().GetExamples().Select(x => x.Value.GetType().SchemaDefinitionName()).Distinct().ToList();
+            filterContext.SchemaRepository.Schemas.Select(x => x.Key).ShouldNotContain(x => expSchemas.Contains(x));
+
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            expSchemas.ShouldBeSubsetOf(filterContext.SchemaRepository.Schemas.Select(x => x.Key));
+        }
+
+        [Fact]
+        public void SetsRequestCorrectMultipleResponseSchema_FromMethodAttributes_WhenMultipleExamplesAreOfDifferentTypes()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType()} } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAndRequestMultipleExamplesNotMatchingResponseAndBodyType));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Responses["200"].Content["application/json"].Schema.Reference.ShouldBeNull();
+            operation.Responses["200"].Content["application/json"].Schema.OneOf.Select(x => x.Reference.Id).ShouldBe(
+                new MultipleTypesResponseExamples().GetExamples().Select(x => x.Value.GetType().SchemaDefinitionName()).Distinct()
+            );
+        }
+
+        [Fact]
+        public void DoesNotGenerateAdditionalResponseSchema_FromMethodAttributes_WhenSchemaAlreadyExists()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType()} } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseMultipleExamplesAttribute));
+
+            // Act
+            filterContext.SchemaRepository.Schemas.Select(x => x.Key)
+                    .Count(x => x == typeof(PersonResponse).SchemaDefinitionName()).ShouldBe(0);
+
+            for (var i = 0; i < 2; i++)
+            {
+                sut.Apply(operation, filterContext);
+
+                // Assert
+                filterContext.SchemaRepository.Schemas.Select(x => x.Key)
+                        .Count(x => x == typeof(PersonResponse).SchemaDefinitionName()).ShouldBe(1);
+            }
+        }
+
+        [Fact]
+        public void SetsSingleResponseSchemaCorrectly_FromMethodAttributes_WhenMultipleExamplesAreOfSameType()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType()} } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseMultipleExamplesAttribute));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Responses["200"].Content["application/json"].Schema.Reference.Id.ShouldBe(typeof(PersonResponse).SchemaDefinitionName());
+        }
+
+        [Fact]
         public void SetsMultipleRequestExamples_FromMethodAttributes()
         {
             // Arrange
@@ -183,6 +455,33 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             // Assert SerializeAsV2
             var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
+            actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
+        }
+
+        [Fact]
+        public void SetsMultipleRequestEnumExamplesCorrectly_FromMethodAttributes()
+        {
+            // Arrange
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithEnumMultipleExamples));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualExamples = requestBody.Content["application/json"].Examples;
+            var expectedExamples = new TitleMultipleExamplesProvider().GetExamples();
+            actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
+
+            // Assert SerializeAsV2
+            var actualSchemaExample = JsonConvert.DeserializeObject<Title>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["Title"].Example).Value);
             actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
         }
 

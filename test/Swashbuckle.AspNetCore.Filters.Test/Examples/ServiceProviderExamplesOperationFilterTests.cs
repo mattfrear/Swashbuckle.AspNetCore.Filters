@@ -13,6 +13,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Swashbuckle.AspNetCore.Filters.Extensions;
 using Xunit;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
@@ -30,8 +31,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
 
-            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var schemaGenerator = new FakeNewtonsoftSchemaGenerator();
+            var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions), schemaGenerator);
+            var responseExample = new ResponseExample(mvcOutputFormatter, schemaGenerator);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
@@ -272,6 +274,37 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualSchemaExample.ShouldBe(expectedExample);
         }
 
+        /// <summary>
+        /// This test proves that fixed FilterContextFor should use SchemaGenerator instead of
+        /// arranging schema on your own hand
+        /// </summary>
+        [Fact]
+        public void WhenTypeIsNullable_SchemaGeneratorReservesIdForItsUnderlyingType()
+        {
+            // Pre-Arrange Assert
+            var schemaRepository = new SchemaRepository();
+
+            schemaRepository.TryGetIdFor(typeof(Title?), out var schemaId);
+            schemaId.ShouldBeNull();
+
+            schemaRepository.TryGetIdFor(typeof(Title), out schemaId);
+            schemaId.ShouldBeNull();
+
+            // Arrange
+            var schemaGenerator = new FakeNewtonsoftSchemaGenerator();
+
+            // Act
+            schemaGenerator.GenerateSchema(typeof(Title?), schemaRepository);
+
+            // Assert
+            schemaRepository.TryGetIdFor(typeof(Title?), out schemaId);
+            schemaId.ShouldBeNull();
+
+            schemaRepository.TryGetIdFor(typeof(Title), out schemaId);
+            schemaId.ShouldBe(typeof(Title).SchemaDefinitionName());
+            schemaId.ShouldBe(typeof(Title?).SchemaDefinitionName());
+        }
+
         [Fact]
         public void SetsMultipleRequestExamples()
         {
@@ -451,7 +484,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             // Arrange
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithSystemTextJsonFormatter, new FakeLoggerFactory());
-            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var responseExample = new ResponseExample(mvcOutputFormatter, new FakeNewtonsoftSchemaGenerator());
             var sut = new ServiceProviderExamplesOperationFilter(serviceProvider, null, responseExample);
 
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };

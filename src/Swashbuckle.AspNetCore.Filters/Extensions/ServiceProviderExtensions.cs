@@ -32,9 +32,11 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
 
             bool IsPrimitiveType()
             {
-                return !type.GetTypeInfo().IsClass
-                    && !type.GetTypeInfo().IsGenericType
-                    && !type.GetTypeInfo().IsInterface;
+                var typeInfo = type.GetTypeInfo();
+                return !typeInfo.IsClass
+                    && !typeInfo.IsGenericType
+                    && !typeInfo.IsInterface
+                    && !typeInfo.IsEnum;
             }
 
             var exampleProviderType = typeof(IExamplesProvider<>).MakeGenericType(type);

@@ -7,6 +7,11 @@ namespace Swashbuckle.AspNetCore.Filters
     public class SwaggerExample<T> : ISwaggerExample<T>
     {
         /// <summary>
+        /// Returns value assigned to the Swagger Example
+        /// </summary>
+        public object GetValue() => Value;
+
+        /// <summary>
         /// Name of the example.  Required.
         /// </summary>
         public string Name { get; set; }
@@ -25,7 +30,7 @@ namespace Swashbuckle.AspNetCore.Filters
     /// <summary>
     /// Helper class to reduce generic boilerplate
     /// </summary>
-    public static class SwaggerExample
+    public class SwaggerExample : SwaggerExample<object>
     {
         /// <summary>
         /// Create an example for a type.

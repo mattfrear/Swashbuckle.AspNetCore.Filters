@@ -3,21 +3,25 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
     internal class ResponseExample
     {
         private readonly MvcOutputFormatter mvcOutputFormatter;
+        private readonly ISchemaGenerator schemaGenerator;
 
-        public ResponseExample(
-            MvcOutputFormatter mvcOutputFormatter)
+        public ResponseExample(MvcOutputFormatter mvcOutputFormatter,
+                ISchemaGenerator schemaGenerator)
         {
             this.mvcOutputFormatter = mvcOutputFormatter;
+            this.schemaGenerator = schemaGenerator;
         }
 
         public void SetResponseExampleForStatusCode(
             OpenApiOperation operation,
+            SchemaRepository schemaRepository,
             int statusCode,
             object example)
         {
@@ -36,14 +40,68 @@ namespace Swashbuckle.AspNetCore.Filters
 
             var examplesConverter = new ExamplesConverter(mvcOutputFormatter);
 
-            var multiple = example as IEnumerable<ISwaggerExample<object>>;
-            if (multiple == null)
+            if (example is IEnumerable<ISwaggerExample<object>> multiple)
             {
-                SetSingleResponseExampleForStatusCode(response, example, examplesConverter);
+                var multipleList = multiple.ToList();
+                SetMultipleResponseExampleForStatusCode(response, multipleList, examplesConverter);
+                SetMultipleSchema(response, schemaRepository, multipleList);
             }
             else
             {
-                SetMultipleResponseExampleForStatusCode(response, multiple, examplesConverter);
+                SetSingleResponseExampleForStatusCode(response, example, examplesConverter);
+                SetSingleSchema(response, schemaRepository, example);
+            }
+        }
+
+        /// <summary>
+        /// Sets the operation schema to match exactly the types of the associated examples.
+        /// <para>Generates new schemas when needed</para>
+        /// </summary>
+        private void SetMultipleSchema(KeyValuePair<string, OpenApiResponse> response,
+                SchemaRepository schemaRepository,
+                List<ISwaggerExample<object>> examples)
+        {
+            var exampleTypes = examples.Where(x => x.Value != null).Select(x => x.Value?.GetType()).Distinct().ToList();
+
+            if (exampleTypes.Count == 1)
+            {
+                SetSingleSchema(response, schemaRepository, examples[0].Value);
+                return;
+            }
+
+            var schemas = exampleTypes.Select(type => schemaGenerator.GenerateSchema(type, schemaRepository)).ToList();
+
+            foreach (var content in response.Value.Content)
+            {
+                if (content.Value.Examples.Count == 0)
+                    continue;
+
+                content.Value.Schema = new OpenApiSchema
+                {
+                    OneOf = schemas
+                };
+            }
+        }
+
+        /// <summary>
+        /// Sets the operation schema to match exactly the type of the associated example.
+        /// <para>Generates new schema when needed</para>
+        /// </summary>
+        private void SetSingleSchema(KeyValuePair<string, OpenApiResponse> response,
+                SchemaRepository schemaRepository, object example)
+        {
+            if (example == null)
+                return;
+
+            var exampleType = example.GetType();
+            var schemaDefinition = schemaGenerator.GenerateSchema(exampleType, schemaRepository);
+
+            foreach (var content in response.Value.Content)
+            {
+                if (content.Value.Example == null && !content.Value.Examples.Any())
+                    continue;
+
+                content.Value.Schema = schemaDefinition;
             }
         }
 

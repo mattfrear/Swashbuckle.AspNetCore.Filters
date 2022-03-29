@@ -10,6 +10,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
 {
     public static class ExampleAssertExtensions
     {
+        public static void ShouldMatch(this Title actualExample, Title expectedExample)
+        {
+            actualExample.ShouldBe(expectedExample);
+        }
+
         public static void ShouldMatch(this PersonRequest actualExample, PersonRequest expectedExample)
         {
             actualExample.Title.ShouldBe(expectedExample.Title);

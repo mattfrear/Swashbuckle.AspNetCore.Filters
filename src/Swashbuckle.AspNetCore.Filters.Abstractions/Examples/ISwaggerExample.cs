@@ -8,8 +8,22 @@ namespace Swashbuckle.AspNetCore.Filters
     /// of the interface to be found with "x as ISwaggerExample{object}" instead
     /// of having to go through reflection gymnastics.
     /// </remarks>
-    public interface ISwaggerExample<out T>
+    public interface ISwaggerExample<out T> : ISwaggerExample
     {
+        /// <summary>
+        /// The example value.  Required.
+        /// </summary>
+        T Value { get; }
+    }
+
+    public interface ISwaggerExample
+    {
+        /// <summary>
+        /// Returns value assigned to SwaggerExample
+        /// </summary>
+        /// <returns></returns>
+        object GetValue();
+
         /// <summary>
         /// Name of the example.  Required.
         /// </summary>
@@ -19,10 +33,5 @@ namespace Swashbuckle.AspNetCore.Filters
         /// Optional summary of the example.
         /// </summary>
         string Summary { get; }
-
-        /// <summary>
-        /// The example value.  Required.
-        /// </summary>
-        T Value { get; }
     }
 }

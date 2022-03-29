@@ -76,7 +76,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 var example = serviceProvider.GetExampleForType(response.Type);
 
-                responseExample.SetResponseExampleForStatusCode(operation, response.StatusCode, example);
+                responseExample.SetResponseExampleForStatusCode(operation, context.SchemaRepository, response.StatusCode, example);
             }
         }
     }
