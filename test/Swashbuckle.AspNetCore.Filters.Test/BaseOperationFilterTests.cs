@@ -13,18 +13,48 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Patterns;
+using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
 {
     public abstract class BaseOperationFilterTests
     {
-        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
+        /// <summary>
+        /// Used for testing against Minimal APIs / Endpoints
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <param name="parameterDescriptions"></param>
+        /// <param name="supportedResponseTypes"></param>
+        /// <returns></returns>
+        protected OperationFilterContext FilterContextFor(Endpoint endpoint, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
         {
-            return FilterContextFor(controllerType, actionName, new CamelCasePropertyNamesContractResolver(), parameterDescriptions, supportedResponseTypes);
+            var apiDescription = new ApiDescription
+            {
+                ActionDescriptor = new ActionDescriptor
+                {
+                    EndpointMetadata = endpoint.Metadata.ToList()
+                }
+            };
+
+            return FilterContextFor(apiDescription, new CamelCasePropertyNamesContractResolver(), parameterDescriptions, supportedResponseTypes);
         }
 
-        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, IContractResolver contractResolver, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
+        /// <summary>
+        /// Used for testing against Controller/Actions
+        /// </summary>
+        /// <param name="controllerType"></param>
+        /// <param name="actionName"></param>
+        /// <param name="parameterDescriptions"></param>
+        /// <param name="supportedResponseTypes"></param>
+        /// <returns></returns>
+        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
         {
             var apiDescription = new ApiDescription
             {
@@ -35,6 +65,22 @@ namespace Swashbuckle.AspNetCore.Filters.Test
                 }
             };
 
+            var schemaRepository = new SchemaRepository();
+
+            var methodInfo = controllerType.GetMethod(actionName);
+            foreach (var parameterInfo in methodInfo.GetParameters())
+            {
+                schemaRepository.GetOrAdd(parameterInfo.ParameterType, parameterInfo.ParameterType.SchemaDefinitionName(), () => new OpenApiSchema()
+                {
+                    Reference = new OpenApiReference { Id = parameterInfo.Name }
+                });
+            }
+
+            return FilterContextFor(apiDescription, new CamelCasePropertyNamesContractResolver(), parameterDescriptions, supportedResponseTypes, schemaRepository);
+        }
+
+        protected OperationFilterContext FilterContextFor(ApiDescription apiDescription, IContractResolver contractResolver, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null, SchemaRepository schemaRepository = null)
+        {
             if (parameterDescriptions != null)
             {
                 apiDescription.With(api => api.ParameterDescriptions, parameterDescriptions);
@@ -49,25 +95,17 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             {
                 ContractResolver = contractResolver
             };
-            
+
             var schemaOptions = new SchemaGeneratorOptions();
 
-            var schemaRepository = new SchemaRepository();
-
-            var methodInfo = controllerType.GetMethod(actionName);
-            foreach (var parameterInfo in methodInfo.GetParameters())
-            {
-                schemaRepository.GetOrAdd(parameterInfo.ParameterType, parameterInfo.ParameterType.SchemaDefinitionName(), () => new OpenApiSchema()
-                {
-                    Reference = new OpenApiReference { Id = parameterInfo.Name }
-                });
-            }
+            var methodInfo = apiDescription.ActionDescriptor is ControllerActionDescriptor descriptor ?
+                descriptor.MethodInfo : null;
 
             return new OperationFilterContext(
                 apiDescription,
                 new NewtonsoftSchemaGenerator(schemaOptions, jsonSerializerSettings),
                 schemaRepository,
-                (apiDescription.ActionDescriptor as ControllerActionDescriptor).MethodInfo);
+                methodInfo);
         }
 
         protected void SetSwaggerResponses(OpenApiOperation operation, OperationFilterContext filterContext)
@@ -91,6 +129,19 @@ namespace Swashbuckle.AspNetCore.Filters.Test
                     return reader.ReadToEnd();
                 }
             }
+        }
+
+        static readonly RequestDelegate EmptyRequestDelegate = (context) => Task.CompletedTask;
+
+
+        protected FakeEndpointConventionBuilder CreateBuilder()
+        {
+            var conventionBuilder = new FakeEndpointConventionBuilder(new RouteEndpointBuilder(
+                EmptyRequestDelegate,
+                RoutePatternFactory.Parse("/test"),
+                order: 0));
+
+            return conventionBuilder;
         }
     }
 }

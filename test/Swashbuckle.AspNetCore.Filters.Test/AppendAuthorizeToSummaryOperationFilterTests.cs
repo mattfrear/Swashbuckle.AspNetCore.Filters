@@ -1,5 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Xunit;
-using Swashbuckle.AspNetCore.Swagger;
 using Shouldly;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
@@ -157,13 +158,30 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             operation.Summary.ShouldBe("Test summary");
         }
 
-
         [Fact]
-        public void Apply_DoesNotAppendWhenControllerHasAllowAnonymous()
+        public void Apply_AppendsPolicyAndRole_Endpoint()
         {
             // Arrange
             var operation = new OpenApiOperation { Summary = "Test summary" };
-            var filterContext = FilterContextFor(typeof(AllowAnonymousController), nameof(AllowAnonymousController.Customer));
+            var builder = CreateBuilder().RequireAuthorization("Administrator").RequireAuthorization(new AuthorizeAttribute { Roles = "Customer" });
+            var endpoint = builder.Build();
+            var filterContext = FilterContextFor(endpoint);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Summary.ShouldBe("Test summary (Auth policies: Administrator; roles: Customer)");
+        }
+
+        [Fact]
+        public void Apply_WorksWhenNoAuthorize_Endpoint()
+        {
+            // Arrange
+            var operation = new OpenApiOperation { Summary = "Test summary" };
+            var builder = CreateBuilder();
+            var endpoint = builder.Build();
+            var filterContext = FilterContextFor(endpoint);
 
             // Act
             sut.Apply(operation, filterContext);

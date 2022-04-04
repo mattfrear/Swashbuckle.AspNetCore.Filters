@@ -34,7 +34,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private void SetRequestExamples(OpenApiOperation operation, OperationFilterContext context)
         {
-            var actionAttributes = context.MethodInfo.GetCustomAttributes<SwaggerRequestExampleAttribute>();
+            var actionAttributes = context.GetControllerAndActionAttributes<SwaggerRequestExampleAttribute>();
 
             foreach (var attr in actionAttributes)
             {
