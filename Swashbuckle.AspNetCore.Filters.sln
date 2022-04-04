@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Filt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi3.1-Swashbuckle5", "test\WebApi3.1-Swashbuckle5\WebApi3.1-Swashbuckle5.csproj", "{D0D8590D-F39D-47C9-9F3B-DC97410F6217}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi6.0-Swashbuckle6", "test\WebApi6.0-Swashbuckle6\WebApi6.0-Swashbuckle6.csproj", "{A4F97312-7456-4635-A561-66A0C5D73992}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalApi6.0-Swashbuckle6", "test\MinimalApi6.0-Swashbuckle6\MinimalApi6.0-Swashbuckle6.csproj", "{A4F97312-7456-4635-A561-66A0C5D73992}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
