@@ -19,12 +19,23 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void ThenAFormatNotFoundExceptionIsThrown()
         {
             var value = new PersonResponseExample().GetExamples();
-            var contentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            var contentType = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
 
             Should
                 .Throw<MvcOutputFormatter.FormatterNotFoundException>(() => sut.Serialize(value, contentType))
                 .Message.ShouldBe($"OutputFormatter not found for '{contentType}'");
         }
+
+        [Fact]
+        public void ThenWillFallbackToSystemTextJson()
+        {
+            var value = new PersonRequestExample().GetExamples();
+            var contentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+
+            sut.Serialize(value, contentType)
+                .ShouldBe("{\"Title\":3,\"Age\":24,\"FirstName\":\"Dave\",\"Income\":null,\"Children\":null,\"Job\":null}");
+        }
+
     }
 
     public class GivenAMvcFormatterWithOutputFormattersButNoLoggerFactory_WhenSerializingAnObject
@@ -67,11 +78,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
     }
 
-    public class GivenAMvcFormatterWitXmlhOutputFormatter_WhenSerializingAnObjectAsXml
+    public class GivenAMvcFormatterWitXmlOutputFormatter_WhenSerializingAnObjectAsXml
     {
         private readonly MvcOutputFormatter sut;
 
-        public GivenAMvcFormatterWitXmlhOutputFormatter_WhenSerializingAnObjectAsXml()
+        public GivenAMvcFormatterWitXmlOutputFormatter_WhenSerializingAnObjectAsXml()
             => sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, new FakeLoggerFactory());
 
         [Fact]

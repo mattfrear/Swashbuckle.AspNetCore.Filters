@@ -58,7 +58,7 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             if (OutputFormatterSelector == null)
             {
-                throw new FormatterNotFoundException(contentType);
+                return SerializeWithoutMvc(value, contentType);
             }
 
             if (value == null)
@@ -96,6 +96,16 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 return result;
             }
+        }
+
+        private string SerializeWithoutMvc<T>(T value, MediaTypeHeaderValue contentType)
+        {
+            if (contentType.MediaType.Value == "application/json")
+            {
+                return System.Text.Json.JsonSerializer.Serialize(value);
+            }
+
+            throw new FormatterNotFoundException(contentType);
         }
 
         private static IOptions<MvcOptions> GetSelectorOptions(IOptions<MvcOptions> options)
