@@ -414,9 +414,8 @@ Example response for application/json mimetype of a Pet data type:
 
 
 #### Known issues
-- Request examples are not shown for querystring parameters (i.e. HTTP GET requests, or for querystring parameters for POST, PUT etc methods). Request examples will only be shown in request body.
-This is as per the OpenApi 3.0 spec.
-
+- Request examples are not shown for querystring parameters (i.e. HTTP GET requests, or for querystring parameters for POST, PUT etc methods). Request examples will only be shown in request body. 
+You can use Swashbuckle.AspNetCore's built-in XML comments to add examples for primitive types.
 
 ### How to use - Multiple examples
 
