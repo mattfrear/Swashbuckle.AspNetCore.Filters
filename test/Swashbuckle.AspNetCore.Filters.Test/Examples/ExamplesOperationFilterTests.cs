@@ -180,6 +180,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var actualExamples = requestBody.Content["application/json"].Examples;
             var expectedExamples = new PersonRequestMultipleExamples().GetExamples();
             actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
+            actualExamples["Dave"].Description.ShouldBe("Here's a description");
+            actualExamples["Angela"].Description.ShouldBeNull();
 
             // Assert SerializeAsV2
             var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);

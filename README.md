@@ -429,6 +429,7 @@ public class DeliveryOptionsSearchModelExample : IMultipleExamplesProvider<Deliv
         // An example without a summary.
         yield return SwaggerExample.Create(
             "Great Britain",
+            "Here's an optional description" // optional description - Markdown is supported
             new DeliveryOptionsSearchModel
             {
                 Lang = "en-GB",

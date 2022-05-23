@@ -8,6 +8,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
         {
             yield return SwaggerExample.Create("Dave",
                 "Posts Dave",
+                "Here's a description",
                 new PersonRequest {FirstName = "Dave", Title = Title.Mr});
             yield return SwaggerExample.Create("Angela",
                 "Let's add Angela",

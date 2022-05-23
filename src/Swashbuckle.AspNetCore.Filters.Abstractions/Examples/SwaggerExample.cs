@@ -41,7 +41,7 @@ namespace Swashbuckle.AspNetCore.Filters
         /// <returns>An example for the type.</returns>
         public static SwaggerExample<T> Create<T>(string name, T value)
         {
-            return new SwaggerExample<T> {Name = name, Value = value};
+            return new SwaggerExample<T> { Name = name, Value = value };
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Swashbuckle.AspNetCore.Filters
         /// <returns>An example for the type.</returns>
         public static SwaggerExample<T> Create<T>(string name, string summary, T value)
         {
-            return new SwaggerExample<T> {Name = name, Summary = summary, Value = value};
+            return new SwaggerExample<T> { Name = name, Summary = summary, Value = value };
         }
 
         /// <summary>
