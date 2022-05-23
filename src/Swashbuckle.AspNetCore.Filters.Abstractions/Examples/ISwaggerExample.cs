@@ -21,6 +21,11 @@ namespace Swashbuckle.AspNetCore.Filters
         string Summary { get; }
 
         /// <summary>
+        /// Optional description of the example.
+        /// </summary>
+        string Description { get; }
+
+        /// <summary>
         /// The example value.  Required.
         /// </summary>
         T Value { get; }

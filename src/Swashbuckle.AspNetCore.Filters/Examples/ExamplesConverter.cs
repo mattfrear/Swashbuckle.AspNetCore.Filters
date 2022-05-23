@@ -51,6 +51,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 ex => new OpenApiExample
                 {
                     Summary = ex.Summary,
+                    Description = ex.Description,
                     Value = exampleConverter(ex.Value)
                 });
 
