@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Issue #189 - fix exception when using Minimal APIs (thanks @dotdiego)
 
+### Added
+- Issue #165 - add Description to multiple examples (thanks @penenkel)
+
 ## [7.0.2] - 2021-04-03
 ### Fixed
 - Fixed License
