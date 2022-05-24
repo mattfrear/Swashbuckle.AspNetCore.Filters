@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Issue #165 - add Description to multiple examples (thanks @penenkel)
 
+### Removed
+- Issue #162 - removed OpenApiRawString and use OpenApiString with isRawString parameter
+
 ## [7.0.2] - 2021-04-03
 ### Fixed
 - Fixed License
