@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
+using System;
+using System.Collections.Generic;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 {
@@ -143,6 +141,19 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         }
 
         public PersonResponse PersonResponseNotAnnotated()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [Authorize]
+    public class BaseController
+    {
+    }
+
+    public class FakeInheritedController : BaseController
+    {
+        public IActionResult Authorize()
         {
             throw new NotImplementedException();
         }

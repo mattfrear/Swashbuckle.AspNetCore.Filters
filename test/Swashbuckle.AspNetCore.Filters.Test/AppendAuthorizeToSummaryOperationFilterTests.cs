@@ -189,5 +189,19 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             // Assert
             operation.Summary.ShouldBe("Test summary");
         }
+
+        [Fact]
+        public void Apply_AppendsAuthToInheritedControllers()
+        {
+            // Arrange
+            var operation = new OpenApiOperation { Summary = "Test summary" };
+            var filterContext = FilterContextFor(typeof(FakeInheritedController), nameof(FakeInheritedController.Authorize));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Summary.ShouldBe("Test summary (Auth)");
+        }
     }
 }
