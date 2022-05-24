@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using NSubstitute;
@@ -19,9 +18,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
     public class ExamplesOperationFilterTests : BaseOperationFilterTests
     {
-        private ExamplesOperationFilter sut;
-        private SchemaGeneratorOptions schemaGeneratorOptions;
-        private SwaggerOptions swaggerOptions = new SwaggerOptions { SerializeAsV2 = true };
+        private readonly ExamplesOperationFilter sut;
+        private readonly SchemaGeneratorOptions schemaGeneratorOptions;
+        private readonly SwaggerOptions swaggerOptions = new SwaggerOptions { SerializeAsV2 = true };
 
         public ExamplesOperationFilterTests()
         {
@@ -56,7 +55,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiString)response.Content["application/json"].Example).Value);
 
             var expectedExample = new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
@@ -78,40 +77,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiRawString)response.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiString)response.Content["application/json"].Example).Value);
 
             var expectedExample = new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
         }
 
-        /* [Fact]
-         This test is no longer needed - we used to have a ContractResolver parameter on the SwaggerResponse attribute,
-         but that has been removed.
-         Your examples will be output with whichever ContractResolver is registered, e.g.
-         services.AddControllers()
-            .AddNewtonsoftJson(opt =>
-            {
-                opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
-        
-        public void SetsResponseExamples_FromMethodAttributesPascalCase()
-        {
-            // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
-            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
-            operation.Responses.Add("200", response);
-
-            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseExampleAttributePascalCase));
-            SetSwaggerResponses(operation, filterContext);
-
-            // Act
-            sut.Apply(operation, filterContext);
-
-            // Assert
-            string jsonExample = ((OpenApiRawString)response.Content["application/json"].Example).Value;
-            var expectedExample = new PersonResponseExample().GetExamples();
-            jsonExample.ShouldContain($"\"Id\": {expectedExample.Id}", Case.Sensitive);
-        } */
 
         [Fact]
         public void SetsMultipleResponseExamples_FromMethodAttributes()
@@ -150,12 +122,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
             var expectedExample = new PersonRequestExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
             actualSchemaExample.ShouldMatch(expectedExample);
         }
 
@@ -184,7 +156,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExamples["Angela"].Description.ShouldBeNull();
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
             actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
         }
 
@@ -207,7 +179,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             // Assert
             // this assertion fails but it's not really a problem, since ASP.NET WebApi only accepts one [FromBody] in the request.
-            // var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
+            // var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
             // actualExample.ShouldBeNull();
         }
 
@@ -229,7 +201,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(((OpenApiRawString)requestBody.Content["application/json"].Example).Value);
+            var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
             actualExample["PropertyInt"].ShouldBe(1);
             actualExample["PropertyString"].ShouldBe("Some string");
 

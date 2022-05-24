@@ -27,7 +27,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public IOpenApiAny SerializeExampleJson(object value)
         {
-            return new OpenApiRawString(mvcOutputFormatter.Serialize(value, ApplicationJson));
+            return new OpenApiString(mvcOutputFormatter.Serialize(value, ApplicationJson), false, true);
         }
 
         public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryXml(
