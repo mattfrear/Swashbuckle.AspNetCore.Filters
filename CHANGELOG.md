@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [7.0.3] - 2022-05-24
 ### Fixed
 - Issue #189 - fix exception when using Minimal APIs (thanks @dotdiego)
 
@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Issue #165 - add Description to multiple examples (thanks @penenkel)
 
 ### Removed
-- Issue #162 - removed OpenApiRawString and use OpenApiString with isRawString parameter (thanks @WillGunn)
+- Issue #162 - removed internal OpenApiRawString and use OpenApiString with isRawString parameter (thanks @WillGunn)
 
 ## [7.0.2] - 2021-04-03
 ### Fixed
