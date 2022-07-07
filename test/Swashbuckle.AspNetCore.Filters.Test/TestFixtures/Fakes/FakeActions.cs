@@ -23,6 +23,19 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             throw new NotImplementedException();
         }
 
+        [SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>))]
+        [SwaggerResponseExample(200, typeof(PeopleResponseExample))]
+        public IActionResult AnnotatedWithSwaggerResponseExampleAttributeOfTypeEnumerable()
+        {
+            throw new NotImplementedException();
+        }
+
+        [SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>))]
+        public IActionResult AnnotatedWithSwaggerResponseAttributeOfTypeEnumerable()
+        {
+            throw new NotImplementedException();
+        }
+
         [SwaggerResponse(200, type: typeof(PersonResponse))]
         public IActionResult AnnotatedWithSwaggerResponseAttribute()
         {
