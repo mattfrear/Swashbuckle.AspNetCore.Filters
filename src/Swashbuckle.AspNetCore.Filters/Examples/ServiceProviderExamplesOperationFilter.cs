@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -43,7 +44,11 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 var example = serviceProvider.GetExampleForType(parameterDescription.Type);
 
-                requestExample.SetRequestExampleForOperation(operation, context.SchemaRepository, parameterDescription.Type, example);
+                //suggested fix 1
+                if (parameterDescription.Source == BindingSource.Body)
+                {
+                    requestExample.SetRequestBodyExampleForOperation(operation, context.SchemaRepository, parameterDescription.Type, example);
+                }
             }
         }
 

@@ -14,10 +14,21 @@ namespace WebApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
+    [ApiVersion("1.0")]
     [SwaggerResponse(404, type: typeof(ErrorResponse), description: "Could not find the person")]
     [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
     public class ValuesController : Controller
     {
+        [HttpPost]
+        [Route("api/test/string/endpoint")]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(string))]
+        [SwaggerResponseExample(200, typeof(StringResponseExample))]
+        [SwaggerRequestExample(typeof(PersonRequest), typeof(StringRequestExample))]
+        public IActionResult StringEndpoint(string input)
+        {
+            return Ok(input);
+        }
+
         ///// <summary>
         ///// Gets a person
         ///// </summary>

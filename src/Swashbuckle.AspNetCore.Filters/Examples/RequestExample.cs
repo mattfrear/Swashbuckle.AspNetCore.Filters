@@ -23,7 +23,7 @@ namespace Swashbuckle.AspNetCore.Filters
             this.swaggerOptions = options?.Value;
         }
 
-        public void SetRequestExampleForOperation(
+        public void SetRequestBodyExampleForOperation(
             OpenApiOperation operation,
             SchemaRepository schemaRepository,
             Type requestType,
@@ -81,7 +81,7 @@ namespace Swashbuckle.AspNetCore.Filters
             var jsonExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleJson(example));
             var xmlExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleXml(example));
 
-            foreach (var content in operation.RequestBody.Content)
+            foreach (var content in operation.RequestBody.Content) //as you are explicitly setting the requestbody example, we should filter for that via the BindingSource in ServiceProviderExamplesOperationFilter
             {
                 if (content.Key.Contains("xml"))
                 {

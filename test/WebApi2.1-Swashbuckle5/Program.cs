@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace WebApi2._0_Swashbuckle4
+namespace WebApi2._1_Swashbuckle5
 {
     public static class Program
     {

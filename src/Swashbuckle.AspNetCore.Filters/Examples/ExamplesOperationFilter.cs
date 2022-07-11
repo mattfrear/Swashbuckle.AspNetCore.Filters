@@ -40,7 +40,7 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 var example = serviceProvider.GetExampleWithExamplesProviderType(attr.ExamplesProviderType);
 
-                requestExample.SetRequestExampleForOperation(
+                requestExample.SetRequestBodyExampleForOperation(
                     operation,
                     context.SchemaRepository,
                     attr.RequestType,

@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.Swagger;
 using WebApi.Models.Examples;
 
-namespace WebApi2._0_Swashbuckle4
+namespace WebApi2._1_Swashbuckle5
 {
     public class Startup
     {
@@ -24,19 +29,31 @@ namespace WebApi2._0_Swashbuckle4
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvc()
+                .AddMvcCore()
+                .AddApiExplorer()
+                .AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV")
+                .AddAuthorization()
+                .AddFormatterMappings()
+                .AddViews()
+                .AddRazorViewEngine()
+                .AddRazorPages()
+                .AddCacheTagHelper()
+                .AddDataAnnotations()
+                .AddJsonFormatters()
+                .AddCors()
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.Converters.Add(new StringEnumConverter());
                     // opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 })
                 .AddXmlSerializerFormatters();
-                //.AddXmlDataContractSerializerFormatters();
+            //.AddXmlDataContractSerializerFormatters();
 
+            services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = false);
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v2" });
-
+                options.EnableAnnotations();
                 options.ExampleFilters();
 
                 options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
@@ -75,6 +92,12 @@ namespace WebApi2._0_Swashbuckle4
                     authBuilder.AddAuthenticationSchemes("Bearer");
                     authBuilder.RequireRole("Customer");
                 });
+            });
+            services.AddApiVersioning(options => {
+                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options);
+                options.ReportApiVersions = true;
             });
         }
 

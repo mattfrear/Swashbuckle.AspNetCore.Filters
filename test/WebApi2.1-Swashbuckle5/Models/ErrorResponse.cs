@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Models
 {
-    internal class ErrorResponse
+    public class ErrorResponse
     {
         public int ErrorCode { get; set; }
 
