@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Text.Json.Serialization;
 using WebApi.Models.Examples;
+using WebApiContrib.Core.Formatter.Csv;
 
 namespace WebApi3._0_Swashbuckle5
 {
@@ -25,6 +26,7 @@ namespace WebApi3._0_Swashbuckle5
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
+                .AddCsvSerializerFormatters()
                 //.AddNewtonsoftJson(opt =>
                 //{
                 //    opt.SerializerSettings.Converters.Add(new StringEnumConverter());
