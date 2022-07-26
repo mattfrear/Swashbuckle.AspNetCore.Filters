@@ -7,10 +7,14 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         public static void ExampleFilters(this SwaggerGenOptions swaggerGenOptions)
         {
-            //Suggested fix 2
+            swaggerGenOptions.OperationFilter<ExamplesOperationFilter>();
+            swaggerGenOptions.OperationFilter<ServiceProviderExamplesOperationFilter>();
+        }
+
+        public static void ExampleFilters_PrioritizingExplicitlyDefinedExamples(this SwaggerGenOptions swaggerGenOptions)
+        {
             swaggerGenOptions.OperationFilter<ServiceProviderExamplesOperationFilter>();
             swaggerGenOptions.OperationFilter<ExamplesOperationFilter>();
-
         }
     }
 }

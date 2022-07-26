@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    internal class RequestExample
+    public class RequestExample
     {
         private readonly MvcOutputFormatter mvcOutputFormatter;
         private readonly SwaggerOptions swaggerOptions;
@@ -81,7 +81,7 @@ namespace Swashbuckle.AspNetCore.Filters
             var jsonExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleJson(example));
             var xmlExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleXml(example));
 
-            foreach (var content in operation.RequestBody.Content) //as you are explicitly setting the requestbody example, we should filter for that via the BindingSource in ServiceProviderExamplesOperationFilter
+            foreach (var content in operation.RequestBody.Content)
             {
                 if (content.Key.Contains("xml"))
                 {

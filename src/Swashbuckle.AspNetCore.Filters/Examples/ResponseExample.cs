@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    internal class ResponseExample
+    public class ResponseExample
     {
         private readonly MvcOutputFormatter mvcOutputFormatter;
 

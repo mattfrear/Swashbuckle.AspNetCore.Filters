@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    internal class MvcOutputFormatter
+    public class MvcOutputFormatter
     {
         private readonly object initializeLock = new object();
         private bool initializedOutputFormatterSelector;

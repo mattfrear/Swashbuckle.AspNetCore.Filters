@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -29,25 +26,14 @@ namespace WebApi2._1_Swashbuckle5
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvcCore()
-                .AddApiExplorer()
-                .AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV")
-                .AddAuthorization()
-                .AddFormatterMappings()
-                .AddViews()
-                .AddRazorViewEngine()
-                .AddRazorPages()
-                .AddCacheTagHelper()
-                .AddDataAnnotations()
-                .AddJsonFormatters()
-                .AddCors()
+                .AddMvc()
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.Converters.Add(new StringEnumConverter());
                     // opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 })
                 .AddXmlSerializerFormatters();
-            //.AddXmlDataContractSerializerFormatters();
+                //.AddXmlDataContractSerializerFormatters();
 
             services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = false);
             services.AddSwaggerGen(options =>
@@ -93,7 +79,8 @@ namespace WebApi2._1_Swashbuckle5
                     authBuilder.RequireRole("Customer");
                 });
             });
-            services.AddApiVersioning(options => {
+            services.AddApiVersioning(options =>
+            {
                 options.ApiVersionReader = new HeaderApiVersionReader("api-version");
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ApiVersionSelector = new CurrentImplementationApiVersionSelector(options);
