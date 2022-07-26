@@ -43,7 +43,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 }
 
                 var example = serviceProvider.GetExampleForType(parameterDescription.Type);
-                if (parameterDescription.Source == BindingSource.Body)
+                if (parameterDescription.Source == BindingSource.Body || parameterDescription.Source == BindingSource.Form || parameterDescription.Source == BindingSource.Custom)
                 {
                     requestExample.SetRequestBodyExampleForOperation(operation, context.SchemaRepository, parameterDescription.Type, example);
                 }
