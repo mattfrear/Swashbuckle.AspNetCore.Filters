@@ -23,6 +23,7 @@
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\ListPeopleRequestExample.cs" Link="Models\Examples\ListPeopleRequestExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\MaleRequestExample.cs" Link="Models\Examples\MaleRequestExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\NotFoundResponseExample.cs" Link="Models\Examples\NotFoundResponseExample.cs" />
+    <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PeopleResponseExample.cs" Link="Models\Examples\PeopleResponseExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonRequestAutoExample.cs" Link="Models\Examples\PersonRequestAutoExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonRequestDependencyInjectionExample.cs" Link="Models\Examples\PersonRequestDependencyInjectionExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonRequestExample.cs" Link="Models\Examples\PersonRequestExample.cs" />
@@ -48,6 +49,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.0.0" />
+    <PackageReference Include="WebApiContrib.Core.Formatter.Csv" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
