@@ -23,6 +23,12 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public IOpenApiAny SerializeExampleCsv(object value)
         {
+            var type = value.GetType();
+            if (type.IsPrimitive || type.IsValueType || type == typeof(string))
+            {
+                return new OpenApiString(value.ToString());
+            }
+
             return new OpenApiString(mvcOutputFormatter.Serialize(value, TextCsv));
         }
 

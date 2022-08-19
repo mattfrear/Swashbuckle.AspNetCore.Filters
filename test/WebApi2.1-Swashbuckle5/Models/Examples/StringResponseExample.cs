@@ -6,7 +6,7 @@ namespace WebApi.Models.Examples
     {
         public string GetExamples()
         {
-            return "{\"test\":\"string response example\"}";
+            return "Hello";
         }
     }
 }
