@@ -54,10 +54,15 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             var jsonExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleJson(example));
             var xmlExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleXml(example));
+            var csvExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleCsv(example));
 
             foreach (var content in response.Value.Content)
             {
-                if (content.Key.Contains("xml"))
+                if (content.Key.Contains("csv"))
+                {
+                    content.Value.Example = csvExample.Value;
+                }
+                else if (content.Key.Contains("xml"))
                 {
                     content.Value.Example = xmlExample.Value;
                 }

@@ -30,6 +30,27 @@ namespace WebApi.Controllers
         }
 
         ///// <summary>
+        ///// Gets all people
+        ///// </summary>
+        ///// <returns>All people.</returns>
+        [HttpGet]
+        [Route("api/values/people")]
+        [SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>), description: "Successfully found the person")]
+        [SwaggerResponseExample(200, typeof(PeopleResponseExample))]
+        [SwaggerResponse(500, type: null, description: "There was an unexpected error")]
+        [SwaggerResponseExample(500, typeof(InternalServerResponseExample))]
+        [Authorize("Customer")]
+        [ProducesResponseType(401)]
+        public IEnumerable<PersonResponse> GetPeople()
+        {
+            return new PersonResponse[]
+            {
+                new PersonResponse { Id = 1, FirstName = "Dave" },
+                new PersonResponse { Id = 2, FirstName = "Sally" },
+            };
+        }
+
+        ///// <summary>
         ///// Gets a person
         ///// </summary>
         ///// <param name="personId"></param>
@@ -143,6 +164,8 @@ namespace WebApi.Controllers
         [SwaggerResponse(200, type: typeof(Dictionary<string, object>), description: "Successfully found the data")]
         [SwaggerResponseExample(200, typeof(DictionaryResponseExample))]
         [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample))]
+        [Consumes("application/json")] // exclude text/csv
+        [Produces("application/json")] // exclude text/csv
         public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
         {
             return new Dictionary<string, object> { { "Some", 1 } };

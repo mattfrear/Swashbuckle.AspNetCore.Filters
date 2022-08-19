@@ -12,12 +12,18 @@ namespace Swashbuckle.AspNetCore.Filters
     {
         private static readonly MediaTypeHeaderValue ApplicationXml = MediaTypeHeaderValue.Parse("application/xml; charset=utf-8");
         private static readonly MediaTypeHeaderValue ApplicationJson = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+        private static readonly MediaTypeHeaderValue TextCsv = MediaTypeHeaderValue.Parse("text/csv");
 
         private readonly MvcOutputFormatter mvcOutputFormatter;
 
         public ExamplesConverter(MvcOutputFormatter mvcOutputFormatter)
         {
             this.mvcOutputFormatter = mvcOutputFormatter;
+        }
+
+        public IOpenApiAny SerializeExampleCsv(object value)
+        {
+            return new OpenApiString(mvcOutputFormatter.Serialize(value, TextCsv));
         }
 
         public IOpenApiAny SerializeExampleXml(object value)

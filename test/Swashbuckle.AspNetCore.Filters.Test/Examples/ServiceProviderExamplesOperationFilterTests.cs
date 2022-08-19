@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Csv;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
@@ -29,13 +30,14 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             schemaGeneratorOptions = new SchemaGeneratorOptions();
 
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonFormatters, new FakeLoggerFactory());
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonAndCsvFormatters, new FakeLoggerFactory());
 
             var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
             var responseExample = new ResponseExample(mvcOutputFormatter);
 
             serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
+            serviceProvider.GetService(typeof(IExamplesProvider<IEnumerable<PersonResponse>>)).Returns(new PeopleResponseExample());
 
             sut = new ServiceProviderExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
@@ -447,6 +449,34 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             formatedExample.EndsWith('"').ShouldBeTrue();
             formatedExample.StartsWith('"').ShouldBeTrue();
             formatedExample.Contains("<FirstName>").ShouldBeTrue();
+        }
+
+        [Fact]
+        public void SetsResponseExamples_CorrectlyFormatsCsvExample()
+        {
+            // Arrange
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "text/csv", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttributeOfTypeEnumerable));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var example = response.Content["text/csv"].Example;
+
+            var formatedExample = RenderOpenApiObject(example);
+            formatedExample.EndsWith('"').ShouldBeTrue();
+            formatedExample.StartsWith('"').ShouldBeTrue();
+
+            IEnumerable<ICsvLine> lines = CsvReader.ReadFromText(
+                formatedExample.Trim('"').Replace("\\r\\n", Environment.NewLine),
+                new CsvOptions { Separator = ';' });
+
+            lines.ShouldContain(x => x["FirstName"] == "John" && x["last"] == "Doe");
+            lines.ShouldContain(x => x["FirstName"] == "Jane" && x["last"] == "Smith");
         }
 
         [Fact]

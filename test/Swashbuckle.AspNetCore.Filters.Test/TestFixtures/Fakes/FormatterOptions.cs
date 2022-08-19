@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Buffers;
 using System.Text.Json;
+using WebApiContrib.Core.Formatter.Csv;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
 {
@@ -35,7 +36,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
         public static FormatterOptions WithNewtonsoftFormatter => new FormatterOptions(jsonOutputFormatter);
 
         public static FormatterOptions WithSystemTextJsonFormatter = new FormatterOptions(systemTextJsonFormatter);
-        public static FormatterOptions WithXmlAndNewtonsoftJsonFormatters => new FormatterOptions(new XmlSerializerOutputFormatter(), jsonOutputFormatter);
+        public static FormatterOptions WithXmlAndNewtonsoftJsonAndCsvFormatters => new FormatterOptions(new XmlSerializerOutputFormatter(), jsonOutputFormatter, new CsvOutputFormatter(new CsvFormatterOptions()));
         public static FormatterOptions WithoutFormatters => new FormatterOptions();
     }
 }
