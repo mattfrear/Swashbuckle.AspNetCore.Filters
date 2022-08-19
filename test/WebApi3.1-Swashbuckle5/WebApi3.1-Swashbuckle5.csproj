@@ -33,6 +33,8 @@
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonResponseExample.cs" Link="Models\Examples\PersonResponseExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonResponseMultipleExamples.cs" Link="Models\Examples\PersonResponseMultipleExamples.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\PersonResponseExample2.cs" Link="Models\Examples\PersonResponseExample2.cs" />
+    <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\StringRequestExample.cs" Link="Models\Examples\StringRequestExample.cs" />
+    <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\StringResponseExample.cs" Link="Models\Examples\StringResponseExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\TitleExample.cs" Link="Models\Examples\TitleExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\WrappedPersonRequestExample.cs" Link="Models\Examples\WrappedPersonRequestExample.cs" />
     <Compile Include="..\WebApi2.1-Swashbuckle5\Models\Examples\WrappedPersonResponseExample.cs" Link="Models\Examples\WrappedPersonResponseExample.cs" />
@@ -47,6 +49,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="2.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.0.0" />
     <PackageReference Include="WebApiContrib.Core.Formatter.Csv" Version="4.0.0" />
