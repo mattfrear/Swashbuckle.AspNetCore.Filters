@@ -10,7 +10,7 @@ namespace Swashbuckle.AspNetCore.Filters
     /// Adds custom Request and Response examples.
     /// You should install it using the .AddSwaggerExamples() extension method
     /// </summary>
-    public class ExamplesOperationFilter : IOperationFilter
+    internal class ExamplesOperationFilter : IOperationFilter
     {
         private readonly IServiceProvider serviceProvider;
         private readonly RequestExample requestExample;

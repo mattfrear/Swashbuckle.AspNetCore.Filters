@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    public class RequestExample
+    internal class RequestExample
     {
         private readonly MvcOutputFormatter mvcOutputFormatter;
         private readonly SwaggerOptions swaggerOptions;
