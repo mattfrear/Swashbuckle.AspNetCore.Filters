@@ -543,9 +543,9 @@ The above is no longer supported - it will output Examples using whichever JSON 
 in `services.AddControllers()`.
 
 ### Minimal APIs
-As the JSON serializer refers to MvcOptions, when working with Minimial APIs camelCase is not applied (as services.AddControllers() isn't set. 
+The JsonSerializer comes from MvcOptions, but this isn't copnfigured when using Minimial APIs. 
 
-In order to serialize in Camel case, or to set another formatting option configure an MvcOptions instance in your Program.cs:
+Therefore, in order to serialize as camel case, or to set another formatting options, configure an MvcOptions instance in your Program.cs:
 ```
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
 {
