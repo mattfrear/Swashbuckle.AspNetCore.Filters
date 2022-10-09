@@ -542,6 +542,24 @@ You can optionally specify policies `[Authorize("Customer")]` or roles `[Authori
 The above is no longer supported - it will output Examples using whichever JSON serializer your controllers are configured with
 in `services.AddControllers()`.
 
+### Minimal APIs
+The JsonSerializer comes from MvcOptions, but that isn't configured when using Minimial APIs.
+
+Therefore, in order to serialize as camel case, or to set another formatting options, manually configure MvcOptions in your Program.cs:
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+...
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
+{
+	options.OutputFormatters.Clear();
+	options.OutputFormatters.Add(
+		new Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter(
+			new JsonSerializerOptions
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+			}));
+});
+```
 
 ## Render Enums as strings
 ~~By default `enum`s will output their integer values. If you want to output strings you can pass in a `StringEnumConverter` like so:
