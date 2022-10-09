@@ -546,8 +546,7 @@ in `services.AddControllers()`.
 The JsonSerializer comes from MvcOptions, but that isn't configured when using Minimial APIs.
 
 Therefore, in order to serialize as camel case, or to set another formatting options, manually configure MvcOptions in your Program.cs:
-```
-
+```csharp
 var builder = WebApplication.CreateBuilder(args);
 ...
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
