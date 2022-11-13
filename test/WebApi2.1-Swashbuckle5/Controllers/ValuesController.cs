@@ -17,6 +17,7 @@ namespace WebApi.Controllers
     [ApiVersion("1.0")]
     [SwaggerResponse(404, type: typeof(ErrorResponse), description: "Could not find the person")]
     [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
+    [SwaggerResponseHeader(new int[] { 200, 401, 403, 404 }, "CustomHeader", "string", "A custom header")]
     public class ValuesController : Controller
     {
         [HttpPost]
@@ -86,7 +87,7 @@ namespace WebApi.Controllers
 
         [SwaggerResponseHeader(StatusCodes.Status200OK, "Location", "string", "Location of the newly created resource")]
         [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
-        [SwaggerResponseHeader(new int[] { 200, 401, 403, 404 }, "CustomHeader", "string", "A custom header")]
+        
         [Authorize("Customer")]
         public PersonResponse PostPerson([FromBody]PersonRequest personRequest)
         {

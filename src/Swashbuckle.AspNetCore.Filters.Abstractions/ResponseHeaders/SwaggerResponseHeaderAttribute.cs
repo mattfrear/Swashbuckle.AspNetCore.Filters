@@ -2,7 +2,7 @@ using System;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class SwaggerResponseHeaderAttribute : Attribute
     {
         public SwaggerResponseHeaderAttribute(int statusCode, string name, string type, string description, string format = "")
