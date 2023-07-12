@@ -98,8 +98,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test
 
             var schemaOptions = new SchemaGeneratorOptions();
 
-            var methodInfo = apiDescription.ActionDescriptor is ControllerActionDescriptor descriptor ?
-                descriptor.MethodInfo : null;
+            // see Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperation
+            apiDescription.TryGetMethodInfo(out var methodInfo);
 
             return new OperationFilterContext(
                 apiDescription,
