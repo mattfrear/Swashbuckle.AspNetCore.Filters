@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Xunit;
 using System.Linq;
 using static Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.FakeControllers;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.OpenApi.Models;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
@@ -232,6 +233,25 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             securityScheme.Value.ShouldNotBeNull();
             var policies = securityScheme.Value;
             policies.Single().ShouldBe("Customer");
+        }
+
+        [Fact]
+        public void Apply_SetsAuthorize_WithEndpointMetadata()
+        {
+            // Arrange
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            var builder = CreateBuilder().RequireAuthorization();
+            var endpoint = builder.Build();
+            var filterContext = FilterContextFor(endpoint);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Security.Count.ShouldBe(1);
+            var securityScheme = operation.Security[0].SingleOrDefault(ss => ss.Key.Reference.Id == "oauth2");
+            securityScheme.Value.ShouldNotBeNull();
+            securityScheme.Value.Count().ShouldBe(0);
         }
 
         [Fact]
