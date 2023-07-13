@@ -12,7 +12,7 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
         {
             if (context.MethodInfo != null)
             {
-                var controllerAttributes = context.MethodInfo.DeclaringType?.GetTypeInfo().GetCustomAttributes<T>();
+                var controllerAttributes = context.MethodInfo.ReflectedType?.GetTypeInfo().GetCustomAttributes<T>();
                 var actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
 
                 var result = new List<T>(actionAttributes);

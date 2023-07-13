@@ -37,6 +37,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             }
         }
 
+        [Authorize]
+        public class AuthControllerDerived : NotAnnotated
+        {
+        }
+
         [AllowAnonymous]
         public class AllowAnonymousController
         {

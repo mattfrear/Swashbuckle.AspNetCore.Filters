@@ -261,5 +261,22 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             // Assert
             operation.Security.Count.ShouldBe(0);
         }
+
+        [Fact]
+        public void Apply_SetsAuthorizeToTheActionFromBaseController_WithController()
+        {
+            // Arrange
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            var filterContext = FilterContextFor(typeof(AuthControllerDerived), nameof(AuthController.None));
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            operation.Security.Count.ShouldBe(1);
+            var securityScheme = operation.Security[0].SingleOrDefault(ss => ss.Key.Reference.Id == "oauth2");
+            securityScheme.Value.ShouldNotBeNull();
+            securityScheme.Value.Count().ShouldBe(0);
+        }
     }
 }
