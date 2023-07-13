@@ -2,16 +2,16 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
-		<PackageVersion>7.0.6</PackageVersion>
+		<PackageVersion>7.0.7</PackageVersion>
 		<Authors>Matt Frear</Authors>
 		<Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageProjectUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Copyright>2022</Copyright>
+		<Copyright>2023</Copyright>
 		<PackageTags>Swagger Swashbuckle</PackageTags>
 		<PackageReleaseNotes>
-			Allow SwaggerResponseHeaderAttribute to be used on classes.
+			Fix minor issue with SecurityRequirementsOperationFilter #225
 		</PackageReleaseNotes>
 		<RepositoryType>git</RepositoryType>
 		<Repository>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</Repository>
@@ -19,7 +19,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<VersionPrefix>7.0.6</VersionPrefix>
+		<VersionPrefix>7.0.7</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
