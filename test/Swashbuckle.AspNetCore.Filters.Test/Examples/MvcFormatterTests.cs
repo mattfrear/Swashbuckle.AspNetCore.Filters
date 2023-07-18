@@ -5,6 +5,12 @@ using Shouldly;
 using Xunit;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using NSubstitute;
+using Castle.Core.Logging;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -110,6 +116,34 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
                     "<Title>Dr</Title>" +
                     "<first>John</first>" +
                     "</PersonResponse>");
+        }
+    }
+    public class GivenAnMvcFormatterWithAnOutputFormatter_WhenAServiceProviderIsInjected
+    {
+        private readonly MvcOutputFormatter sut;
+
+        private static IServiceProvider GetServiceProvider()
+        {
+            var serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.GetService(typeof(string)).Returns("somePropName");
+            var mvcOptions = Substitute.For<IOptions<MvcOptions>>();
+            serviceProvider.GetService(typeof(IOptions<MvcOptions>)).Returns(mvcOptions);
+            return serviceProvider;
+        }
+
+        public GivenAnMvcFormatterWithAnOutputFormatter_WhenAServiceProviderIsInjected()
+            => sut = new MvcOutputFormatter(
+                FormatterOptions.WithFormatterAccessingRequestServices,
+                GetServiceProvider(),
+                new FakeLoggerFactory());
+
+        [Fact]
+        public void TheServiceProviderIsPassedToTheOutputFormatterContext()
+        {
+            var contentType = MediaTypeHeaderValue.Parse("text/plain; charset=utf-8");
+
+            sut.Serialize(32, contentType)
+                .ShouldBe("somePropName=32");
         }
     }
 }
