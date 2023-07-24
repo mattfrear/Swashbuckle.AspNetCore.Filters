@@ -14,10 +14,7 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
 #if NETCOREAPP3_1_OR_GREATER
             if (context.ApiDescription.ActionDescriptor.EndpointMetadata != null)
             {
-                var endpointAttributes = context.ApiDescription.ActionDescriptor.EndpointMetadata.OfType<T>();
-
-                var result = new List<T>(endpointAttributes);
-                return result;
+                return context.ApiDescription.ActionDescriptor.EndpointMetadata.OfType<T>();
             }
 #else
             if (context.MethodInfo != null)
