@@ -33,7 +33,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         /// <param name="parameterDescriptions"></param>
         /// <param name="supportedResponseTypes"></param>
         /// <returns></returns>
-        protected OperationFilterContext FilterContextFor(Endpoint endpoint, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
+        protected static OperationFilterContext FilterContextFor(Endpoint endpoint, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
         {
             var apiDescription = new ApiDescription
             {
@@ -54,7 +54,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         /// <param name="parameterDescriptions"></param>
         /// <param name="supportedResponseTypes"></param>
         /// <returns></returns>
-        protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
+        protected static OperationFilterContext FilterContextFor(Type controllerType, string actionName, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
         {
             var methodInfo = controllerType.GetMethod(actionName);
             var apiDescription = new ApiDescription
@@ -79,7 +79,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             return FilterContextFor(apiDescription, new CamelCasePropertyNamesContractResolver(), parameterDescriptions, supportedResponseTypes, schemaRepository);
         }
 
-        protected OperationFilterContext FilterContextFor(ApiDescription apiDescription, IContractResolver contractResolver, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null, SchemaRepository schemaRepository = null)
+        protected static OperationFilterContext FilterContextFor(ApiDescription apiDescription, IContractResolver contractResolver, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null, SchemaRepository schemaRepository = null)
         {
             if (parameterDescriptions != null)
             {
@@ -108,7 +108,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
                 methodInfo);
         }
 
-        protected void SetSwaggerResponses(OpenApiOperation operation, OperationFilterContext filterContext)
+        protected static void SetSwaggerResponses(OpenApiOperation operation, OperationFilterContext filterContext)
         {
             var swaggerResponseFilter = new AnnotationsOperationFilter();
             swaggerResponseFilter.Apply(operation, filterContext);
@@ -134,7 +134,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         static readonly RequestDelegate EmptyRequestDelegate = (context) => Task.CompletedTask;
 
 
-        protected FakeEndpointConventionBuilder CreateBuilder()
+        protected static FakeEndpointConventionBuilder CreateBuilder()
         {
             var conventionBuilder = new FakeEndpointConventionBuilder(new RouteEndpointBuilder(
                 EmptyRequestDelegate,
