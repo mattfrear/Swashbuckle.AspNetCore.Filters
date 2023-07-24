@@ -39,7 +39,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             {
                 ActionDescriptor = new ActionDescriptor
                 {
-                    EndpointMetadata = endpoint.Metadata.ToList()
+                    EndpointMetadata = GetEndpointMetadata(endpoint.RequestDelegate.Method).Concat(GetEndpointMetadata(endpoint)).ToList()
                 }
             };
 
@@ -56,18 +56,18 @@ namespace Swashbuckle.AspNetCore.Filters.Test
         /// <returns></returns>
         protected OperationFilterContext FilterContextFor(Type controllerType, string actionName, List<ApiParameterDescription> parameterDescriptions = null, List<ApiResponseType> supportedResponseTypes = null)
         {
+            var methodInfo = controllerType.GetMethod(actionName);
             var apiDescription = new ApiDescription
             {
                 ActionDescriptor = new ControllerActionDescriptor
                 {
                     ControllerTypeInfo = controllerType.GetTypeInfo(),
-                    MethodInfo = controllerType.GetMethod(actionName),
+                    MethodInfo = methodInfo,
+                    EndpointMetadata = GetEndpointMetadata(methodInfo).Concat(GetControllerMetadata(controllerType)).ToList()
                 }
             };
 
             var schemaRepository = new SchemaRepository();
-
-            var methodInfo = controllerType.GetMethod(actionName);
             foreach (var parameterInfo in methodInfo.GetParameters())
             {
                 schemaRepository.GetOrAdd(parameterInfo.ParameterType, parameterInfo.ParameterType.SchemaDefinitionName(), () => new OpenApiSchema()
@@ -142,6 +142,23 @@ namespace Swashbuckle.AspNetCore.Filters.Test
                 order: 0));
 
             return conventionBuilder;
+        }
+
+        private static IEnumerable<object> GetEndpointMetadata(MethodInfo method)
+        {
+            yield return method;
+            foreach (var attribute in method.GetCustomAttributes(true).Cast<Attribute>())
+            {
+                yield return attribute;
+            }
+        }
+        private static IEnumerable<object> GetEndpointMetadata(Endpoint endpoint)
+        {
+            return endpoint.Metadata;
+        }
+        private static IEnumerable<object> GetControllerMetadata(Type controllerType)
+        {
+            return controllerType.GetTypeInfo().GetCustomAttributes(true).Cast<Attribute>();
         }
     }
 }
