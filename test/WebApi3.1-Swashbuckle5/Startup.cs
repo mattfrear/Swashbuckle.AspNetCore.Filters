@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using WebApi.Models.Examples;
 using WebApiContrib.Core.Formatter.Csv;
@@ -47,7 +48,8 @@ namespace WebApi3._0_Swashbuckle5
 
                 options.OperationFilter<AddResponseHeadersFilter>();
 
-                var filePath = Path.Combine(AppContext.BaseDirectory, "WebApi.xml");
+                var assembly = Assembly.GetExecutingAssembly();
+                var filePath = Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
                 options.IncludeXmlComments(filePath);
 
                 options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
@@ -101,7 +103,7 @@ namespace WebApi3._0_Swashbuckle5
             });
 
             app.UseSwagger(
-                // c => c.SerializeAsV2 = true
+            // c => c.SerializeAsV2 = true
             );
 
             app.UseSwaggerUI(c =>

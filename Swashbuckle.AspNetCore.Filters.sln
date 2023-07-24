@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalApi6.0-Swashbuckle6"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Filters.Test6", "test\Swashbuckle.AspNetCore.Filters.Test6\Swashbuckle.AspNetCore.Filters.Test6.csproj", "{FB0CC270-EC53-4064-9A67-EB41ED691E4D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swashbuckle.AspNetCore.Filters.Test3.1", "test\Swashbuckle.AspNetCore.Filters.Test3.1\Swashbuckle.AspNetCore.Filters.Test3.1.csproj", "{5960F7FB-0FC1-4378-805F-25C7C34AB411}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{FB0CC270-EC53-4064-9A67-EB41ED691E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB0CC270-EC53-4064-9A67-EB41ED691E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB0CC270-EC53-4064-9A67-EB41ED691E4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5960F7FB-0FC1-4378-805F-25C7C34AB411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5960F7FB-0FC1-4378-805F-25C7C34AB411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5960F7FB-0FC1-4378-805F-25C7C34AB411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5960F7FB-0FC1-4378-805F-25C7C34AB411}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{D0D8590D-F39D-47C9-9F3B-DC97410F6217} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
 		{A4F97312-7456-4635-A561-66A0C5D73992} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
 		{FB0CC270-EC53-4064-9A67-EB41ED691E4D} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
+		{5960F7FB-0FC1-4378-805F-25C7C34AB411} = {0C0D0AB6-777A-4327-92B6-41AA086FC049}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24267CCB-C313-45F2-83DE-727185B6A4D7}
