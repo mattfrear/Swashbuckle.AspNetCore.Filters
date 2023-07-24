@@ -1,9 +1,13 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
+builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -21,6 +25,10 @@ builder.Services.AddSwaggerGen(c =>
 
     c.ExampleFilters();
     c.OperationFilter<SecurityRequirementsOperationFilter>();
+
+    var assembly = Assembly.GetExecutingAssembly();
+    var filePath = Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
+    c.IncludeXmlComments(filePath);
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblyOf<WeatherForecastExample>();
@@ -41,6 +49,7 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
+app.MapControllers();
 app.MapGet("/weatherforecast", () =>
 {
     var forecast = Enumerable.Range(1, 5).Select(index =>
