@@ -41,6 +41,12 @@ test_script:
   # run the unit tests (requires changing into the test directory)
   - cmd: cd ./test/Swashbuckle.AspNetCore.Filters.Test3.1
   - cmd: dotnet test
+  - cmd: cd ../..
+  # restore packages for our unit tests
+  - cmd: dotnet restore ./test/Swashbuckle.AspNetCore.Filters.Test2.1/Swashbuckle.AspNetCore.Filters.Test2.1.csproj --verbosity m
+  # run the unit tests (requires changing into the test directory)
+  - cmd: cd ./test/Swashbuckle.AspNetCore.Filters.Test2.1
+  - cmd: dotnet test
 on_finish :
   # any cleanup in here
 deploy: off

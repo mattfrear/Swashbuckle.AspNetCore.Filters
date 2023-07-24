@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -46,7 +47,8 @@ namespace WebApi2._1_Swashbuckle5
 
                 options.OperationFilter<AddResponseHeadersFilter>();
 
-                var filePath = Path.Combine(AppContext.BaseDirectory, "WebApi.xml");
+                var assembly = Assembly.GetExecutingAssembly();
+                var filePath = Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
                 options.IncludeXmlComments(filePath);
 
                 options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();

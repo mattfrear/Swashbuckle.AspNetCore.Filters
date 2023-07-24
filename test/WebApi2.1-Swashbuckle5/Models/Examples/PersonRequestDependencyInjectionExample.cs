@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Swashbuckle.AspNetCore.Filters;
-#if NETCOREAPP3_0
+#if NETCOREAPP3_1_OR_GREATER
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
 #endif
 
