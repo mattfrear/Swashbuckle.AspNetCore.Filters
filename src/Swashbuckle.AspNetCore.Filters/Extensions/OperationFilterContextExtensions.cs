@@ -10,30 +10,25 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
     {
         public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context) where T : Attribute
         {
+            var result = new List<T>();
+
             if (context.MethodInfo != null)
             {
-                var controllerAttributes = context.MethodInfo.ReflectedType?.GetTypeInfo().GetCustomAttributes<T>();
                 var actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
+                result.AddRange(actionAttributes);
 
-                var result = new List<T>(actionAttributes);
-                if (controllerAttributes != null)
-                {
-                    result.AddRange(controllerAttributes);
-                }
-
-                return result;
+                var controllerAttributes = context.MethodInfo.ReflectedType?.GetTypeInfo().GetCustomAttributes<T>();
+                result.AddRange(controllerAttributes);
             }
 
 #if NETCOREAPP3_1_OR_GREATER
             if (context.ApiDescription.ActionDescriptor.EndpointMetadata != null)
             {
                 var endpointAttributes = context.ApiDescription.ActionDescriptor.EndpointMetadata.OfType<T>();
-
-                var result = new List<T>(endpointAttributes);
-                return result;
+                result.AddRange(endpointAttributes);
             }
 #endif
-            return Enumerable.Empty<T>();
+            return result;
         }
     }
 }
