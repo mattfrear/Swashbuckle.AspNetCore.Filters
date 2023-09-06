@@ -14,11 +14,11 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
 
             if (context.MethodInfo != null)
             {
-                var actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
-                result.AddRange(actionAttributes);
-
                 var controllerAttributes = context.MethodInfo.ReflectedType?.GetTypeInfo().GetCustomAttributes<T>();
                 result.AddRange(controllerAttributes);
+
+                var actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
+                result.AddRange(actionAttributes);
             }
 
 #if NETCOREAPP3_1_OR_GREATER
