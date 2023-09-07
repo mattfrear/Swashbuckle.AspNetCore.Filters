@@ -1,4 +1,5 @@
 using Csv;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
@@ -30,14 +31,15 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             schemaGeneratorOptions = new SchemaGeneratorOptions();
 
+            serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
+            serviceProvider.GetService(typeof(IExamplesProvider<IEnumerable<PersonResponse>>)).Returns(new PeopleResponseExample());
+            serviceProvider.GetService(typeof(IOptions<MvcOptions>)).Returns(Options.Create(new MvcOptions()));
+
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonAndCsvFormatters, serviceProvider, new FakeLoggerFactory());
 
             var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
             var responseExample = new ResponseExample(mvcOutputFormatter);
-
-            serviceProvider = Substitute.For<IServiceProvider>();
-            serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
-            serviceProvider.GetService(typeof(IExamplesProvider<IEnumerable<PersonResponse>>)).Returns(new PeopleResponseExample());
 
             sut = new ServiceProviderExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }

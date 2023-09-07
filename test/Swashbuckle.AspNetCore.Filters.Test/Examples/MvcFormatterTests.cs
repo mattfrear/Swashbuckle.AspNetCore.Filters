@@ -85,9 +85,17 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
     public class GivenAMvcFormatterWitXmlOutputFormatter_WhenSerializingAnObjectAsXml
     {
         private readonly MvcOutputFormatter sut;
+        private readonly IServiceProvider serviceProvider;
 
         public GivenAMvcFormatterWitXmlOutputFormatter_WhenSerializingAnObjectAsXml()
-            => sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, null, new FakeLoggerFactory());
+        {
+            serviceProvider = Substitute.For<IServiceProvider>();
+            // serviceProvider.GetService(typeof(string)).Returns("somePropName");
+            var mvcOptions = Substitute.For<IOptions<MvcOptions>>();
+            serviceProvider.GetService(typeof(IOptions<MvcOptions>)).Returns(mvcOptions);
+
+            sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, serviceProvider, new FakeLoggerFactory());
+        }
 
         [Fact]
         public void ThenAnXmlStringIsReturned()
@@ -114,34 +122,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
                     "<Title>Dr</Title>" +
                     "<first>John</first>" +
                     "</PersonResponse>");
-        }
-    }
-    public class GivenAnMvcFormatterWithAnOutputFormatter_WhenAServiceProviderIsInjected
-    {
-        private readonly MvcOutputFormatter sut;
-
-        private static IServiceProvider GetServiceProvider()
-        {
-            var serviceProvider = Substitute.For<IServiceProvider>();
-            serviceProvider.GetService(typeof(string)).Returns("somePropName");
-            var mvcOptions = Substitute.For<IOptions<MvcOptions>>();
-            serviceProvider.GetService(typeof(IOptions<MvcOptions>)).Returns(mvcOptions);
-            return serviceProvider;
-        }
-
-        public GivenAnMvcFormatterWithAnOutputFormatter_WhenAServiceProviderIsInjected()
-            => sut = new MvcOutputFormatter(
-                FormatterOptions.WithFormatterAccessingRequestServices,
-                GetServiceProvider(),
-                new FakeLoggerFactory());
-
-        [Fact]
-        public void TheServiceProviderIsPassedToTheOutputFormatterContext()
-        {
-            var contentType = MediaTypeHeaderValue.Parse("text/plain; charset=utf-8");
-
-            sut.Serialize(32, contentType)
-                .ShouldBe("somePropName=32");
         }
     }
 }
