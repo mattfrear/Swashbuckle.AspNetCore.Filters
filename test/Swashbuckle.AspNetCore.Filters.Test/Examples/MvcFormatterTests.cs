@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using NSubstitute;
@@ -90,9 +89,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public GivenAMvcFormatterWitXmlOutputFormatter_WhenSerializingAnObjectAsXml()
         {
             serviceProvider = Substitute.For<IServiceProvider>();
-            // serviceProvider.GetService(typeof(string)).Returns("somePropName");
-            var mvcOptions = Substitute.For<IOptions<MvcOptions>>();
-            serviceProvider.GetService(typeof(IOptions<MvcOptions>)).Returns(mvcOptions);
+            serviceProvider.GetService(typeof(IOptions<MvcOptions>)).Returns(Options.Create(new MvcOptions()));
 
             sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, serviceProvider, new FakeLoggerFactory());
         }
