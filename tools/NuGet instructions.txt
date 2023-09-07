@@ -4,10 +4,11 @@
 4. git tag -a v1.2.5 -m 'Fix issue #89'
 5. git push --follow-tags
 
+dotnet pack -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -c Release
+
 cd src\Swashbuckle.AspNetCore.Filters.Abstractions\bin\Release
 nuget push Swashbuckle.AspNetCore.Filters.Abstrations.7.0.0.nupkg MySecretNuGetApiKeyHere -Source https://api.nuget.org/v3/index.json
 
-dotnet pack -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -c Release
 cd src\Swashbuckle.AspNetCore.Filters\bin\Release
 nuget push Swashbuckle.AspNetCore.Filters.7.0.0.nupkg MySecretNuGetApiKeyHere -Source https://api.nuget.org/v3/index.json
 
