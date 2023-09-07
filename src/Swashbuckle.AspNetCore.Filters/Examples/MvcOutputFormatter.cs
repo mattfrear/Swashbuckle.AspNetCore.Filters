@@ -20,7 +20,7 @@ namespace Swashbuckle.AspNetCore.Filters
         private bool initializedOutputFormatterSelector;
 
         private readonly IOptions<MvcOptions> options;
-        private readonly IServiceProvider requestServices;
+        private readonly IServiceProvider serviceProvider;
         private readonly ILoggerFactory loggerFactory;
 
         private OutputFormatterSelector outputFormatterSelector;
@@ -50,7 +50,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public MvcOutputFormatter(IOptions<MvcOptions> options, ILoggerFactory loggerFactory)
             : this(options,
-                  GetDefaultRequestServices(),
+                  GetDefaultServiceProvider(),
                   loggerFactory)
         {
         }
@@ -59,7 +59,7 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             this.initializedOutputFormatterSelector = false;
             this.options = options;
-            this.requestServices = serviceProvider;
+            this.serviceProvider = serviceProvider;
             this.loggerFactory = loggerFactory;
         }
 
@@ -82,7 +82,7 @@ namespace Swashbuckle.AspNetCore.Filters
                     value,
                     value.GetType(),
                     contentType,
-                    requestServices);
+                    serviceProvider);
 
                 var formatter = OutputFormatterSelector.SelectFormatter(
                     outputFormatterContext,
@@ -144,10 +144,10 @@ namespace Swashbuckle.AspNetCore.Filters
             object outputValue,
             Type outputType,
             MediaTypeHeaderValue contentType,
-            IServiceProvider requestServices)
+            IServiceProvider serviceProvider)
         {
             return new OutputFormatterWriteContext(
-                GetHttpContext(contentType, requestServices),
+                GetHttpContext(contentType, serviceProvider),
                 (stream, encoding) => writer,
                 outputType,
                 outputValue);
@@ -155,7 +155,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private static HttpContext GetHttpContext(
             MediaTypeHeaderValue contentType,
-            IServiceProvider requestServices)
+            IServiceProvider serviceProvider)
         {
             var httpContext = new DefaultHttpContext();
 
@@ -164,12 +164,12 @@ namespace Swashbuckle.AspNetCore.Filters
             httpContext.Request.ContentType = contentType.MediaType.Value;
 
             httpContext.Response.Body = new MemoryStream();
-            httpContext.RequestServices = requestServices;
+            httpContext.RequestServices = serviceProvider;
 
             return httpContext;
         }
 
-        private static IServiceProvider GetDefaultRequestServices()
+        private static IServiceProvider GetDefaultServiceProvider()
             => new ServiceCollection()
                     .AddSingleton(Options.Create(new MvcOptions()))
                     .BuildServiceProvider();
