@@ -28,7 +28,7 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
                 result.AddRange(endpointAttributes);
             }
 #endif
-            return result;
+            return result.Distinct();
         }
     }
 }
