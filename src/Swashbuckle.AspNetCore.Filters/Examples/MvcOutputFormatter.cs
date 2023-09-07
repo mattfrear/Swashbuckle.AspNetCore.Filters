@@ -48,13 +48,6 @@ namespace Swashbuckle.AspNetCore.Filters
             }
         }
 
-        public MvcOutputFormatter(IOptions<MvcOptions> options, ILoggerFactory loggerFactory)
-            : this(options,
-                  GetDefaultServiceProvider(),
-                  loggerFactory)
-        {
-        }
-
         public MvcOutputFormatter(IOptions<MvcOptions> options, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
         {
             this.initializedOutputFormatterSelector = false;
@@ -168,11 +161,6 @@ namespace Swashbuckle.AspNetCore.Filters
 
             return httpContext;
         }
-
-        private static IServiceProvider GetDefaultServiceProvider()
-            => new ServiceCollection()
-                    .AddSingleton(Options.Create(new MvcOptions()))
-                    .BuildServiceProvider();
 
         internal class FormatterNotFoundException : Exception
         {

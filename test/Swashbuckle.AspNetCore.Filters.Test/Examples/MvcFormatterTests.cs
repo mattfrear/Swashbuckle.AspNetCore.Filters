@@ -1,16 +1,14 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using NSubstitute;
 using Shouldly;
-using Xunit;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using NSubstitute;
-using Castle.Core.Logging;
+using System;
+using System.Xml.Linq;
+using Xunit;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -19,7 +17,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         private readonly MvcOutputFormatter sut;
 
         public GivenAMvcFormatterWithNoOutputFormatters_WhenSerializingAnObject()
-            => sut = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, null);
+            => sut = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, null, null);
 
         [Fact]
         public void ThenAFormatNotFoundExceptionIsThrown()
@@ -50,7 +48,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
         public GivenAMvcFormatterWithOutputFormattersButNoLoggerFactory_WhenSerializingAnObject()
         {
-            sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, null);
+            sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, null, null);
         }
 
         [Fact]
@@ -70,7 +68,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         private readonly MvcOutputFormatter sut;
 
         public GivenAMvcFormatterWithOutputFormatters_WhenSerializingAnObjectForAContentTypeThatIsNotConfigured()
-            => sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, new FakeLoggerFactory());
+            => sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, null, new FakeLoggerFactory());
 
         [Fact]
         public void ThenAFormatNotFoundExceptionIsThrown()
@@ -89,7 +87,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         private readonly MvcOutputFormatter sut;
 
         public GivenAMvcFormatterWitXmlOutputFormatter_WhenSerializingAnObjectAsXml()
-            => sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, new FakeLoggerFactory());
+            => sut = new MvcOutputFormatter(FormatterOptions.WithXmlDataContractFormatter, null, new FakeLoggerFactory());
 
         [Fact]
         public void ThenAnXmlStringIsReturned()

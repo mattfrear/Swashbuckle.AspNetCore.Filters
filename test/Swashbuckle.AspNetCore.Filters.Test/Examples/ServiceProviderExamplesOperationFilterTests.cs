@@ -30,7 +30,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             schemaGeneratorOptions = new SchemaGeneratorOptions();
 
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonAndCsvFormatters, new FakeLoggerFactory());
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonAndCsvFormatters, serviceProvider, new FakeLoggerFactory());
 
             var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
             var responseExample = new ResponseExample(mvcOutputFormatter);
@@ -483,7 +483,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void ShouldEmitSystemTextJsonPropertyName()
         {
             // Arrange
-            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithSystemTextJsonFormatter, new FakeLoggerFactory());
+            var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithSystemTextJsonFormatter, serviceProvider, new FakeLoggerFactory());
             var responseExample = new ResponseExample(mvcOutputFormatter);
             var sut = new ServiceProviderExamplesOperationFilter(serviceProvider, null, responseExample);
 
