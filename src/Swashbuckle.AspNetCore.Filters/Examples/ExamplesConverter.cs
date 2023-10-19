@@ -29,7 +29,14 @@ namespace Swashbuckle.AspNetCore.Filters
                 return new OpenApiString(value.ToString());
             }
 
-            return new OpenApiString(mvcOutputFormatter.Serialize(value, TextCsv));
+            try
+            {
+                return new OpenApiString(mvcOutputFormatter.Serialize(value, TextCsv));
+            }
+            catch (MvcOutputFormatter.FormatterNotFoundException)
+            {
+                return new OpenApiString("No formatter found");
+            }
         }
 
         public IOpenApiAny SerializeExampleXml(object value)
@@ -46,6 +53,12 @@ namespace Swashbuckle.AspNetCore.Filters
             IEnumerable<ISwaggerExample<object>> examples)
         {
             return ToOpenApiExamplesDictionary(examples, SerializeExampleXml);
+        }
+
+        public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryCsv(
+            IEnumerable<ISwaggerExample<object>> examples)
+        {
+            return ToOpenApiExamplesDictionary(examples, SerializeExampleCsv);
         }
 
         public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryJson(

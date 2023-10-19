@@ -80,12 +80,17 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             var jsonExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleJson(example));
             var xmlExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleXml(example));
+            var csvExample = new Lazy<IOpenApiAny>(() => examplesConverter.SerializeExampleCsv(example));
 
             foreach (var content in operation.RequestBody.Content)
             {
                 if (content.Key.Contains("xml"))
                 {
                     content.Value.Example = xmlExample.Value;
+                }
+                else if (content.Key.Contains("csv"))
+                {
+                    content.Value.Example = csvExample.Value;
                 }
                 else
                 {
@@ -113,11 +118,19 @@ namespace Swashbuckle.AspNetCore.Filters
                 examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
             );
 
+            var csvExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryCsv(examples)
+            );
+
             foreach (var content in operation.RequestBody.Content)
             {
                 if (content.Key.Contains("xml"))
                 {
                     content.Value.Examples = xmlExamples.Value;
+                }
+                else if (content.Key.Contains("csv"))
+                {
+                    content.Value.Examples = csvExamples.Value;
                 }
                 else
                 {

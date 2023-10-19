@@ -86,11 +86,19 @@ namespace Swashbuckle.AspNetCore.Filters
                 examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
             );
 
+            var csvExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryCsv(examples)
+            );
+
             foreach (var content in response.Value.Content)
             {
                 if (content.Key.Contains("xml"))
                 {
                     content.Value.Examples = xmlExamples.Value;
+                }
+                else if (content.Key.Contains("csv"))
+                {
+                    content.Value.Examples = csvExamples.Value;
                 }
                 else
                 {
