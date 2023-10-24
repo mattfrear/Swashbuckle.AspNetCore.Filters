@@ -33,9 +33,9 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 return new OpenApiString(mvcOutputFormatter.Serialize(value, TextCsv));
             }
-            catch (MvcOutputFormatter.FormatterNotFoundException)
+            catch (MvcOutputFormatter.FormatterNotFoundException ex)
             {
-                return new OpenApiString("No formatter found");
+                return new OpenApiString(ex.ToString());
             }
         }
 
