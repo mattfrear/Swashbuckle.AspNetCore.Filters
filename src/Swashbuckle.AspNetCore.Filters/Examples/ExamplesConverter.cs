@@ -35,7 +35,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
             catch (MvcOutputFormatter.FormatterNotFoundException ex)
             {
-                return new OpenApiString(ex.ToString());
+                return new OpenApiString($"{ex.GetType()}: {ex.Message} for example of {type.FullName}.");
             }
         }
 
