@@ -87,9 +87,9 @@ namespace WebApi.Controllers
 
         [SwaggerResponseHeader(StatusCodes.Status200OK, "Location", "string", "Location of the newly created resource")]
         [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
-        
+
         [Authorize("Customer")]
-        public PersonResponse PostPerson([FromBody]PersonRequest personRequest)
+        public PersonResponse PostPerson([FromBody] PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
@@ -107,7 +107,7 @@ namespace WebApi.Controllers
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully added the person")]
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestMultipleExamples))]
         [SwaggerResponseExample(200, typeof(PersonResponseMultipleExamples))]
-        public PersonResponse PostAnyone([FromBody]PersonRequest personRequest)
+        public PersonResponse PostAnyone([FromBody] PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave", LastName = "Multi" };
             return personResponse;
@@ -121,7 +121,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("api/values/male/")]
         [ProducesResponseType(typeof(PersonResponse), 200)]
-        public PersonResponse PostMale([FromBody]MaleRequest maleRequest)
+        public PersonResponse PostMale([FromBody] MaleRequest maleRequest)
         {
             var personResponse = new PersonResponse { Id = 7, FirstName = "Dave" };
             return personResponse;
@@ -133,7 +133,7 @@ namespace WebApi.Controllers
         [SwaggerResponseExample(200, typeof(WrappedPersonResponseExample))]
         [SwaggerRequestExample(typeof(RequestWrapper<PersonRequest>), typeof(WrappedPersonRequestExample))]
         [Authorize(Roles = "Customer")]
-        public ResponseWrapper<PersonResponse> PostGenericPerson([FromBody]RequestWrapper<PersonRequest> personRequest)
+        public ResponseWrapper<PersonResponse> PostGenericPerson([FromBody] RequestWrapper<PersonRequest> personRequest)
         {
             var personResponse = new ResponseWrapper<PersonResponse>
             {
@@ -148,8 +148,8 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         [Route("api/values/listperson")]
         [SwaggerResponse(200, type: typeof(IEnumerable<PersonResponse>), description: "Successfully found the people")]
-        [SwaggerRequestExample(typeof(PeopleRequest), typeof(ListPeopleRequestExample))]
-        public IEnumerable<PersonResponse> PostPersonList([FromBody]List<PeopleRequest> peopleRequest)
+        [SwaggerRequestExample(typeof(IEnumerable<PeopleRequest>), typeof(ListPeopleRequestExample))]
+        public IEnumerable<PersonResponse> PostPersonList([FromBody] List<PeopleRequest> peopleRequest)
         {
             var people = new[] { new PersonResponse { Id = 1, FirstName = "Sally" } };
             return people;
@@ -167,7 +167,7 @@ namespace WebApi.Controllers
         [SwaggerRequestExample(typeof(Dictionary<string, object>), typeof(DictionaryRequestExample))]
         [Consumes("application/json")] // exclude text/csv
         [Produces("application/json")] // exclude text/csv
-        public Dictionary<string, object> PostDictionary([FromBody]Dictionary<string, object> dynamicDictionary)
+        public Dictionary<string, object> PostDictionary([FromBody] Dictionary<string, object> dynamicDictionary)
         {
             return new Dictionary<string, object> { { "Some", 1 } };
         }
@@ -182,7 +182,7 @@ namespace WebApi.Controllers
         [SwaggerResponse(200, type: typeof(DynamicData), description: "Successfully found the data")]
         [SwaggerResponseExample(200, typeof(DynamicDataResponseExample))]
         [SwaggerRequestExample(typeof(DynamicData), typeof(DynamicDataRequestExample))]
-        public DynamicData GetData([FromBody]DynamicData personRequest)
+        public DynamicData GetData([FromBody] DynamicData personRequest)
         {
             var personResponse = new DynamicData();
             personResponse.Payload.Add("Property", "val");
@@ -194,7 +194,7 @@ namespace WebApi.Controllers
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample2))]
         [SwaggerResponse(200, type: typeof(PersonResponse), description: "Successfully found the person")]
         [SwaggerResponseExample(200, typeof(PersonResponseExample2))]
-        public PersonResponse PostDifferentPerson([FromBody]PersonRequest personRequest)
+        public PersonResponse PostDifferentPerson([FromBody] PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
@@ -207,7 +207,7 @@ namespace WebApi.Controllers
 #if NETCOREAPP3_0
         [ProducesDefaultResponseType(typeof(ErrorResponse))]
 #endif
-        public PersonResponse PostDependencyInjectedExampleResponsePerson([FromBody]PersonRequest personRequest)
+        public PersonResponse PostDependencyInjectedExampleResponsePerson([FromBody] PersonRequest personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
@@ -217,14 +217,14 @@ namespace WebApi.Controllers
         [Route("api/values/patchperson")]
         [SwaggerRequestExample(typeof(JsonPatchDocument<PersonRequest>), typeof(JsonPatchPersonRequestExample))] // ASP.NET Core 1.1
         [SwaggerRequestExample(typeof(Operation), typeof(JsonPatchPersonRequestExample))] // ASP.NET Core 2.0
-        public PersonResponse JsonPatchPerson([FromBody]JsonPatchDocument<PersonRequest> personRequest)
+        public PersonResponse JsonPatchPerson([FromBody] JsonPatchDocument<PersonRequest> personRequest)
         {
             var personResponse = new PersonResponse { Id = 1, FirstName = "Dave" };
             return personResponse;
         }
 
         [HttpPost("api/values/title")]
-        public void NullableEnumTest([FromBody]Title? someEnum)
+        public void NullableEnumTest([FromBody] Title? someEnum)
         {
         }
     }

@@ -5,7 +5,7 @@ namespace Swashbuckle.AspNetCore.Filters
     /// <inheritdoc />
     /// <summary>
     /// Adds example requests to your controller endpoints.
-    /// See: https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples
+    /// See: https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SwaggerRequestExampleAttribute : Attribute
@@ -20,6 +20,9 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             RequestType = requestType;
             ExamplesProviderType = examplesProviderType;
+
+            // todo - can (and should) I introduce a check here to check that the examplesProviderType's ImplementedInterfaces contains IExamplesProvider of requestType
+            // Remember that there was an issue with ListPeopleRequestExample which is now commented out.
         }
 
         public Type ExamplesProviderType { get; }

@@ -26,7 +26,7 @@ namespace WebApi3._0_Swashbuckle5
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddCsvSerializerFormatters()
+                .AddCsvSerializerFormatters(new CsvFormatterOptions { CsvDelimiter = "," })
                 //.AddNewtonsoftJson(opt =>
                 //{
                 //    opt.SerializerSettings.Converters.Add(new StringEnumConverter());

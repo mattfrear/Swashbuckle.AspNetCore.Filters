@@ -5,7 +5,7 @@ namespace Swashbuckle.AspNetCore.Filters
     /// <inheritdoc />
     /// <summary>
     /// This is used for generating Swagger documentation. Should be used in conjuction with SwaggerResponse - will add examples to SwaggerResponse.
-    /// See https://github.com/mattfrear/Swashbuckle.AspNetCore.Examples
+    /// See https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class SwaggerResponseExampleAttribute : Attribute
