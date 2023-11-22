@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Buffers;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using WebApiContrib.Core.Formatter.Csv;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
@@ -19,7 +20,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes
             new MvcOptions());
 
         private static SystemTextJsonOutputFormatter systemTextJsonFormatter = new SystemTextJsonOutputFormatter(
-            new JsonSerializerOptions { WriteIndented = true });
+            new JsonSerializerOptions { WriteIndented = true, TypeInfoResolver = new DefaultJsonTypeInfoResolver() });
 
         private FormatterOptions(params IOutputFormatter[] formatters)
         {
