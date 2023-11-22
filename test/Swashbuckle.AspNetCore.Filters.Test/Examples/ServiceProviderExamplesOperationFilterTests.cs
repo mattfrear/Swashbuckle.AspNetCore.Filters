@@ -35,6 +35,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(IExamplesProvider<PersonResponse>)).Returns(new PersonResponseAutoExample());
             serviceProvider.GetService(typeof(IExamplesProvider<IEnumerable<PersonResponse>>)).Returns(new PeopleResponseExample());
             serviceProvider.GetService(typeof(IOptions<MvcOptions>)).Returns(Options.Create(new MvcOptions()));
+            serviceProvider.GetService(typeof(IOptions<MvcNewtonsoftJsonOptions>)).Returns(Options.Create(new MvcNewtonsoftJsonOptions()));
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonAndCsvFormatters, serviceProvider, new FakeLoggerFactory());
 
