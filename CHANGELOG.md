@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [8.0.0] - 2024-01-09
+### Changed
+- Issue #237 - breaking change. Default to camelCase instead of PascalCase for examples in minimal APIs.
+
 ## [7.0.12] - 2023-10-24
 ### Added
 - PR #235 added support for text/csv in request examples and IMultipleExamplesProvider (thanks @Bl4d3s)

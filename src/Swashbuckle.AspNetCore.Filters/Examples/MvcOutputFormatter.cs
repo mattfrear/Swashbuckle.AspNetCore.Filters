@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -105,7 +104,12 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             if (contentType.MediaType.Value == "application/json")
             {
+#if NET5_0_OR_GREATER
+                return System.Text.Json.JsonSerializer.Serialize(value,
+                    new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
+#else
                 return System.Text.Json.JsonSerializer.Serialize(value);
+#endif
             }
 
             throw new FormatterNotFoundException(contentType);

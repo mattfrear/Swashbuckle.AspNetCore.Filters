@@ -2,16 +2,16 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
-		<PackageVersion>7.0.12</PackageVersion>
+		<PackageVersion>8.0.0</PackageVersion>
 		<Authors>Matt Frear</Authors>
 		<Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageProjectUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Copyright>2023</Copyright>
+		<Copyright>2024</Copyright>
 		<PackageTags>Swagger Swashbuckle</PackageTags>
 		<PackageReleaseNotes>
-			Render CSV examples for requests, and for IMultipleExamplesProvider (thanks @Bl4d3s)
+			Breaking change. Default to camelCase instead of PascalCase for examples in minimal APIs.
 		</PackageReleaseNotes>
 		<RepositoryType>git</RepositoryType>
 		<Repository>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</Repository>
@@ -19,7 +19,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<VersionPrefix>7.0.12</VersionPrefix>
+		<VersionPrefix>8.0.0</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>

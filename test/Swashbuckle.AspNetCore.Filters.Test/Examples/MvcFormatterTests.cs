@@ -36,7 +36,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var contentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
 
             sut.Serialize(value, contentType)
-                .ShouldBe("{\"Title\":3,\"Age\":24,\"FirstName\":\"Dave\",\"Income\":null,\"Children\":null,\"Job\":null}");
+                .ShouldBe("{\"title\":3,\"age\":24,\"firstName\":\"Dave\",\"income\":null,\"children\":null,\"job\":null}");
         }
 
     }

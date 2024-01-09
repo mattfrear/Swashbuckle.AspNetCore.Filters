@@ -543,23 +543,8 @@ The above is no longer supported - it will output Examples using whichever JSON 
 in `services.AddControllers()`.
 
 ### Minimal APIs
-The JsonSerializer comes from MvcOptions, but that isn't configured when using Minimial APIs.
-
-Therefore, in order to serialize as camel case, or to set another formatting options, manually configure MvcOptions in your Program.cs:
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-...
-builder.Services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
-{
-	options.OutputFormatters.Clear();
-	options.OutputFormatters.Add(
-		new Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter(
-			new JsonSerializerOptions
-			{
-				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-			}));
-});
-```
+If you're using .NET 5 and above, we now default to use `System.Text.Json.JsonSerializerDefaults.Web` when rendering examples,
+which means you'll get camelCase. PascalCase is not supported.
 
 ## Render Enums as strings
 ~~By default `enum`s will output their integer values. If you want to output strings you can pass in a `StringEnumConverter` like so:
