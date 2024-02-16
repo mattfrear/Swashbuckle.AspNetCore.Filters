@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0</TargetFrameworks>
-		<PackageVersion>8.0.0</PackageVersion>
+		<PackageVersion>8.0.1</PackageVersion>
 		<Authors>Matt Frear</Authors>
 		<Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -11,15 +11,16 @@
 		<Copyright>2024</Copyright>
 		<PackageTags>Swagger Swashbuckle</PackageTags>
 		<PackageReleaseNotes>
-			Breaking change. Default to camelCase instead of PascalCase for examples in minimal APIs.
+			Add Readme to NuGet.
 		</PackageReleaseNotes>
 		<RepositoryType>git</RepositoryType>
-		<Repository>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</Repository>
+		<RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<VersionPrefix>8.0.0</VersionPrefix>
+		<VersionPrefix>8.0.1</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
@@ -27,6 +28,10 @@
 		<OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.*" PrivateAssets="All" />
 	</ItemGroup>
