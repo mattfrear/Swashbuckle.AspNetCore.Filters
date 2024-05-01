@@ -59,12 +59,11 @@ namespace Swashbuckle.AspNetCore.Filters
                 }
             }
 
-            var policies = policySelector(actionAttributes) ?? Enumerable.Empty<string>();
-
-            operation.Security.Add(new OpenApiSecurityRequirement
+            if (!operation.Security.Any(requirement => requirement.Any(scheme => scheme.Key.Reference.Id == securitySchemaName)))
             {
-                { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = securitySchemaName } }, policies.ToList() }
-            });
+                var policies = policySelector(actionAttributes) ?? Enumerable.Empty<string>();
+                operation.Security.Add(new OpenApiSecurityRequirement {{ new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = securitySchemaName } }, policies.ToList() }});
+            }
         }
     }
 }
