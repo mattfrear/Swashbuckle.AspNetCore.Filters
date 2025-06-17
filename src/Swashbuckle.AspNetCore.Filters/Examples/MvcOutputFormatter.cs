@@ -102,7 +102,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         private string SerializeWithoutMvc<T>(T value, MediaTypeHeaderValue contentType)
         {
-            if (contentType.MediaType.Value == "application/json")
+            if (contentType.MediaType.Value.StartsWith("application/json"))
             {
 #if NET5_0_OR_GREATER
                 return System.Text.Json.JsonSerializer.Serialize(value,

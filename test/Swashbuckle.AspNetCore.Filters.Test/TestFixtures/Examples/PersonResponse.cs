@@ -34,6 +34,6 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
         public decimal? Income { get; set; }
 
         [Description("Not a data member. This must be hidden in data contract")]
-        public string InternalNeedsOnly => "For internal needs only. Should not be exposed in Swagger UI anywhere";
+        public string InternalNeedsOnly => "For internal needs only. Should not be exposed in XML examples";
     }
 }

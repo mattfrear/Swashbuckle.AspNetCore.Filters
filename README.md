@@ -183,11 +183,11 @@ This will register your examples with the ServiceProvider.
 ### Serialize Swagger in the 2.0 format
 There are two ways to tell Swashbuckle.AspNetCore to output the swagger.json in the legacy Swagger 2.0 format:
 ```csharp
-app.UseSwagger(c => c.SerializeAsV2 = true);
+app.UseSwagger(c => c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0);
 
 // OR
 
-services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = true);
+builder.Services.Configure<SwaggerOptions>(c => c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0);
 ```
 If you want to SerializeAsV2 and you're using my Request example filter then you must call `services.Configure<SwaggerOptions>(c => c.SerializeAsV2 = true);`.
 
@@ -420,6 +420,9 @@ You can use Swashbuckle.AspNetCore's built-in XML comments to add examples for p
 ### How to use - Multiple examples
 
 Sometimes more than a single example are desirable for an API. In this case you can use `IMultipleExamplesProvider<T>` rather than `IExamplesProvider<T>` to return multiple examples. The example provider class is still located in the same way (automatic or manual annotation), but the `GetExamples()` call returns an enumerated list of examples along with their name and optional summary. To reduce boilerplate, it is recommended to use `yield return` for each example value. Every returned `SwaggerExample<T>` should have different value of `Name` property.
+
+> [!NOTE]  
+> Multiple examples are not supported in with OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0.
 
 ```csharp
 public class DeliveryOptionsSearchModelExample : IMultipleExamplesProvider<DeliveryOptionsSearchModel>

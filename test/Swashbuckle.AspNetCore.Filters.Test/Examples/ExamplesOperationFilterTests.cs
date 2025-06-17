@@ -22,7 +22,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
     {
         private readonly ExamplesOperationFilter sut;
         private readonly SchemaGeneratorOptions schemaGeneratorOptions;
-        private readonly SwaggerOptions swaggerOptions = new SwaggerOptions { SerializeAsV2 = true };
+        private readonly SwaggerOptions swaggerOptions = new SwaggerOptions { OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0 };
 
         public ExamplesOperationFilterTests()
         {
@@ -40,7 +40,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonAndCsvFormatters, serviceProvider, new FakeLoggerFactory());
             var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var responseExample = new ResponseExample(mvcOutputFormatter, Options.Create(swaggerOptions));
 
             sut = new ExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
@@ -94,6 +94,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void SetsMultipleResponseExamples_FromMethodAttributes()
         {
             // Arrange
+            swaggerOptions.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0;
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
@@ -107,6 +108,27 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var actualExamples = response.Content["application/json"].Examples;
             var expectedExamples = new PersonResponseMultipleExamples().GetExamples();
             actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
+        }
+
+        [Fact]
+        public void SetsFirstMultipleResponseExamples_FromMethodAttributes_WhenOpenApi2_0()
+        {
+            // Arrange
+            swaggerOptions.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
+            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
+            operation.Responses.Add("200", response);
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseMultipleExamplesAttribute));
+            SetSwaggerResponses(operation, filterContext);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(((OpenApiString)response.Content["application/json"].Example).Value);
+            var expectedExample = new PersonResponseMultipleExamples().GetExamples().First().Value;
+            actualExample.Id.ShouldBe(expectedExample.Id);
+            actualExample.FirstName.ShouldBe(expectedExample.FirstName);
         }
 
         [Fact]

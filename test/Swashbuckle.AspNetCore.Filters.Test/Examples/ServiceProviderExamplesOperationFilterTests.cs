@@ -25,7 +25,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         private readonly IOperationFilter sut;
         private readonly IServiceProvider serviceProvider;
         private readonly SchemaGeneratorOptions schemaGeneratorOptions;
-        private readonly SwaggerOptions swaggerOptions = new SwaggerOptions { SerializeAsV2 = true };
+        private readonly SwaggerOptions swaggerOptions = new SwaggerOptions { OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0 };
 
         public ServiceProviderExamplesOperationFilterTests()
         {
@@ -40,7 +40,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithXmlAndNewtonsoftJsonAndCsvFormatters, serviceProvider, new FakeLoggerFactory());
 
             var requestExample = new RequestExample(mvcOutputFormatter, Options.Create(swaggerOptions));
-            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var responseExample = new ResponseExample(mvcOutputFormatter, Options.Create(swaggerOptions));
 
             sut = new ServiceProviderExamplesOperationFilter(serviceProvider, requestExample, responseExample);
         }
@@ -487,7 +487,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             // Arrange
             var mvcOutputFormatter = new MvcOutputFormatter(FormatterOptions.WithSystemTextJsonFormatter, serviceProvider, new FakeLoggerFactory());
-            var responseExample = new ResponseExample(mvcOutputFormatter);
+            var responseExample = new ResponseExample(mvcOutputFormatter, Options.Create(swaggerOptions));
             var sut = new ServiceProviderExamplesOperationFilter(serviceProvider, null, responseExample);
 
             var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };

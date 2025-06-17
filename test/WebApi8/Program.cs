@@ -19,7 +19,9 @@ builder.Services
     //})
     .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
     .AddXmlSerializerFormatters();
-    // .AddXmlDataContractSerializerFormatters(); builder.Services.AddEndpointsApiExplorer();
+// .AddXmlDataContractSerializerFormatters();
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -48,6 +50,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblyOf<PersonResponseExample>();
+
+// builder.Services.Configure<SwaggerOptions>(c => c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0);
 
 builder.Services.AddAuthorization(options =>
 {

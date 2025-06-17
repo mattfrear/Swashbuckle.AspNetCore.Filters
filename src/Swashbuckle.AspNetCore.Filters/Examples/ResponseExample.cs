@@ -1,5 +1,7 @@
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,14 @@ namespace Swashbuckle.AspNetCore.Filters
     internal class ResponseExample
     {
         private readonly MvcOutputFormatter mvcOutputFormatter;
+        private readonly SwaggerOptions swaggerOptions;
 
         public ResponseExample(
-            MvcOutputFormatter mvcOutputFormatter)
+            MvcOutputFormatter mvcOutputFormatter,
+            IOptions<SwaggerOptions> options)
         {
             this.mvcOutputFormatter = mvcOutputFormatter;
+            this.swaggerOptions = options?.Value;
         }
 
         public void SetResponseExampleForStatusCode(
@@ -43,7 +48,16 @@ namespace Swashbuckle.AspNetCore.Filters
             }
             else
             {
-                SetMultipleResponseExampleForStatusCode(response, multiple, examplesConverter);
+                if (swaggerOptions.OpenApiVersion == Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0)
+                {
+                    // Swashbuckle.AspNetCore 8 & 9 duplicates the examples when using 2.0, which it shouldn't do.
+                    // As a workaround I'm going to just set the first example
+                    SetSingleResponseExampleForStatusCode(response, multiple.First().Value, examplesConverter);
+                }
+                else
+                {
+                    SetMultipleResponseExampleForStatusCode(response, multiple, examplesConverter);
+                }
             }
         }
 

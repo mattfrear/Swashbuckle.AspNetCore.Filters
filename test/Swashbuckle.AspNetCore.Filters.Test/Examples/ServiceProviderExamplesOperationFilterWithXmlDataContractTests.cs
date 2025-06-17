@@ -31,7 +31,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut = new ServiceProviderExamplesOperationFilter(
                 serviceProvider,
                 new RequestExample(mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions())),
-                new ResponseExample(mvcOutputFormatter));
+                new ResponseExample(mvcOutputFormatter, Options.Create(new Swagger.SwaggerOptions())));
         }
 
         [Fact]

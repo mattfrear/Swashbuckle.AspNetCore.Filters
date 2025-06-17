@@ -52,7 +52,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 firstOpenApiExample = SetMultipleRequestExamplesForOperation(operation, multiple, examplesConverter);
             }
 
-            if (swaggerOptions.SerializeAsV2)
+            if (swaggerOptions.OpenApiVersion == Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0)
             {
                 // Swagger v2 doesn't have a request example on the path
                 // Fallback to setting it on the object in the "definitions"
