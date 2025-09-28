@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -59,11 +59,11 @@ namespace Swashbuckle.AspNetCore.Filters
                 }
             }
 
-            if (!operation.Security.Any(requirement => requirement.Any(scheme => scheme.Key.Reference.Id == securitySchemaName)))
-            {
-                var policies = policySelector(actionAttributes) ?? Enumerable.Empty<string>();
-                operation.Security.Add(new OpenApiSecurityRequirement {{ new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = securitySchemaName } }, policies.ToList() }});
-            }
+            //if (!operation.Security.Any(requirement => requirement.Any(scheme => scheme.Key.Reference.Id == securitySchemaName)))
+            //{
+            //    var policies = policySelector(actionAttributes) ?? Enumerable.Empty<string>();
+            //    // operation.Security.Add(new OpenApiSecurityRequirement {{ new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = securitySchemaName } }, policies.ToList() }});
+            //}
         }
     }
 }

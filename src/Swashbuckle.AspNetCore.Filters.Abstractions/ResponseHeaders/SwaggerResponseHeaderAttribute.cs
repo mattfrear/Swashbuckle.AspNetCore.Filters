@@ -1,11 +1,12 @@
 using System;
+using Microsoft.OpenApi;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class SwaggerResponseHeaderAttribute : Attribute
     {
-        public SwaggerResponseHeaderAttribute(int statusCode, string name, string type, string description, string format = "")
+        public SwaggerResponseHeaderAttribute(int statusCode, string name, JsonSchemaType type, string description, string format = "")
         {
             StatusCodes = new int[] { statusCode };
             Name = name;
@@ -14,7 +15,7 @@ namespace Swashbuckle.AspNetCore.Filters
             Format = format;
         }
 
-        public SwaggerResponseHeaderAttribute(int[] statusCode, string name, string type, string description, string format = "")
+        public SwaggerResponseHeaderAttribute(int[] statusCode, string name, JsonSchemaType type, string description, string format = "")
         {
             StatusCodes = statusCode;
             Name = name;
@@ -27,7 +28,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public string Name { get; }
 
-        public string Type { get; }
+        public JsonSchemaType Type { get; }
 
         public string Description { get; }
 

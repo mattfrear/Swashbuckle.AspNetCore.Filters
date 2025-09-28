@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Net;
@@ -15,7 +16,7 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [SwaggerResponse(404, type: typeof(ErrorResponse), description: "Could not find the person")]
     [SwaggerResponseExample(404, typeof(NotFoundResponseExample))]
-    [SwaggerResponseHeader(new int[] { 200, 401, 403, 404 }, "CustomHeader", "string", "A custom header")]
+    [SwaggerResponseHeader([200, 401, 403, 404], "CustomHeader", JsonSchemaType.String, "A custom header")]
     public class ValuesController : ControllerBase
     {
         [HttpPost]
@@ -83,8 +84,8 @@ namespace WebApi.Controllers
 
         [SwaggerRequestExample(typeof(PersonRequest), typeof(PersonRequestExample))]
 
-        [SwaggerResponseHeader(StatusCodes.Status200OK, "Location", "string", "Location of the newly created resource")]
-        [SwaggerResponseHeader(200, "ETag", "string", "An ETag of the resource")]
+        [SwaggerResponseHeader(StatusCodes.Status200OK, "Location", JsonSchemaType.String, "Location of the newly created resource")]
+        [SwaggerResponseHeader(200, "ETag", JsonSchemaType.String, "An ETag of the resource")]
 
         [Authorize("Customer")]
         public PersonResponse PostPerson([FromBody] PersonRequest personRequest)

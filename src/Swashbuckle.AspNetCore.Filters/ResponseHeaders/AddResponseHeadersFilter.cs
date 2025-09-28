@@ -1,4 +1,4 @@
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Filters.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
@@ -21,12 +21,12 @@ namespace Swashbuckle.AspNetCore.Filters
 
                     if (response != null)
                     {
-                        if (response.Headers == null)
-                        {
-                            response.Headers = new Dictionary<string, OpenApiHeader>();
-                        }
+                        //if (response.Headers == null)
+                        //{
+                        //    response.Headers = new Dictionary<string, IOpenApiHeader>();
+                        //}
 
-                        response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, Schema = new OpenApiSchema { Description = attr.Description, Type = attr.Type, Format = attr.Format } });
+                        //response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, Schema = new OpenApiSchema { Description = attr.Description, Type = attr.Type, Format = attr.Format } });
                     }
                 }
             }

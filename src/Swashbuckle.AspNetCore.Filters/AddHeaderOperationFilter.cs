@@ -1,4 +1,4 @@
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 
@@ -21,7 +21,7 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             if (operation.Parameters == null)
             {
-                operation.Parameters = new List<OpenApiParameter>();
+                operation.Parameters = new List<IOpenApiParameter>();
             }
 
             operation.Parameters.Add(new OpenApiParameter
@@ -32,7 +32,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 Required = required,
                 Schema = new OpenApiSchema
                 {
-                    Type = "string"
+                    Type = JsonSchemaType.String
                 }
             });
         }
