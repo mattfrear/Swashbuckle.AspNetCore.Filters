@@ -46,7 +46,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
         public JsonNode SerializeExampleJson(object value)
         {
-            return JsonValue.Create(mvcOutputFormatter.Serialize(value, ApplicationJson));
+            return JsonNode.Parse(mvcOutputFormatter.Serialize(value, ApplicationJson));
         }
 
         public IDictionary<string, IOpenApiExample> ToOpenApiExamplesDictionaryXml(
