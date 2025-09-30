@@ -21,12 +21,28 @@ namespace Swashbuckle.AspNetCore.Filters
 
                     if (response != null)
                     {
-                        //if (response.Headers == null)
-                        //{
-                        //    response.Headers = new Dictionary<string, IOpenApiHeader>();
-                        //}
+                        // In Microsoft.OpenApi 2.0 response.Headers is null and readonly, so we need to create a new OpenApiResponse and replace it in the Responses dictionary
 
-                        //response.Headers.Add(attr.Name, new OpenApiHeader { Description = attr.Description, Schema = new OpenApiSchema { Description = attr.Description, Type = attr.Type, Format = attr.Format } });
+                        var existingHeaders = response.Headers ?? new Dictionary<string, IOpenApiHeader>();
+                        var newHeaders = new Dictionary<string, IOpenApiHeader>(existingHeaders)
+                        {
+                            [attr.Name] = new OpenApiHeader
+                            {
+                                Description = attr.Description,
+                                Schema = new OpenApiSchema { Description = attr.Description, Type = attr.Type, Format = attr.Format }
+                            }
+                        };
+
+                        var newResponse = new OpenApiResponse
+                        {
+                            Description = response.Description,
+                            Content = response.Content,
+                            Headers = newHeaders,
+                            Links = response.Links,
+                            Extensions = response.Extensions
+                        };
+
+                        operation.Responses[statusCode.ToString(CultureInfo.InvariantCulture)] = newResponse;
                     }
                 }
             }
