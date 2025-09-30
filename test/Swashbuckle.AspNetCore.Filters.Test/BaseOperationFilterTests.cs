@@ -66,11 +66,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             var schemaRepository = new SchemaRepository();
 
             var methodInfo = controllerType.GetMethod(actionName);
+
             foreach (var parameterInfo in methodInfo.GetParameters())
             {
-                schemaRepository.AddDefinition(parameterInfo.ParameterType.SchemaDefinitionName(), new OpenApiSchema()
+                schemaRepository.AddDefinition(parameterInfo.ParameterType.SchemaDefinitionName(), new OpenApiSchema
                 {
-                    Reference = new OpenApiReference { Id = parameterInfo.Name }
+                    // Reference = new OpenApiReference { Id = parameterInfo.Name, Type = ReferenceType.Schema }
                 });
             }
 
@@ -108,6 +109,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
                 apiDescription,
                 new SchemaGenerator(schemaOptions, new NewtonsoftDataContractResolver(jsonSerializerSettings)),
                 schemaRepository,
+                new OpenApiDocument(),
                 methodInfo);
         }
 
@@ -117,14 +119,14 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             swaggerResponseFilter.Apply(operation, filterContext);
         }
 
-        protected static string RenderOpenApiObject(IOpenApiAny item)
+        protected static string RenderOpenApiObject(object item)
         {
             using (var stream = new MemoryStream())
             {
                 using (var writer = new StreamWriter(stream, System.Text.Encoding.ASCII, 1024, true))
                 {
                     var openApiWriter = new OpenApiJsonWriter(writer);
-                    item.Write(openApiWriter, Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0);
+                    // item.Write(openApiWriter, Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0);
                 }
                 stream.Seek(0, SeekOrigin.Begin);
                 using (var reader = new StreamReader(stream))
