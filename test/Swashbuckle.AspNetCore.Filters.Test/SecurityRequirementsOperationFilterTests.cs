@@ -1,12 +1,10 @@
 ﻿using Shouldly;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Collections.Generic;
 using Xunit;
 using System.Linq;
 using static Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.FakeControllers;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
 {

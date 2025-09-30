@@ -1,4 +1,3 @@
-using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Generic;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples

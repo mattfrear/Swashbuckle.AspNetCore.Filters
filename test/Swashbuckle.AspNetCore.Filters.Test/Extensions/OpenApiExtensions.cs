@@ -1,8 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
 {

@@ -1,6 +1,4 @@
-﻿using Swashbuckle.AspNetCore.Filters;
-
-namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
+﻿namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
 {
     internal class PersonResponseAutoExample : IExamplesProvider<PersonResponse>
     {

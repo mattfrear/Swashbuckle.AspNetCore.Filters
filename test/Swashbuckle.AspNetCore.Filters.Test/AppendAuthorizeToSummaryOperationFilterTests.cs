@@ -5,7 +5,7 @@ using Shouldly;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes;
 using static Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.FakeControllers;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Swashbuckle.AspNetCore.Filters.Test
 {
