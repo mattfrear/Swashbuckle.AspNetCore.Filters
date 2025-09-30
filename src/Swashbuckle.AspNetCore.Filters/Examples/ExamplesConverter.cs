@@ -21,7 +21,7 @@ namespace Swashbuckle.AspNetCore.Filters
             this.mvcOutputFormatter = mvcOutputFormatter;
         }
 
-        public string SerializeExampleCsv(object value)
+        public JsonNode SerializeExampleCsv(object value)
         {
             var type = value.GetType();
             if (type.IsPrimitive || type.IsValueType || type == typeof(string))
@@ -39,7 +39,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
         }
 
-        public string SerializeExampleXml(object value)
+        public JsonNode SerializeExampleXml(object value)
         {
             return mvcOutputFormatter.Serialize(value, ApplicationXml).FormatXml();
         }
@@ -49,43 +49,43 @@ namespace Swashbuckle.AspNetCore.Filters
             return JsonValue.Create(mvcOutputFormatter.Serialize(value, ApplicationJson));
         }
 
-    //    public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryXml(
-    //        IEnumerable<ISwaggerExample<object>> examples)
-    //    {
-    //        return ToOpenApiExamplesDictionary(examples, SerializeExampleXml);
-    //    }
+        public IDictionary<string, IOpenApiExample> ToOpenApiExamplesDictionaryXml(
+            IEnumerable<ISwaggerExample<object>> examples)
+        {
+            return ToOpenApiExamplesDictionary(examples, SerializeExampleXml);
+        }
 
-    //    public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryCsv(
-    //        IEnumerable<ISwaggerExample<object>> examples)
-    //    {
-    //        return ToOpenApiExamplesDictionary(examples, SerializeExampleCsv);
-    //    }
+        public IDictionary<string, IOpenApiExample> ToOpenApiExamplesDictionaryCsv(
+            IEnumerable<ISwaggerExample<object>> examples)
+        {
+            return ToOpenApiExamplesDictionary(examples, SerializeExampleCsv);
+        }
 
-    //    public IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionaryJson(
-    //        IEnumerable<ISwaggerExample<object>> examples)
-    //    {
-    //        return ToOpenApiExamplesDictionary(examples, SerializeExampleJson);
-    //    }
+        public IDictionary<string, IOpenApiExample> ToOpenApiExamplesDictionaryJson(
+            IEnumerable<ISwaggerExample<object>> examples)
+        {
+            return ToOpenApiExamplesDictionary(examples, SerializeExampleJson);
+        }
 
-    //    private static IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(
-    //        IEnumerable<ISwaggerExample<object>> examples,
-    //        Func<object, IOpenApiAny> exampleConverter)
-    //    {
-    //        var groupedExamples = examples.GroupBy(
-    //            ex => ex.Name,
-    //            ex => new OpenApiExample
-    //            {
-    //                Summary = ex.Summary,
-    //                Description = ex.Description,
-    //                Value = exampleConverter(ex.Value)
-    //            });
+        private static IDictionary<string, IOpenApiExample> ToOpenApiExamplesDictionary(
+            IEnumerable<ISwaggerExample<object>> examples,
+            Func<object, JsonNode> exampleConverter)
+        {
+            var groupedExamples = examples.GroupBy(
+                ex => ex.Name,
+                ex => (IOpenApiExample)new OpenApiExample
+                {
+                    Summary = ex.Summary,
+                    Description = ex.Description,
+                    Value = exampleConverter(ex.Value)
+                });
 
-    //        // If names are duplicated, only the first one is taken
-    //        var examplesDict = groupedExamples.ToDictionary(
-    //            grouping => grouping.Key,
-    //            grouping => grouping.First());
+            // If names are duplicated, only the first one is taken
+            var examplesDict = groupedExamples.ToDictionary(
+                grouping => grouping.Key,
+                grouping => grouping.First());
 
-    //        return examplesDict;
-    //    }
+            return examplesDict;
+        }
     }
 }

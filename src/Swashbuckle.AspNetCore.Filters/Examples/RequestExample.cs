@@ -49,8 +49,7 @@ namespace Swashbuckle.AspNetCore.Filters
             }
             else
             {
-                // firstOpenApiExample = SetMultipleRequestExamplesForOperation(operation, multiple, examplesConverter);
-                firstOpenApiExample = SetSingleRequestExampleForOperation(operation, example, examplesConverter);
+                firstOpenApiExample = SetMultipleRequestExamplesForOperation(operation, multiple, examplesConverter);
             }
 
             if (swaggerOptions.OpenApiVersion == Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0)
@@ -80,8 +79,8 @@ namespace Swashbuckle.AspNetCore.Filters
             ExamplesConverter examplesConverter)
         {
             var jsonExample = new Lazy<JsonNode>(() => examplesConverter.SerializeExampleJson(example));
-            var xmlExample = new Lazy<string>(() => examplesConverter.SerializeExampleXml(example));
-            var csvExample = new Lazy<string>(() => examplesConverter.SerializeExampleCsv(example));
+            var xmlExample = new Lazy<JsonNode>(() => examplesConverter.SerializeExampleXml(example));
+            var csvExample = new Lazy<JsonNode>(() => examplesConverter.SerializeExampleCsv(example));
 
             foreach (var content in operation.RequestBody.Content)
             {
@@ -106,40 +105,40 @@ namespace Swashbuckle.AspNetCore.Filters
         /// Sets multiple examples on the operation for all of the operation's content types
         /// </summary>
         /// <returns>The first example so that it can be reused on the definition for V2</returns>
-        //private IOpenApiAny SetMultipleRequestExamplesForOperation(
-        //    OpenApiOperation operation,
-        //    IEnumerable<ISwaggerExample<object>> examples,
-        //    ExamplesConverter examplesConverter)
-        //{
-        //    var jsonExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-        //        examplesConverter.ToOpenApiExamplesDictionaryJson(examples)
-        //    );
+        private JsonNode SetMultipleRequestExamplesForOperation(
+            OpenApiOperation operation,
+            IEnumerable<ISwaggerExample<object>> examples,
+            ExamplesConverter examplesConverter)
+        {
+            var jsonExamples = new Lazy<IDictionary<string, IOpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryJson(examples)
+            );
 
-        //    var xmlExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-        //        examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
-        //    );
+            var xmlExamples = new Lazy<IDictionary<string, IOpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
+            );
 
-        //    var csvExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-        //        examplesConverter.ToOpenApiExamplesDictionaryCsv(examples)
-        //    );
+            var csvExamples = new Lazy<IDictionary<string, IOpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryCsv(examples)
+            );
 
-        //    foreach (var content in operation.RequestBody.Content)
-        //    {
-        //        if (content.Key.Contains("xml"))
-        //        {
-        //            content.Value.Examples = xmlExamples.Value;
-        //        }
-        //        else if (content.Key.Contains("csv"))
-        //        {
-        //            content.Value.Examples = csvExamples.Value;
-        //        }
-        //        else
-        //        {
-        //            content.Value.Examples = jsonExamples.Value;
-        //        }
-        //    }
+            foreach (var content in operation.RequestBody.Content)
+            {
+                if (content.Key.Contains("xml"))
+                {
+                    content.Value.Examples = xmlExamples.Value;
+                }
+                else if (content.Key.Contains("csv"))
+                {
+                    content.Value.Examples = csvExamples.Value;
+                }
+                else
+                {
+                    content.Value.Examples = jsonExamples.Value;
+                }
+            }
 
-        //    return operation.RequestBody.Content.FirstOrDefault().Value?.Examples?.FirstOrDefault().Value?.Value;
-        //}
+            return operation.RequestBody.Content.FirstOrDefault().Value?.Examples?.FirstOrDefault().Value?.Value;
+        }
     }
 }

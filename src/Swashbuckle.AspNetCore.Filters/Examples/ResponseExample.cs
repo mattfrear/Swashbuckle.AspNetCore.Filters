@@ -56,7 +56,7 @@ namespace Swashbuckle.AspNetCore.Filters
                 }
                 else
                 {
-                    // SetMultipleResponseExampleForStatusCode(response, multiple, examplesConverter);
+                    SetMultipleResponseExampleForStatusCode(response, multiple, examplesConverter);
                 }
             }
         }
@@ -67,8 +67,8 @@ namespace Swashbuckle.AspNetCore.Filters
             ExamplesConverter examplesConverter)
         {
             var jsonExample = new Lazy<JsonNode>(() => examplesConverter.SerializeExampleJson(example));
-            var xmlExample = new Lazy<string>(() => examplesConverter.SerializeExampleXml(example));
-            var csvExample = new Lazy<string>(() => examplesConverter.SerializeExampleCsv(example));
+            var xmlExample = new Lazy<JsonNode>(() => examplesConverter.SerializeExampleXml(example));
+            var csvExample = new Lazy<JsonNode>(() => examplesConverter.SerializeExampleCsv(example));
 
             foreach (var content in response.Value.Content)
             {
@@ -87,38 +87,38 @@ namespace Swashbuckle.AspNetCore.Filters
             }
         }
 
-    //    private void SetMultipleResponseExampleForStatusCode(
-    //        KeyValuePair<string, OpenApiResponse> response,
-    //        IEnumerable<ISwaggerExample<object>> examples,
-    //        ExamplesConverter examplesConverter)
-    //    {
-    //        var jsonExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-    //            examplesConverter.ToOpenApiExamplesDictionaryJson(examples)
-    //        );
+        private void SetMultipleResponseExampleForStatusCode(
+            KeyValuePair<string, IOpenApiResponse> response,
+            IEnumerable<ISwaggerExample<object>> examples,
+            ExamplesConverter examplesConverter)
+        {
+            var jsonExamples = new Lazy<IDictionary<string, IOpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryJson(examples)
+            );
 
-    //        var xmlExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-    //            examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
-    //        );
+            var xmlExamples = new Lazy<IDictionary<string, IOpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryXml(examples)
+            );
 
-    //        var csvExamples = new Lazy<IDictionary<string, OpenApiExample>>(() =>
-    //            examplesConverter.ToOpenApiExamplesDictionaryCsv(examples)
-    //        );
+            var csvExamples = new Lazy<IDictionary<string, IOpenApiExample>>(() =>
+                examplesConverter.ToOpenApiExamplesDictionaryCsv(examples)
+            );
 
-    //        foreach (var content in response.Value.Content)
-    //        {
-    //            if (content.Key.Contains("xml"))
-    //            {
-    //                content.Value.Examples = xmlExamples.Value;
-    //            }
-    //            else if (content.Key.Contains("csv"))
-    //            {
-    //                content.Value.Examples = csvExamples.Value;
-    //            }
-    //            else
-    //            {
-    //                content.Value.Examples = jsonExamples.Value;
-    //            }
-    //        }
-    //    }
+            foreach (var content in response.Value.Content)
+            {
+                if (content.Key.Contains("xml"))
+                {
+                    content.Value.Examples = xmlExamples.Value;
+                }
+                else if (content.Key.Contains("csv"))
+                {
+                    content.Value.Examples = csvExamples.Value;
+                }
+                else
+                {
+                    content.Value.Examples = jsonExamples.Value;
+                }
+            }
+        }
     }
 }
