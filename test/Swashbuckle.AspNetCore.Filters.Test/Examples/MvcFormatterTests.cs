@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
 using System;
 using System.Xml.Linq;
 using Xunit;
+using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 {
@@ -38,7 +39,37 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Serialize(value, contentType)
                 .ShouldBe("{\"title\":3,\"age\":24,\"firstName\":\"Dave\",\"income\":null,\"children\":null,\"job\":null}");
         }
+    }
 
+    public class GivenAMvcFormatterWithNoOutputFormatters_WhenSerializingAnObjectAndJsonOptionsAreConfigured
+    {
+        private readonly MvcOutputFormatter sut;
+        private readonly IServiceProvider serviceProvider;
+        private readonly IOptions<JsonOptions> jsonOptions;
+
+        public GivenAMvcFormatterWithNoOutputFormatters_WhenSerializingAnObjectAndJsonOptionsAreConfigured()
+        {
+            jsonOptions = Substitute.For<IOptions<JsonOptions>>();
+            jsonOptions.Value.Returns(new JsonOptions
+            {
+                SerializerOptions = { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseUpper }
+            });
+
+            serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.GetService(typeof(IOptions<JsonOptions>)).Returns(jsonOptions);
+
+            sut = new MvcOutputFormatter(FormatterOptions.WithoutFormatters, serviceProvider, null);
+        }
+
+        [Fact]
+        public void ThenWillFallbackToSystemTextJsonWithJsonOptions()
+        {
+            var value = new PersonRequestExample().GetExamples();
+            var contentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+
+            sut.Serialize(value, contentType)
+                .ShouldBe("{\"TITLE\":3,\"AGE\":24,\"FIRST_NAME\":\"Dave\",\"INCOME\":null,\"CHILDREN\":null,\"JOB\":null}");
+        }
     }
 
     public class GivenAMvcFormatterWithOutputFormattersButNoLoggerFactory_WhenSerializingAnObject
