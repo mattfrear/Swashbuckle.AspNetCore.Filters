@@ -104,10 +104,8 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             if (contentType.MediaType.Value.StartsWith("application/json"))
             {
-#if NET5_0_OR_GREATER && !NET6_0_OR_GREATER
-                return System.Text.Json.JsonSerializer.Serialize(value,
-                    new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
-#elif NET6_0_OR_GREATER
+                // todo, tidy this up more ?
+
                 if (serviceProvider?.GetService(typeof(IOptions<Microsoft.AspNetCore.Http.Json.JsonOptions>)) is { } jsonOptions)
                 {
                     return System.Text.Json.JsonSerializer.Serialize(value,
@@ -116,9 +114,6 @@ namespace Swashbuckle.AspNetCore.Filters
 
                 return System.Text.Json.JsonSerializer.Serialize(value,
                     new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
-#else
-                return System.Text.Json.JsonSerializer.Serialize(value);
-#endif
             }
 
             throw new FormatterNotFoundException(contentType);
