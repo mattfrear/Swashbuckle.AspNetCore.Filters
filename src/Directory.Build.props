@@ -20,7 +20,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<VersionPrefix>10.0.0</VersionPrefix>
+		<VersionPrefix>10.0.0-alpha-1</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>

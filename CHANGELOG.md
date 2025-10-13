@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- Upgrade from Swashbuckle.AspNetCore 9.0.0 to 10.0.0
+- Upgrade from Microsoft.OpenApi 1.2.3 to 1.3.0
+
+### Removed
+- Support for .NET Standard 2.0 because Swashbuckle.AspNetCore 10.0.0 only supports .NET 8.0 and above
+
+## [9.0.1] - 2025-10-14
+### Fixed
+- Fix issue #261 (thanks @ntark)
+
 ## [9.0.0] - 2025-06-17
 ### Changed
 - Issue #257 upgrade from Swashbuckle.AspNetCore.SwaggerGen 5.0.0 to 8.0.0 because Swashbuckle.AspNetCore 9.0.0 didn't work. No longer support .netcore3.1 or .net5.0, only support .netstandard20 and .net80.

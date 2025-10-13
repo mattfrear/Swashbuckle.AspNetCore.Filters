@@ -104,7 +104,16 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             if (contentType.MediaType.Value.StartsWith("application/json"))
             {
-#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER && !NET6_0_OR_GREATER
+                return System.Text.Json.JsonSerializer.Serialize(value,
+                    new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
+#elif NET6_0_OR_GREATER
+                if (serviceProvider?.GetService(typeof(IOptions<Microsoft.AspNetCore.Http.Json.JsonOptions>)) is { } jsonOptions)
+                {
+                    return System.Text.Json.JsonSerializer.Serialize(value,
+                        ((IOptions<Microsoft.AspNetCore.Http.Json.JsonOptions>)jsonOptions).Value.SerializerOptions);
+                }
+
                 return System.Text.Json.JsonSerializer.Serialize(value,
                     new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
 #else
