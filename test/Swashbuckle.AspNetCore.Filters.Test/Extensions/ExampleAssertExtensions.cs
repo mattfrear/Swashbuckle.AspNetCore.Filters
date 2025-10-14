@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.OpenApi;
 using Newtonsoft.Json;
 using Shouldly;
@@ -27,16 +28,15 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
             actualExample.Income.ShouldBe(expectedExample.Income);
         }
 
-        public static void ShouldMatch<T>(this OpenApiExample actualExample, ISwaggerExample<T> expectedExample, Action<T,T> matcher)
+        public static void ShouldMatch<T>(this IOpenApiExample actualExample, ISwaggerExample<T> expectedExample, Action<T,T> matcher)
         {
             actualExample.Summary.ShouldBe(expectedExample.Summary);
-            var actualRequestValueSerialized = actualExample.Value.ShouldBeAssignableTo<OpenApiString>();
-            var actualRequestValue = JsonConvert.DeserializeObject<T>(actualRequestValueSerialized.Value);
+            var actualRequestValue = actualExample.Value.Deserialize<T>();
             matcher(actualRequestValue, expectedExample.Value);
         }
 
         public static void ShouldAllMatch<T>(
-            this IDictionary<string, OpenApiExample> actualExamples,
+            this IDictionary<string, IOpenApiExample> actualExamples,
             IEnumerable<ISwaggerExample<T>> expectedExamples,
             Action<T,T> matcher)
         {

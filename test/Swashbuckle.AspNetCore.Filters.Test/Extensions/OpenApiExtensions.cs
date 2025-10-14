@@ -9,13 +9,13 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
     {
         public static T DeserializeDataContractXmlExampleAs<T>(this OpenApiRequestBody response)
         {
-            var value = ((OpenApiString)response.Content["application/xml"].Example).Value;
+            var value = response.Content["application/xml"].Example.ToString();
             return DeserializeDataContractXmlAs<T>(value);
         }
 
         public static T DeserializeDataContractXmlExampleAs<T>(this OpenApiResponse response)
         {
-            var value = ((OpenApiString)response.Content["application/xml"].Example).Value;
+            var value = response.Content["application/xml"].Example.ToString();
             return DeserializeDataContractXmlAs<T>(value);
         }
 

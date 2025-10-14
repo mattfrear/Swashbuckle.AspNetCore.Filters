@@ -150,12 +150,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
+            var actualExample = requestBody.Content["application/json"].Example.Deserialize<PersonRequest>();
             var expectedExample = new PersonRequestExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
+            var actualSchemaExample = filterContext.SchemaRepository.Schemas["PersonRequest"].Example.Deserialize<PersonRequest>();
             actualSchemaExample.ShouldMatch(expectedExample);
         }
 
@@ -184,7 +184,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExamples["Angela"].Description.ShouldBeNull();
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(((OpenApiString)filterContext.SchemaRepository.Schemas["PersonRequest"].Example).Value);
+            var actualSchemaExample = filterContext.SchemaRepository.Schemas["PersonRequest"].Example.Deserialize<PersonRequest>();
             actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
         }
 
@@ -229,7 +229,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(((OpenApiString)requestBody.Content["application/json"].Example).Value);
+            var actualExample = requestBody.Content["application/json"].Example.Deserialize<IDictionary<string, object>>();
             actualExample["PropertyInt"].ShouldBe(1);
             actualExample["PropertyString"].ShouldBe("Some string");
 

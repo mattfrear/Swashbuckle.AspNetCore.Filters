@@ -43,7 +43,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             {
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
-                    { "application/xml", new OpenApiMediaType() { Schema = new OpenApiSchema { Reference = new OpenApiReference { Id = "definitions/object" } } } }
+                    { "application/xml", new OpenApiMediaType() { Schema = new OpenApiSchema() } }
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
