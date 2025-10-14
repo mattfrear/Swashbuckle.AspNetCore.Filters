@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using Microsoft.OpenApi;
+﻿using Microsoft.OpenApi;
 using Newtonsoft.Json;
 using Shouldly;
 using Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
 {
@@ -31,7 +30,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
         public static void ShouldMatch<T>(this IOpenApiExample actualExample, ISwaggerExample<T> expectedExample, Action<T,T> matcher)
         {
             actualExample.Summary.ShouldBe(expectedExample.Summary);
-            var actualRequestValue = actualExample.Value.Deserialize<T>();
+            var actualRequestValue = JsonConvert.DeserializeObject<T>(actualExample.Value.ToString());
             matcher(actualRequestValue, expectedExample.Value);
         }
 

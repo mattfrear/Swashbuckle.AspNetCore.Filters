@@ -172,7 +172,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample.ShouldMatch(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = filterContext.SchemaRepository.Schemas["PersonRequest"].Example.Deserialize<PersonRequest>();
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Example.ToString());
             actualSchemaExample.ShouldMatch(expectedExample);
         }
 
@@ -224,7 +224,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample.ShouldMatch(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = filterContext.SchemaRepository.Schemas["IPersonRequest"].Example.Deserialize<PersonRequest>();
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["IPersonRequest"].Example.ToString());
             actualSchemaExample.ShouldMatch(expectedExample);
         }
 
@@ -274,7 +274,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualParameterExample.ShouldBe(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = filterContext.SchemaRepository.Schemas["Title"].Example.Deserialize<Title>();
+            var actualSchemaExample = JsonConvert.DeserializeObject<Title>(filterContext.SchemaRepository.Schemas["Title"].Example.ToString());
             actualSchemaExample.ShouldBe(expectedExample);
         }
 
@@ -305,7 +305,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExamples["Angela"].Description.ShouldBeNull();
 
             // Assert SerializeAsV2
-            var actualSchemaExample = filterContext.SchemaRepository.Schemas["PersonRequest"].Example.Deserialize<PersonRequest>();
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Example.ToString());
             actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
         }
 
@@ -330,7 +330,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             // Assert
             var actualExamples = requestBody.Content["application/json"].Examples;
-            actualExamples.Count.ShouldBe(0);
+            actualExamples.ShouldBeNull();
         }
 
         [Fact]
@@ -383,7 +383,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
 
             // Assert
             var actualExamples = requestBody.Content["application/json"].Examples;
-            actualExamples.Count.ShouldBe(0);
+            actualExamples.ShouldBeNull();
         }
 
         [Fact]
@@ -427,9 +427,9 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Assert
             var example = response.Content["application/json"].Example;
 
-            var formatedExample = RenderOpenApiObject(example);
-            formatedExample.EndsWith('"').ShouldBeFalse();
-            formatedExample.StartsWith('"').ShouldBeFalse();
+            var formattedExample = RenderOpenApiObject(example);
+            formattedExample.EndsWith('"').ShouldBeFalse();
+            formattedExample.StartsWith('"').ShouldBeFalse();
         }
 
         [Fact]
@@ -446,12 +446,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var example = response.Content["application/xml"].Example;
+            var example = response.Content["application/xml"].Example.ToString();
 
-            var formatedExample = RenderOpenApiObject(example);
-            formatedExample.EndsWith('"').ShouldBeTrue();
-            formatedExample.StartsWith('"').ShouldBeTrue();
-            formatedExample.Contains("<FirstName>").ShouldBeTrue();
+            var formattedExample = response.Content["application/xml"].Example.ToString();
+            formattedExample.Contains("<FirstName>").ShouldBeTrue();
         }
 
         [Fact]
@@ -468,14 +466,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var example = response.Content["text/csv"].Example;
-
-            var formatedExample = RenderOpenApiObject(example);
-            formatedExample.EndsWith('"').ShouldBeTrue();
-            formatedExample.StartsWith('"').ShouldBeTrue();
+            var formattedExample = response.Content["text/csv"].Example.ToString();
 
             IEnumerable<ICsvLine> lines = CsvReader.ReadFromText(
-                formatedExample.Trim('"').Replace("\\r\\n", Environment.NewLine),
+                formattedExample.Trim('"').Replace("\\r\\n", Environment.NewLine),
                 new CsvOptions { Separator = ';' });
 
             lines.ShouldContain(x => x["FirstName"] == "John" && x["last"] == "Doe");

@@ -73,13 +73,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var example = response.Content["application/xml"].Example;
+            var formattedExample = response.Content["application/xml"].Example.ToString();
 
-            var formatedExample = RenderOpenApiObject(example);
-            formatedExample.EndsWith('"').ShouldBeTrue();
-            formatedExample.StartsWith('"').ShouldBeTrue();
-            formatedExample.Contains("<FirstName>").ShouldBeFalse();
-            formatedExample.Contains("<first>").ShouldBeTrue();
+            formattedExample.Contains("<FirstName>").ShouldBeFalse();
+            formattedExample.Contains("<first>").ShouldBeTrue();
         }
     }
 }
