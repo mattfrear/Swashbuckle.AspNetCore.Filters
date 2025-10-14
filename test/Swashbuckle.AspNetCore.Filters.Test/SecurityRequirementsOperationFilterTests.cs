@@ -89,7 +89,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Security.Count.ShouldBe(0);
+            operation.Security?.Count.ShouldBe(0);
         }
 
         [Fact]
@@ -243,7 +243,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Security.Count.ShouldBe(0);
+            operation.Security?.Count.ShouldBe(0);
         }
 
         [Fact]
@@ -257,7 +257,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             sut.Apply(operation, filterContext);
 
             // Assert
-            operation.Security.Count.ShouldBe(0);
+            operation.Security?.Count.ShouldBe(0);
         }
 
         [Fact]

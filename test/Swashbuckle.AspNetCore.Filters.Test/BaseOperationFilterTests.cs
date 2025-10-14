@@ -69,10 +69,11 @@ namespace Swashbuckle.AspNetCore.Filters.Test
 
             foreach (var parameterInfo in methodInfo.GetParameters())
             {
-                schemaRepository.AddDefinition(parameterInfo.ParameterType.SchemaDefinitionName(), new OpenApiSchema
-                {
-                    // Reference = new OpenApiReference { Id = parameterInfo.Name, Type = ReferenceType.Schema }
-                });
+                var dictionary = new Dictionary<string, IOpenApiSchema> { [parameterInfo.Name] = new OpenApiSchema { Type = JsonSchemaType.String } };
+                var schema = new OpenApiSchema { Type = JsonSchemaType.Object, Properties =  dictionary };
+                var schemaId = parameterInfo.ParameterType.SchemaDefinitionName();
+
+                schemaRepository.AddDefinition(schemaId, schema);
             }
 
             return FilterContextFor(apiDescription, new CamelCasePropertyNamesContractResolver(), parameterDescriptions, supportedResponseTypes, schemaRepository);
