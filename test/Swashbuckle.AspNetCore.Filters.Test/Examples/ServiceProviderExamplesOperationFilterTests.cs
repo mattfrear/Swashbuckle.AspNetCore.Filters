@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
+using Newtonsoft.Json;
 using NSubstitute;
 using Shouldly;
 using Swashbuckle.AspNetCore.Filters.Test.Extensions;
@@ -58,7 +59,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = response.Content["application/json"].Example.Deserialize<PersonResponse>();
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(response.Content["application/json"].Example.ToString());
 
             var expectedExample = new PersonResponseAutoExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
@@ -80,7 +81,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = response.Content["application/json"].Example.Deserialize<PersonResponse>();
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(response.Content["application/json"].Example.ToString());
 
             var expectedExample = new PersonResponseAutoExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
@@ -101,7 +102,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = response.Content["application/json"].Example.Deserialize<PersonResponse>();
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(response.Content["application/json"].Example.ToString());
 
             var expectedExample = new PersonResponseAutoExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
@@ -141,7 +142,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = response.Content["application/json"].Example.Deserialize<List<string>>();
+            var actualExample = JsonConvert.DeserializeObject<List<string>>(response.Content["application/json"].Example.ToString());
             actualExample[0].ShouldBe("Hello");
             actualExample[1].ShouldBe("there");
         }
@@ -166,7 +167,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = requestBody.Content["application/json"].Example.Deserialize<PersonRequest>();
+            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(requestBody.Content["application/json"].Example.ToString());
             var expectedExample = new PersonRequestAutoExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
 
@@ -218,7 +219,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = requestBody.Content["application/json"].Example.Deserialize<PersonRequest>();
+            var actualExample = JsonConvert.DeserializeObject<PersonRequest>(requestBody.Content["application/json"].Example.ToString());
             var expectedExample = new PersonRequestAutoExample().GetExamples();
             actualExample.ShouldMatch(expectedExample);
 
@@ -405,7 +406,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = requestBody.Content["application/json"].Example.Deserialize<Dictionary<string, object>>();
+            var actualExample = JsonConvert.DeserializeObject<Dictionary<string, object>>(requestBody.Content["application/json"].Example.ToString());
             actualExample["PropertyInt"].ShouldBe(1);
             actualExample["PropertyString"].ShouldBe("Some string");
         }
@@ -519,7 +520,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var actualExample = response.Content["application/json"].Example.Deserialize<PersonResponse>();
+            var actualExample = JsonConvert.DeserializeObject<PersonResponse>(response.Content["application/json"].Example.ToString());
 
             var expectedExample = new PersonResponseExample().GetExamples();
             actualExample.Id.ShouldBe(expectedExample.Id);
