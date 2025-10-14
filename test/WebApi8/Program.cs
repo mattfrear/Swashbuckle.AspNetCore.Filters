@@ -17,9 +17,9 @@ builder.Services
     //    opt.SerializerSettings.ContractResolver = new ExcludeObsoletePropertiesResolver(opt.SerializerSettings.ContractResolver);
     //    // opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
     //})
-    .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-    // .AddXmlSerializerFormatters();
-// .AddXmlDataContractSerializerFormatters();
+    .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+    .AddXmlSerializerFormatters();
+ //.AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddEndpointsApiExplorer();
 

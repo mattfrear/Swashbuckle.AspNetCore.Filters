@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace Swashbuckle.AspNetCore.Filters
 {
@@ -104,16 +106,12 @@ namespace Swashbuckle.AspNetCore.Filters
         {
             if (contentType.MediaType.Value.StartsWith("application/json"))
             {
-                // todo, tidy this up more ?
+                var jsonOptions = serviceProvider?.GetService<IOptions<Microsoft.AspNetCore.Http.Json.JsonOptions>>();
+                var jsonSerializerOptions = jsonOptions != null
+                    ? jsonOptions.Value.SerializerOptions
+                    : new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-                if (serviceProvider?.GetService(typeof(IOptions<Microsoft.AspNetCore.Http.Json.JsonOptions>)) is { } jsonOptions)
-                {
-                    return System.Text.Json.JsonSerializer.Serialize(value,
-                        ((IOptions<Microsoft.AspNetCore.Http.Json.JsonOptions>)jsonOptions).Value.SerializerOptions);
-                }
-
-                return System.Text.Json.JsonSerializer.Serialize(value,
-                    new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
+                return JsonSerializer.Serialize(value, jsonSerializerOptions);
             }
 
             throw new FormatterNotFoundException(contentType);
