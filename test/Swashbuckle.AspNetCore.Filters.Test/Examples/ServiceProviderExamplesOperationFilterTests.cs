@@ -425,11 +425,10 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             sut.Apply(operation, filterContext);
 
             // Assert
-            var example = response.Content["application/json"].Example;
+            var example = response.Content["application/json"].Example.ToString();
 
-            var formattedExample = RenderOpenApiObject(example);
-            formattedExample.EndsWith('"').ShouldBeFalse();
-            formattedExample.StartsWith('"').ShouldBeFalse();
+            example.EndsWith('"').ShouldBeFalse();
+            example.StartsWith('"').ShouldBeFalse();
         }
 
         [Fact]

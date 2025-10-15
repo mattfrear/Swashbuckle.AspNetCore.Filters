@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [10.0.0] - date TBC
 ### Changed
-- Upgrade from Swashbuckle.AspNetCore 9.0.0 to 10.0.0
-- Upgrade from Microsoft.OpenApi 1.2.3 to 1.3.0
+- Upgrade from Swashbuckle.AspNetCore 9.0.0 to 10.0.0 which meant a of breaking changes in Microsoft.OpenApi.
+- SwaggerResponseHeaderAttribute `type` parameter is now `JsonSchemaType` instead of string
 
 ### Removed
 - Support for .NET Standard 2.0 because Swashbuckle.AspNetCore 10.0.0 only supports .NET 8.0 and above

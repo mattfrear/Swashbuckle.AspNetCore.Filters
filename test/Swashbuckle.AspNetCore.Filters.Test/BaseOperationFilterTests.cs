@@ -120,25 +120,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test
             swaggerResponseFilter.Apply(operation, filterContext);
         }
 
-        protected static string RenderOpenApiObject(object item)
-        {
-            using (var stream = new MemoryStream())
-            {
-                using (var writer = new StreamWriter(stream, System.Text.Encoding.ASCII, 1024, true))
-                {
-                    var openApiWriter = new OpenApiJsonWriter(writer);
-                    // item.Write(openApiWriter, Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0);
-                }
-                stream.Seek(0, SeekOrigin.Begin);
-                using (var reader = new StreamReader(stream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
-        }
-
         static readonly RequestDelegate EmptyRequestDelegate = (context) => Task.CompletedTask;
-
 
         protected FakeEndpointConventionBuilder CreateBuilder()
         {
