@@ -62,9 +62,12 @@ namespace Swashbuckle.AspNetCore.Filters
             if (operation?.Security?.Any(requirement => requirement.Any(scheme => scheme.Key.Reference.Id == securitySchemaName)) != true)
             {
                 var policies = policySelector(actionAttributes) ?? Enumerable.Empty<string>();
+
+                var schema = new OpenApiSecuritySchemeReference(securitySchemaName, context.Document);
+
                 var securityRequirement = new OpenApiSecurityRequirement
                 {
-                    [new OpenApiSecuritySchemeReference(securitySchemaName)] = policies.ToList()
+                    [schema] = policies.ToList()
                 };
 
                 if (operation.Security is null)
