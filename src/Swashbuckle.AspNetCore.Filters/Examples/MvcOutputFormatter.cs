@@ -66,7 +66,7 @@ namespace Swashbuckle.AspNetCore.Filters
 
             if (value == null)
             {
-                return "\"null\"";
+                return contentType.SubType == "json" ? "\"null\"" : string.Empty;
             }
 
             using (var stringWriter = new StringWriter())

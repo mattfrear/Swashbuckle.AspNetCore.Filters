@@ -32,6 +32,7 @@ This is a realy great feature for longer descriptions.
                 "And the last example",
                 // not specifying a description is fine too
                 new PersonRequest {FirstName = "Michael", Income = 321.7m});
+            yield return SwaggerExample.Create<PersonRequest>("Null guy", null);
         }
     }
 }

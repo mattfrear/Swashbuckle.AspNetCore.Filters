@@ -395,7 +395,8 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             {
                 Content = new Dictionary<string, OpenApiMediaType>
                 {
-                    { "application/json", new OpenApiMediaType() }
+                    { "application/json", new OpenApiMediaType() },
+                    { "application/xml", new OpenApiMediaType() }
                 }
             };
             var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
