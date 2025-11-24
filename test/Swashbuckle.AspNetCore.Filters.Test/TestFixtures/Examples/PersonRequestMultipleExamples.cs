@@ -43,6 +43,19 @@ namespace Swashbuckle.AspNetCore.Filters.Test.TestFixtures.Fakes.Examples
         }
     }
 
+    internal class PersonRequestMultipleExamplesNullExample : IMultipleExamplesProvider<PersonRequest>
+    {
+        public IEnumerable<SwaggerExample<PersonRequest>> GetExamples()
+        {
+            yield return SwaggerExample.Create("Dave",
+                "Posts Dave",
+                new PersonRequest { FirstName = "Dave", Title = Title.Mr });
+            yield return SwaggerExample.Create<PersonRequest>("Null",
+                "Posts null",
+                null);
+        }
+    }
+
     internal class PersonRequestMultipleExamplesEmpty : IMultipleExamplesProvider<PersonRequest>
     {
         public IEnumerable<SwaggerExample<PersonRequest>> GetExamples()

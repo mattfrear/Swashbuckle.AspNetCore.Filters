@@ -12,6 +12,12 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Extensions
     {
         public static void ShouldMatch(this PersonRequest actualExample, PersonRequest expectedExample)
         {
+            if (actualExample is null)
+            {
+                expectedExample.ShouldBeNull();
+                return;
+            }
+
             actualExample.Title.ShouldBe(expectedExample.Title);
             actualExample.FirstName.ShouldBe(expectedExample.FirstName);
             actualExample.Age.ShouldBe(expectedExample.Age);

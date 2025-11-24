@@ -387,6 +387,32 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         }
 
         [Fact]
+        public void WhenMultipleRequestsExamplesReturnsNullExample_ShouldNotThrow()
+        {
+            // Arrange
+            serviceProvider.GetService(typeof(IMultipleExamplesProvider<PersonRequest>)).Returns(new PersonRequestMultipleExamplesNullExample());
+            var requestBody = new OpenApiRequestBody
+            {
+                Content = new Dictionary<string, OpenApiMediaType>
+                {
+                    { "application/json", new OpenApiMediaType() },
+                    { "application/xml", new OpenApiMediaType() }
+                }
+            };
+            var operation = new OpenApiOperation { OperationId = "foobar", RequestBody = requestBody };
+            var parameterDescriptions = new List<ApiParameterDescription>() { new ApiParameterDescription { Type = typeof(PersonRequest), Source = BindingSource.Body } };
+            var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.PersonRequestUnannotated), parameterDescriptions);
+
+            // Act
+            sut.Apply(operation, filterContext);
+
+            // Assert
+            var actualExamples = requestBody.Content["application/json"].Examples;
+            var expectedExamples = new PersonRequestMultipleExamplesNullExample().GetExamples();
+            actualExamples.ShouldAllMatch(expectedExamples, ExampleAssertExtensions.ShouldMatch);
+        }
+
+        [Fact]
         public void WhenPassingDictionary_ShouldSetExampleOnRequestSchema()
         {
             // Arrange
