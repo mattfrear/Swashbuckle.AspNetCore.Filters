@@ -86,15 +86,15 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 if (content.Key.Contains("xml"))
                 {
-                    content.Value.Example = xmlExample.Value;
+                    ((OpenApiMediaType)content.Value).Example = xmlExample.Value;
                 }
                 else if (content.Key.Contains("csv"))
                 {
-                    content.Value.Example = csvExample.Value;
+                    ((OpenApiMediaType)content.Value).Example = csvExample.Value;
                 }
                 else
                 {
-                    content.Value.Example = jsonExample.Value;
+                    ((OpenApiMediaType)content.Value).Example = jsonExample.Value;
                 }
             }
 
@@ -126,15 +126,15 @@ namespace Swashbuckle.AspNetCore.Filters
             {
                 if (content.Key.Contains("xml"))
                 {
-                    content.Value.Examples = xmlExamples.Value;
+                    ((OpenApiMediaType)content.Value).Examples = xmlExamples.Value;
                 }
                 else if (content.Key.Contains("csv"))
                 {
-                    content.Value.Examples = csvExamples.Value;
+                    ((OpenApiMediaType)content.Value).Examples = csvExamples.Value;
                 }
                 else
                 {
-                    content.Value.Examples = jsonExamples.Value;
+                    ((OpenApiMediaType)content.Value).Examples = jsonExamples.Value;
                 }
             }
 

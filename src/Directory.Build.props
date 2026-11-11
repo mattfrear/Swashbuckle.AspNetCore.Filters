@@ -1,7 +1,7 @@
 <Project>
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
+		<TargetFrameworks>net11.0</TargetFrameworks>
 		<PackageVersion>10.0.1</PackageVersion>
 		<Authors>Matt Frear</Authors>
 		<Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
@@ -33,6 +33,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.*" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="11.0.100" PrivateAssets="All" />
 	</ItemGroup>
 </Project>

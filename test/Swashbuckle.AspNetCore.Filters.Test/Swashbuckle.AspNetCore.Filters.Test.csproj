@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,17 +9,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Csv" Version="2.0.170" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="Moq" Version="4.20.69" />
-    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="Csv" Version="3.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.1" />
+    <PackageReference Include="Moq" Version="4.21.0" />
+    <PackageReference Include="NSubstitute" Version="6.2.0" />
     <PackageReference Include="Shouldly" Version="4.3.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="10.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="11.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="11.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="11.0.0" />
     <PackageReference Include="WebApiContrib.Core.Formatter.Csv" Version="4.0.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
+    <PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

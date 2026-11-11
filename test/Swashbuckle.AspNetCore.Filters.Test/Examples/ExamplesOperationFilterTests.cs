@@ -50,7 +50,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void SetsResponseExamples_FromMethodAttributes()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
 
@@ -72,7 +72,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void SetsResponseExamples_FromControllerAttributes()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
 
@@ -96,7 +96,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             // Arrange
             swaggerOptions.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0;
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseMultipleExamplesAttribute));
@@ -116,7 +116,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         {
             // Arrange
             swaggerOptions.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseMultipleExamplesAttribute));
@@ -138,7 +138,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Arrange
             var requestBody = new OpenApiRequestBody
             {
-                Content = new Dictionary<string, OpenApiMediaType>
+                Content = new Dictionary<string, IOpenApiMediaType>
                 {
                     { "application/json", new OpenApiMediaType() }
                 }
@@ -165,7 +165,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Arrange
             var requestBody = new OpenApiRequestBody
             {
-                Content = new Dictionary<string, OpenApiMediaType>
+                Content = new Dictionary<string, IOpenApiMediaType>
                 {
                     { "application/json", new OpenApiMediaType() }
                 }
@@ -194,7 +194,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Arrange
             var requestBody = new OpenApiRequestBody
             {
-                Content = new Dictionary<string, OpenApiMediaType>
+                Content = new Dictionary<string, IOpenApiMediaType>
                 {
                     { "application/json", new OpenApiMediaType() }
                 }
@@ -217,7 +217,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             // Arrange
             var requestBody = new OpenApiRequestBody
             {
-                Content = new Dictionary<string, OpenApiMediaType>
+                Content = new Dictionary<string, IOpenApiMediaType>
                 {
                     { "application/json", new OpenApiMediaType() }
                 }
@@ -241,7 +241,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void SetsResponseExamples_CorrectlyFormatsJsonExample()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { { "application/json", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
 
@@ -262,7 +262,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void SetsResponseExamples_CorrectlyFormatsXmlExample()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
 
@@ -282,7 +282,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void SetsResponseExamples_CorrectlyFormatsCsvExample()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "text/csv", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { { "text/csv", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
 

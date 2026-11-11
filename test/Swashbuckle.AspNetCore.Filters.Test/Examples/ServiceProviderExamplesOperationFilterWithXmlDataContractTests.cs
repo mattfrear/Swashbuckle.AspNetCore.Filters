@@ -41,7 +41,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             serviceProvider.GetService(typeof(IExamplesProvider<Dictionary<string, object>>)).Returns(new DictionaryAutoRequestExample());
             var requestBody = new OpenApiRequestBody
             {
-                Content = new Dictionary<string, OpenApiMediaType>
+                Content = new Dictionary<string, IOpenApiMediaType>
                 {
                     { "application/xml", new OpenApiMediaType() { Schema = new OpenApiSchema() } }
                 }
@@ -63,7 +63,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
         public void Apply_SetsResponseExamples_CorrectlyFormatsXmlExample()
         {
             // Arrange
-            var response = new OpenApiResponse { Content = new Dictionary<string, OpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
+            var response = new OpenApiResponse { Content = new Dictionary<string, IOpenApiMediaType> { { "application/xml", new OpenApiMediaType() } } };
             var operation = new OpenApiOperation { OperationId = "foobar", Responses = new OpenApiResponses() };
             operation.Responses.Add("200", response);
             var filterContext = FilterContextFor(typeof(FakeActions), nameof(FakeActions.AnnotatedWithSwaggerResponseAttribute));
