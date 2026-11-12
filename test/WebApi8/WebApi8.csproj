@@ -18,8 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="11.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="11.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="11.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="11.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="11.0.1" />
     <PackageReference Include="WebApiContrib.Core.Formatter.Csv" Version="4.0.0" />
   </ItemGroup>
 

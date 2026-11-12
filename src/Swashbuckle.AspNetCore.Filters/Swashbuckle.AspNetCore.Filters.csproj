@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="Scrutor" Version="7.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="11.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="11.0.1" />
   </ItemGroup>
 
   <ItemGroup>
