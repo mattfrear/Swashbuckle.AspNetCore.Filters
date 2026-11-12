@@ -1,7 +1,7 @@
 <Project>
 
 	<PropertyGroup>
-		<TargetFrameworks>net11.0</TargetFrameworks>
+		<TargetFrameworks>net11.0;net10.0</TargetFrameworks>
 		<PackageVersion>10.0.1</PackageVersion>
 		<Authors>Matt Frear</Authors>
 		<Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
