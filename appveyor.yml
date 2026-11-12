@@ -7,7 +7,32 @@ init:
   # Good practise, because Windows line endings are different from Unix/Linux ones
   - cmd: git config --global core.autocrlf true
 install:
-  # Install repo specific stuff here
+  - ps: |
+      $installer = "$env:TEMP\dotnet-install.ps1"
+
+      Invoke-WebRequest `
+        -Uri "https://dot.net/v1/dotnet-install.ps1" `
+        -OutFile $installer
+
+      & $installer `
+        -Channel "10.0" `
+        -Architecture x64 `
+        -InstallDir "$env:ProgramFiles\dotnet"
+
+      if ($LASTEXITCODE -ne 0) {
+        throw ".NET 10 SDK installation failed"
+      }
+
+      & $installer `
+        -Channel "11.0" `
+        -Architecture x64 `
+        -InstallDir "$env:ProgramFiles\dotnet"
+
+      if ($LASTEXITCODE -ne 0) {
+        throw ".NET 11 SDK installation failed"
+      }
+
+      dotnet --list-sdks
 before_build:
   # Display .NET Core version
   - cmd: dotnet --version
