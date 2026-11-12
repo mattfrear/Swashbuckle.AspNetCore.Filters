@@ -24,6 +24,14 @@ install:
         throw ".NET 10 SDK installation failed"
       }
 
+      dotnet --list-sdks
+  - ps: |
+      $installer = "$env:TEMP\dotnet-install.ps1"
+
+      Invoke-WebRequest `
+        -Uri "https://dot.net/v1/dotnet-install.ps1" `
+        -OutFile $installer
+
       & $installer `
         -Channel "11.0" `
         -Architecture x64 `
