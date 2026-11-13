@@ -15,7 +15,7 @@ namespace Swashbuckle.AspNetCore.Filters
         /// Add custom example data to your SwaggerResponse
         /// </summary>
         /// <param name="statusCode">The HTTP status code, e.g. 200</param>
-        /// <param name="examplesProviderType">A type that inherits from IExamplesProvider</param>
+        /// <param name="examplesProviderType">A type that implements <see cref="IExamplesProvider{T}"/></param>
         public SwaggerResponseExampleAttribute(int statusCode, Type examplesProviderType)
         {
             StatusCode = statusCode;

@@ -15,7 +15,7 @@ namespace Swashbuckle.AspNetCore.Filters
         /// Add example data for a request
         /// </summary>
         /// <param name="requestType">The type passed to the request</param>
-        /// <param name="examplesProviderType">A type that inherits from IExamplesProvider</param>
+        /// <param name="examplesProviderType">A type that implements <see cref="IExamplesProvider{T}"/></param>
         public SwaggerRequestExampleAttribute(Type requestType, Type examplesProviderType)
         {
             RequestType = requestType;
