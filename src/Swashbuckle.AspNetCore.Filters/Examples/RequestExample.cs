@@ -61,9 +61,9 @@ namespace Swashbuckle.AspNetCore.Filters
                 if (schemaRepository.Schemas.ContainsKey(schemaDefinitionName))
                 {
                     var schemaDefinition = schemaRepository.Schemas[schemaDefinitionName];
-                    if (schemaDefinition.Example == null)
+                    if (schemaDefinition.Examples == null || schemaDefinition.Examples.Count == 0)
                     {
-                        ((OpenApiSchema)schemaDefinition).Example = firstOpenApiExample;
+                        ((OpenApiSchema)schemaDefinition).Examples = new List<JsonNode> { firstOpenApiExample };
                     }
                 }
             }

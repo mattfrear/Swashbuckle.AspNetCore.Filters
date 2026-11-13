@@ -155,7 +155,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample.ShouldMatch(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Example.ToString());
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Examples.First().ToString());
             actualSchemaExample.ShouldMatch(expectedExample);
         }
 
@@ -184,7 +184,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExamples["Angela"].Description.ShouldBeNull();
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Example.ToString());
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Examples.First().ToString());
             actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
         }
 

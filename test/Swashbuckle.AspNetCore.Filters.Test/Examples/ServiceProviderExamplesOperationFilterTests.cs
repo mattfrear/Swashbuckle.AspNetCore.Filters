@@ -172,7 +172,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample.ShouldMatch(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Example.ToString());
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Examples.First().ToString());
             actualSchemaExample.ShouldMatch(expectedExample);
         }
 
@@ -224,7 +224,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExample.ShouldMatch(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["IPersonRequest"].Example.ToString());
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["IPersonRequest"].Examples.First().ToString());
             actualSchemaExample.ShouldMatch(expectedExample);
         }
 
@@ -274,7 +274,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualParameterExample.ShouldBe(expectedExample);
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<Title>(filterContext.SchemaRepository.Schemas["Title"].Example.ToString());
+            var actualSchemaExample = JsonConvert.DeserializeObject<Title>(filterContext.SchemaRepository.Schemas["Title"].Examples.First().ToString());
             actualSchemaExample.ShouldBe(expectedExample);
         }
 
@@ -305,7 +305,7 @@ namespace Swashbuckle.AspNetCore.Filters.Test.Examples
             actualExamples["Angela"].Description.ShouldBeNull();
 
             // Assert SerializeAsV2
-            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Example.ToString());
+            var actualSchemaExample = JsonConvert.DeserializeObject<PersonRequest>(filterContext.SchemaRepository.Schemas["PersonRequest"].Examples.First().ToString());
             actualSchemaExample.ShouldMatch(expectedExamples.First().Value);
         }
 
