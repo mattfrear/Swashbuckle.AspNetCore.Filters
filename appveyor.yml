@@ -8,6 +8,7 @@ init:
   # Good practise, because Windows line endings are different from Unix/Linux ones
   - cmd: git config --global core.autocrlf true
 install:
+# explicit installation can be removed once the build image is updated: https://github.com/appveyor/build-images/issues/179
   - ps: |
       $installer = "$env:TEMP\dotnet-install.ps1"
 
