@@ -21,19 +21,6 @@ install:
         -InstallDir "$env:ProgramFiles\dotnet"
 
       dotnet --list-sdks
-  - ps: |
-      $installer = "$env:TEMP\dotnet-install.ps1"
-
-      Invoke-WebRequest `
-        -Uri "https://dot.net/v1/dotnet-install.ps1" `
-        -OutFile $installer
-
-      & $installer `
-        -Channel "11.0" `
-        -Architecture x64 `
-        -InstallDir "$env:ProgramFiles\dotnet"
-
-      dotnet --list-sdks
 before_build:
   # Display .NET Core version
   - cmd: dotnet --version
