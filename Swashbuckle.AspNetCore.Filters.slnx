@@ -13,9 +13,9 @@
     <Project Path="src/Swashbuckle.AspNetCore.Filters/Swashbuckle.AspNetCore.Filters.csproj" />
   </Folder>
   <Folder Name="/test/">
-    <Project Path="test/MinimalApi8/MinimalApi10.csproj" />
+    <Project Path="test/MinimalApi10/MinimalApi10.csproj" />
     <Project Path="test/Swashbuckle.AspNetCore.Filters.Test/Swashbuckle.AspNetCore.Filters.Test.csproj" />
-    <Project Path="test/WebApi8/WebApi10.csproj" />
+    <Project Path="test/WebApi10/WebApi10.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <File Path="tools/key.snk" />
