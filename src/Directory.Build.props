@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0</TargetFrameworks>
-		<PackageVersion>11.0.0-alpha</PackageVersion>
+		<PackageVersion>11.0.0</PackageVersion>
 		<Authors>Matt Frear</Authors>
 		<Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -21,7 +21,7 @@
 
 	<PropertyGroup>
 		<VersionPrefix>11.0.0</VersionPrefix>
-		<VersionSuffix>alpha</VersionSuffix>
+		<VersionSuffix></VersionSuffix>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
 		<DelaySign>False</DelaySign>
