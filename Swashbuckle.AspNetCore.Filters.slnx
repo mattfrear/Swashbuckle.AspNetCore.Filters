@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="appveyor.yml" />
+    <File Path="CHANGELOG.md" />
+    <File Path="LICENSE" />
+    <File Path="NuGet.config" />
+    <File Path="README.md" />
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/key.snk" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Swashbuckle.AspNetCore.Filters.Abstractions/Swashbuckle.AspNetCore.Filters.Abstractions.csproj" />
+    <Project Path="src/Swashbuckle.AspNetCore.Filters/Swashbuckle.AspNetCore.Filters.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/MinimalApi8/MinimalApi10.csproj" />
+    <Project Path="test/Swashbuckle.AspNetCore.Filters.Test/Swashbuckle.AspNetCore.Filters.Test.csproj" />
+    <Project Path="test/WebApi8/WebApi10.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <File Path="tools/key.snk" />
+    <File Path="tools/NuGet instructions.txt" />
+  </Folder>
+</Solution>

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [11.0.0] - 2026-11-19
+### Changed
+- Upgrade from Swashbuckle.AspNetCore 10.0.0 to 11 (thanks @nesc58)
+
 ## [10.0.1] - 2025-11-24
 ### Fixed
 - Fix issue #264 (thanks @ntark)

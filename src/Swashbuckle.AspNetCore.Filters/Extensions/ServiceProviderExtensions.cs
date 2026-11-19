@@ -6,10 +6,10 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
     internal static class ServiceProviderExtensions
     {
         /// <summary>
-        /// Gets a specific IExamplesProvider<T> from the ServiceProvider and calls GetExamples() on it
+        /// Gets a specific <see cref="IExamplesProvider{T}"/> from the ServiceProvider and calls GetExamples() on it
         /// </summary>
         /// <param name="serviceProvider"></param>
-        /// <param name="examplesProviderType">Either an IExamplesProvider<T>, or a concrete type, e.g. PersonRequestExample</param>
+        /// <param name="examplesProviderType">Either an <see cref="IExamplesProvider{T}"/>, or a concrete type, e.g. PersonRequestExample</param>
         /// <returns>The result of calling GetExamples on the given examplesProviderType</returns>
         public static object GetExampleWithExamplesProviderType(this IServiceProvider serviceProvider, Type examplesProviderType)
         {
@@ -18,7 +18,7 @@ namespace Swashbuckle.AspNetCore.Filters.Extensions
         }
 
         /// <summary>
-        /// Searches the serviceProvider for an IExamplesProvider<T>, where T is the requested type
+        /// Searches the serviceProvider for an <see cref="IExamplesProvider{T}"/>, where T is the requested type
         /// </summary>
         /// <param name="serviceProvider"></param>
         /// <param name="type"></param>
