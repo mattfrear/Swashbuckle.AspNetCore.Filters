@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0</TargetFrameworks>
-		<PackageVersion>10.0.1</PackageVersion>
+		<PackageVersion>11.0.0-alpha</PackageVersion>
 		<Authors>Matt Frear</Authors>
 		<Description>Some additional useful filters for Swashbuckle.AspNetCore. This package replaces Swashbuckle.AspNetCore.Examples.</Description>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -11,7 +11,7 @@
 		<Copyright>2025</Copyright>
 		<PackageTags>Swagger Swashbuckle</PackageTags>
 		<PackageReleaseNotes>
-			Fix issue #264 (thanks @ntark)
+			Upgrade from Swashbuckle.AspNetCore 10.0.0 to 11 (thanks @nesc58)
 		</PackageReleaseNotes>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/mattfrear/Swashbuckle.AspNetCore.Filters</RepositoryUrl>
@@ -20,8 +20,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<VersionPrefix>10.0.1</VersionPrefix>
-		<VersionSuffix></VersionSuffix>
+		<VersionPrefix>11.0.0</VersionPrefix>
+		<VersionSuffix>alpha</VersionSuffix>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
 		<DelaySign>False</DelaySign>
